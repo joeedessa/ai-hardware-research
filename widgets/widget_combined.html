@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Hardware Research</title>
+<style>
+/* ── Standalone CSS variables ── */
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --color-text-primary:#111827;
+  --color-text-secondary:#374151;
+  --color-text-tertiary:#6B7280;
+  --color-text-info:#1D4ED8;
+  --color-background-primary:#FFFFFF;
+  --color-background-secondary:#F9FAFB;
+  --color-background-info:#EFF6FF;
+  --color-border-tertiary:#E5E7EB;
+  --color-border-secondary:#D1D5DB;
+  --color-border-info:#BFDBFE;
+}
+body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
+#loading{font-size:15.0px;color:#6B7280;padding:20px;text-align:center}
+
+/* ── Shared base ── */
+*{box-sizing:border-box}
+.w{padding:.4rem 0;font-family:var(--font-sans)}
+.tabs{display:flex;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:6px;overflow-x:auto}
+.tab{padding:4px 11px;font-size:12.0px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-.5px;white-space:nowrap}
+.tab.on{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.tab-group-sep{width:1px;background:var(--color-border-tertiary);margin:4px 4px 0;flex-shrink:0}
+.view{display:none}.view.on{display:block}
+.note{font-size:11.0px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:3px;padding:3px 6px;margin-bottom:5px;line-height:1.5}
+.note b{color:var(--color-text-secondary);font-weight:500}
+.pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.pill{padding:2px 8px;border-radius:20px;font-size:11.0px;font-weight:500;cursor:pointer;border:.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:transparent;transition:all .12s}
+.pill.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+
+/* ── Widget 1: Matrix ── */
+.mxs{overflow-x:auto}
+.mch{border-radius:3px 3px 0 0;padding:3px 2px;text-align:center;font-size:10.0px;font-weight:500;line-height:1.2;pointer-events:none}
+.mrl{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);display:flex;align-items:center;padding-right:3px;line-height:1.2}
+.mc{border-radius:2px;padding:3px 3px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;min-height:28px;transition:all .1s;position:relative}
+.mc:hover{background:var(--color-background-primary);border-color:var(--color-border-secondary)}
+.mc.hi{border-color:#534AB7;background:#534AB70A}
+.mc.hi:hover{background:#534AB715}
+.mc *{pointer-events:none}
+.ct{display:inline-block;font-size:9.5px;font-weight:500;padding:1px 2px;border-radius:2px;margin:1px 0;line-height:1.3;white-space:nowrap}
+.v0{background:#4F46E522;color:#4F46E5}.v1{background:#0EA5E922;color:#0369A1}.v2{background:#2563EB22;color:#2563EB}
+.v3{background:#7C3AED22;color:#7C3AED}.v4{background:#0891B222;color:#0891B2}.v5{background:#16A34A22;color:#15803D}
+.v6{background:#05966922;color:#059669}.v7{background:#65A30D22;color:#4D7C0F}.v8{background:#D9770622;color:#B45309}
+.v9{background:#DC262622;color:#DC2626}.va{background:#E11D4822;color:#BE123C}.vb{background:#DB277722;color:#DB2777}
+.vc{background:#9333EA22;color:#9333EA}
+.det-box{margin-top:5px;border-radius:5px;padding:7px 9px;border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:11.5px;line-height:1.5;color:var(--color-text-secondary);display:none}
+.det-box.on{display:block}
+.det-title{font-size:13.0px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.sf{font-size:9.5px;font-weight:500;padding:1px 3px;border-radius:2px;display:inline-block;margin-right:2px}
+.fch{background:#FCEBEB;color:#791F1F}.fgp{background:#FAEEDA;color:#633806}
+.fgeo{background:#E24B4A18;color:#A32D2D;border:.5px solid #E24B4A44}
+.bband{border-radius:4px;margin:4px 0;border:.5px solid var(--color-border-info);background:var(--color-background-info);overflow-x:auto}
+.binner{padding:3px 5px;min-width:1050px}
+.blbl{font-size:9.5px;font-weight:500;color:var(--color-text-info);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.brow{display:grid;gap:2px;margin-bottom:2px}
+.brhdr{font-size:9.5px;font-weight:500;color:var(--color-text-info);display:flex;align-items:center;padding-right:4px;min-width:68px}
+.bcell{border-radius:2px;padding:2px 3px;font-size:9.5px;color:var(--color-text-info);line-height:1.3;background:#E6F1FB33;border:.5px solid var(--color-border-info)}
+.cband{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:4px}
+.cc{border-radius:5px;padding:6px 8px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.ctit{font-size:11.0px;font-weight:500;margin-bottom:2px}
+.crow{font-size:9.5px;color:var(--color-text-secondary);padding:1px 0;border-bottom:.5px solid var(--color-border-tertiary);line-height:1.4}
+.crow:last-child{border-bottom:none}
+.csub{font-size:9.0px;color:var(--color-text-tertiary);line-height:1.3}
+.integ{border-radius:4px;padding:5px 7px;border:.5px solid #EF9F2744;background:#EF9F2708;margin-top:4px;font-size:10.0px;color:var(--color-text-secondary);line-height:1.5}
+
+/* ── Widget 1: Explorer ── */
+.exp{display:grid;grid-template-columns:112px 1fr;gap:7px}
+.vlist{display:flex;flex-direction:column;gap:2px}
+.vgrp{font-size:9.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);padding:5px 0 2px;border-top:.5px solid var(--color-border-tertiary)}
+.vgrp:first-child{border-top:none;padding-top:0}
+.vbtn{padding:4px 5px;border-radius:4px;font-size:11.5px;cursor:pointer;border:.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);background:transparent;text-align:left;width:100%;line-height:1.3;transition:all .12s}
+.vbtn.on{color:#fff;border-color:transparent}
+.vbtn:not(.on):hover{background:var(--color-background-secondary)}
+.vdetail{max-height:860px;overflow-y:auto}
+.vnote{font-size:11.0px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:3px;padding:4px 6px;margin-bottom:5px;line-height:1.5}
+.srow{display:grid;grid-template-columns:16px 1fr;gap:3px;align-items:start}
+.snd{width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.0px;font-weight:500;color:#fff;flex-shrink:0}
+.sln{width:2px;min-height:8px;opacity:.15;margin:1px auto}
+.sc{margin-bottom:3px;border-radius:4px;padding:5px 7px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer}
+.sc:hover,.sc.ex{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.sct{font-size:12.0px;font-weight:500;color:var(--color-text-primary);display:flex;justify-content:space-between;align-items:center}
+.scr{font-size:10.5px;color:var(--color-text-secondary);margin:2px 0;line-height:1.3}
+.scd{font-size:10.5px;color:var(--color-text-tertiary);line-height:1.5;padding-top:3px;border-top:.5px solid var(--color-border-tertiary);display:none;margin-top:2px}
+.sc.ex .scd{display:block}
+.sch{font-size:9.0px;color:var(--color-text-tertiary);transition:transform .12s;pointer-events:none}
+.sc.ex .sch{transform:rotate(180deg)}
+.sfl{font-size:9.5px;font-weight:500;padding:1px 3px;border-radius:2px;display:inline-block;margin-right:2px;margin-top:1px}
+.fc{background:#FCEBEB;color:#791F1F}
+.fg{background:#FAEEDA;color:#633806}
+.fge{background:#E24B4A18;color:#A32D2D;border:.5px solid #E24B4A44}
+.fx{background:#E1F5EE;color:#085041;cursor:pointer!important;pointer-events:all!important}
+.fx:hover{background:#1D9E75;color:#fff}
+.fn{background:#EEEDFE;color:#3C3489}
+
+/* ── Widget 1: Explainers ── */
+.exg{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:5px}
+.exc{border:.5px solid var(--color-border-tertiary);border-radius:7px;padding:8px 10px;background:var(--color-background-primary);cursor:pointer}
+.exc:hover,.exc.on{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.exh{display:flex;align-items:center;gap:5px;margin-bottom:2px;pointer-events:none}
+.exd{width:7px;height:7px;border-radius:50%}
+.exn{font-size:13.0px;font-weight:500;color:var(--color-text-primary)}
+.exch{font-size:9.0px;color:var(--color-text-tertiary);margin-left:auto;transition:transform .12s}
+.exc.on .exch{transform:rotate(180deg)}
+.exhk{font-size:11.0px;color:var(--color-text-secondary);line-height:1.4;font-style:italic;margin-bottom:3px;pointer-events:none}
+.exar{font-size:10.5px;color:var(--color-text-tertiary);margin-bottom:3px;line-height:1.4;pointer-events:none}
+.exbd{font-size:11.0px;color:var(--color-text-secondary);line-height:1.6;display:none}
+.exc.on .exbd{display:block}
+.vr{display:flex;align-items:center;gap:4px;margin-top:2px;font-size:10.5px}
+.vrl{color:var(--color-text-tertiary);min-width:90px}
+.vrb{flex:1;height:4px;border-radius:2px;background:var(--color-background-secondary)}
+.vrf{height:100%;border-radius:2px}
+.vrn{color:var(--color-text-tertiary);min-width:75px;text-align:right;font-size:10.0px}
+
+/* ── Widget 1: Geo ── */
+.hm-grid{display:grid;gap:2px;min-width:580px}
+.hm-col{font-size:10.0px;font-weight:500;color:var(--color-text-secondary);text-align:center;padding:3px 2px;border-bottom:.5px solid var(--color-border-tertiary);line-height:1.3}
+.hm-lbl{font-size:11.0px;font-weight:500;color:var(--color-text-secondary);display:flex;align-items:center;padding-right:5px;cursor:pointer}
+.hm-lbl:hover{color:var(--color-text-primary)}
+.hm-cell{border-radius:3px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .1s}
+.hm-cell:hover{opacity:.75}
+.hm-score{font-size:13.0px;font-weight:500;pointer-events:none}
+.am-grid{display:grid;gap:2px;min-width:640px}
+.am-col{font-size:10.0px;font-weight:500;color:var(--color-text-secondary);text-align:center;padding:3px 2px;border-bottom:.5px solid var(--color-border-tertiary)}
+.am-lbl{font-size:10.5px;font-weight:500;color:var(--color-text-secondary);display:flex;align-items:center;padding-right:4px}
+.am-cell{border-radius:3px;padding:3px 4px;font-size:9.5px;font-weight:500;line-height:1.3;min-height:26px;display:flex;align-items:center;cursor:pointer}
+.am-cell:hover{opacity:.8}
+.a-us{background:#E1F5EE;color:#085041}.a-cn{background:#FCEBEB;color:#791F1F}
+.a-tw{background:#E6F1FB;color:#0C447C}.a-kr{background:#EEEDFE;color:#3C3489}
+.a-jp{background:#F4C0D1;color:#72243E}.a-eu{background:#FAEEDA;color:#633806}
+
+/* ── Widget 1: Cycle ── */
+.cy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:5px}
+.cyc{border:.5px solid var(--color-border-tertiary);border-radius:7px;padding:8px 10px;background:var(--color-background-primary);cursor:pointer}
+.cyc:hover,.cyc.ex{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.cyc *{pointer-events:none}
+.cyh{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.cyd{width:7px;height:7px;border-radius:50%}
+.cyn{font-size:13.0px;font-weight:500;color:var(--color-text-primary)}
+.cyv{margin-left:auto;font-size:10.0px;font-weight:500;padding:2px 5px;border-radius:3px}
+.cych{font-size:9.0px;color:var(--color-text-tertiary);transition:transform .12s}
+.cyc.ex .cych{transform:rotate(180deg)}
+.cyr{display:grid;grid-template-columns:105px 1fr 40px;gap:3px;align-items:center;margin-bottom:3px;font-size:10.5px}
+.cyl{color:var(--color-text-tertiary)}
+.cyb{height:4px;border-radius:2px;background:var(--color-background-secondary)}
+.cyf{height:100%;border-radius:2px}
+.cyval{font-size:10.5px;font-weight:500;text-align:right}
+.inn{display:flex;align-items:center;gap:3px;margin:3px 0}
+.id{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cysum{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5;margin-top:4px;padding-top:4px;border-top:.5px solid var(--color-border-tertiary);display:none}
+.cyc.ex .cysum{display:block}
+.cy-filt{display:none}
+.rt{width:100%;border-collapse:collapse;min-width:620px}
+.rt th{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);text-align:left;padding:4px 6px;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap}
+.rt td{font-size:10.5px;padding:4px 6px;border-bottom:.5px solid var(--color-border-tertiary);vertical-align:middle}
+.rt tr:last-child td{border-bottom:none}
+.rt tr:hover td{background:var(--color-background-secondary)}
+.rn{display:flex;align-items:center;gap:4px;font-weight:500;color:var(--color-text-primary);cursor:pointer}
+.rn:hover{color:var(--color-text-info)}
+.rdot{width:6px;height:6px;border-radius:50%}
+.rb{width:60px;height:4px;border-radius:2px;background:var(--color-background-secondary);display:inline-block;vertical-align:middle}
+.rf2{height:100%;border-radius:2px;display:block}
+.rv{font-size:10.0px;font-weight:500;padding:1px 5px;border-radius:3px}
+
+/* ── Widget 2: Picks & Shovels ── */
+.sec{margin-bottom:12px}
+.sec-head{display:flex;align-items:center;gap:7px;margin-bottom:5px;padding-bottom:3px;border-bottom:.5px solid var(--color-border-tertiary)}
+.sec-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.0px;font-weight:500;color:#fff;flex-shrink:0}
+.sec-title{font-size:13.0px;font-weight:500;color:var(--color-text-primary)}
+.sec-sub{font-size:10.5px;color:var(--color-text-tertiary);margin-left:auto}
+.why{border-radius:0 5px 5px 0;border-left:3px solid;padding:5px 8px;margin-bottom:6px;font-size:10.5px;color:var(--color-text-secondary);line-height:1.5}
+.ps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:4px}
+.psc{border:.5px solid var(--color-border-tertiary);border-radius:5px;padding:6px 8px;background:var(--color-background-primary)}
+.psc.hi{border-left:3px solid #E24B4A;border-radius:0 5px 5px 0;background:#FCEBEB06}
+.psn{font-size:12.0px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px;display:flex;align-items:center;gap:4px}
+.psr{font-size:10.5px;color:var(--color-text-secondary);line-height:1.4;margin-bottom:3px}
+.pst{font-size:10.0px;color:var(--color-text-tertiary);line-height:1.4}
+.srv{font-size:9.5px;font-weight:500;padding:1px 4px;border-radius:2px;background:var(--color-background-secondary);color:var(--color-text-tertiary);border:.5px solid var(--color-border-tertiary);cursor:default;display:inline-block;margin:1px}
+.badge{font-size:9.5px;font-weight:500;padding:1px 5px;border-radius:3px}
+.b-hot{background:#FCEBEB;color:#791F1F}
+.b-str{background:#E1F5EE;color:#085041}
+.b-mod{background:#FAEEDA;color:#633806}
+
+/* ── Widget 2: Electricity ── */
+.bottleneck{border:.5px solid #E24B4A;border-left:3px solid #E24B4A;border-radius:0 5px 5px 0;padding:6px 9px;background:#FCEBEB0A;margin-bottom:6px}
+.bt{font-size:13.0px;font-weight:500;color:#A32D2D;margin-bottom:2px}
+.bb2{font-size:11.0px;color:var(--color-text-secondary);line-height:1.5}
+.el-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:4px}
+.elc{border:.5px solid var(--color-border-tertiary);border-radius:5px;padding:6px 8px;background:var(--color-background-primary);cursor:pointer}
+.elc.hi{border-top:3px solid #E24B4A;border-radius:5px}
+.elc:hover,.elc.ex{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.elh{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.eld{width:7px;height:7px;border-radius:50%;pointer-events:none}
+.eln{font-size:12.0px;font-weight:500;color:var(--color-text-primary);pointer-events:none}
+.elch{font-size:9.0px;color:var(--color-text-tertiary);margin-left:auto;transition:transform .12s;pointer-events:none}
+.elc.ex .elch{transform:rotate(180deg)}
+.elb{font-size:10.5px;color:var(--color-text-secondary);line-height:1.4;pointer-events:none}
+.elt{font-size:10.0px;color:var(--color-text-tertiary);margin-top:2px;pointer-events:none}
+.eld2{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5;margin-top:4px;padding-top:4px;border-top:.5px solid var(--color-border-tertiary);display:none;pointer-events:none}
+.elc.ex .eld2{display:block}
+
+/* ── Widget 2: Themes ── */
+.th-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:7px}
+.tn{border:.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 8px;cursor:pointer;transition:all .12s;background:var(--color-background-primary)}
+.tn.on{color:#fff;border-color:transparent}
+.tn-name{font-size:12.0px;font-weight:500;line-height:1.3}
+.tn-sub{font-size:10.0px;opacity:.85;line-height:1.3;margin-top:1px}
+.th-detail{display:none}.th-detail.on{display:block}
+.th-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.th-chain{display:flex;flex-direction:column;gap:3px}
+.tc-item{display:flex;align-items:flex-start;gap:5px;padding:4px 6px;border-radius:4px;background:var(--color-background-secondary)}
+.tc-num{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:500;color:#fff;flex-shrink:0;margin-top:1px}
+.tc-lbl{font-size:11.0px;font-weight:500;color:var(--color-text-primary)}
+.tc-txt{font-size:10.5px;color:var(--color-text-tertiary);line-height:1.4;margin-top:1px}
+.th-right{display:flex;flex-direction:column;gap:6px}
+.th-box{background:var(--color-background-secondary);border-radius:5px;padding:6px 9px}
+.th-box-title{font-size:10.0px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:3px}
+.th-box-body{font-size:11.0px;color:var(--color-text-secondary);line-height:1.5}
+.risk-box{border-radius:5px;padding:5px 8px;border-left:3px solid #EF9F27;background:#EF9F2708}
+.risk-title{font-size:10.0px;font-weight:500;color:#633806;margin-bottom:2px}
+.risk-body{font-size:10.5px;color:var(--color-text-secondary);line-height:1.4}
+.pos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.pos-card{border:.5px solid var(--color-border-tertiary);border-radius:4px;padding:4px 6px;background:var(--color-background-primary)}
+.pos-tier{font-size:9.5px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-tertiary);margin-bottom:1px}
+.pos-items{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5}
+.vbar{display:flex;align-items:center;gap:4px;margin-bottom:3px;font-size:10.5px}
+.vbar-lbl{color:var(--color-text-tertiary);min-width:90px}
+.vbar-b{flex:1;height:4px;border-radius:2px;background:var(--color-background-primary)}
+.vbar-f{height:100%;border-radius:2px}
+
+/* ── Widget 2: Portfolio ── */
+.banner{border-radius:6px;padding:9px 11px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);margin-bottom:7px}
+.banner-title{font-size:13.5px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.banner-body{font-size:11.5px;color:var(--color-text-secondary);line-height:1.6}
+.cluster-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
+.cluster{border-radius:6px;padding:7px 9px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.cluster.early{border-top:3px solid #E24B4A}
+.cluster.mid{border-top:3px solid #EF9F27}
+.cluster.late{border-top:3px solid #888780}
+.cluster-title{font-size:11.5px;font-weight:500;margin-bottom:3px}
+.cluster-items{font-size:10.5px;color:var(--color-text-secondary);line-height:1.7}
+.q4-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-bottom:8px}
+.q4-card{border:.5px solid var(--color-border-tertiary);border-radius:5px;padding:7px 9px;background:var(--color-background-primary)}
+.q4-q{font-size:12.0px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.q4-a{font-size:11.0px;color:var(--color-text-secondary);line-height:1.5}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:4px}
+.cat-card{border:.5px solid var(--color-border-tertiary);border-radius:6px;padding:7px 9px;background:var(--color-background-primary)}
+.cat-head{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.cat-dot{width:7px;height:7px;border-radius:50%}
+.cat-name{font-size:12.0px;font-weight:500;color:var(--color-text-primary)}
+.ct-pill{font-size:9.5px;font-weight:500;padding:1px 4px;border-radius:2px;flex-shrink:0}
+.ct-now{background:#E1F5EE;color:#085041;border:.5px solid #5DCAA5}
+.ct-12m{background:#FAEEDA;color:#633806;border:.5px solid #EF9F27}
+.ct-3y{background:#E6F1FB;color:#0C447C;border:.5px solid #378ADD}
+.ct-on{background:var(--color-background-secondary);color:var(--color-text-tertiary);border:.5px solid var(--color-border-tertiary)}
+</style>
+</head>
+<body>
+<div id="loading">Loading AI hardware research data…</div>
+<div class="w" id="app" style="display:none">
+
+<div class="tabs">
+  <!-- Widget 1 tabs -->
+  <div class="tab on" onclick="ST('mx',this)">Universe matrix</div>
+  <div class="tab" onclick="ST('vx',this)">Chain explorer</div>
+  <div class="tab" onclick="ST('ex',this)">How it works</div>
+  <div class="tab" onclick="ST('geo',this)">Geopolitical</div>
+  <div class="tab" onclick="ST('cy',this)">Cycle &amp; innings</div>
+  <!-- Separator -->
+  <div class="tab-group-sep"></div>
+  <!-- Widget 2 tabs -->
+  <div class="tab" onclick="ST('ps',this)">Picks &amp; Shovels</div>
+  <div class="tab" onclick="ST('el',this)">Power &amp; Cooling</div>
+  <div class="tab" onclick="ST('th',this)">Demand Themes</div>
+  <div class="tab" onclick="ST('pf',this)">Portfolio Summary</div>
+</div>
+
+<!-- ── Widget 1 views ── -->
+<div class="view on" id="view-mx">
+  <div class="note"><b>Dimension A</b> — 13 hardware verticals × 10 supply-chain stages (ex-materials). <span style="background:#534AB70A;border:.5px solid #534AB7;padding:0 4px;border-radius:2px;color:#534AB7;font-weight:500">blue cells</span> = analytical detail, click to open. Other cells navigate to that vertical in the explorer. <b>Dim B</b> (blue band) = cross-cutting chokepoints. <b>Dim C</b> (bottom panels) = equipment, Asian chokepoints, and the AI datacenter stack.</div>
+  <div class="mxs"><div id="mxg" style="display:grid;gap:2px;min-width:1050px"></div></div>
+  <div class="det-box" id="mx-det"></div>
+  <div class="bband"><div class="binner" id="binner"><div class="blbl">Dimension B — Cross-cutting chokepoints: key bottleneck, China localization, key Japan supplier (full detail in Picks &amp; Shovels tab)</div><div id="brows"></div></div></div>
+  <div class="note" style="margin-top:4px"><b>Dimension C — Cross-cutting layers</b> (full detail in Power &amp; Cooling tab)</div>
+  <div class="cband" id="cband"></div>
+  <div class="integ" id="integ"></div>
+</div>
+
+<div class="view" id="view-vx">
+  <div class="note"><b>Chain explorer</b> — all 13 supply chains. Click any chain step to expand. <span class="sfl fc">⚠ choke</span> <span class="sfl fg">↑ supply gap</span> <span class="sfl fge">⚑ geo</span> <span class="sfl fx" style="pointer-events:none">⇄ cross-chain</span> <span class="sfl fn">★ new layer</span></div>
+  <div class="exp"><div class="vlist" id="vlist"></div><div class="vdetail" id="vdetail"></div></div>
+</div>
+
+<div class="view" id="view-ex">
+  <div class="note"><b>Chain explainers</b> — how each chain works, where value is captured, and the structural demand thesis. Click any card to expand.</div>
+  <div class="exg" id="exg"></div>
+</div>
+
+<div class="view" id="view-geo">
+  <div class="pills">
+    <button class="pill on" onclick="setGV('hm',this)">Heat map (scores 1–5)</button>
+    <button class="pill" onclick="setGV('am',this)">Actor control map</button>
+  </div>
+  <div id="g-hm">
+    <div class="note"><b>Scores 1–5.</b> Click any row or score cell for the full narrative.</div>
+    <div style="overflow-x:auto"><div class="hm-grid" id="hmg"></div></div>
+    <div class="det-box" id="hm-det"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:10.0px;color:var(--color-text-tertiary)">Score: 1=Very low · 2=Low · 3=Moderate · 4=High · 5=Very high</div>
+  </div>
+  <div id="g-am" style="display:none">
+    <div class="note"><b>Who controls each broad stage, by country.</b> Click any cell for detail.</div>
+    <div style="overflow-x:auto"><div class="am-grid" id="amg"></div></div>
+    <div class="det-box" id="am-det"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;font-size:10.0px">
+      <span class="ct a-us" style="padding:1px 5px;border-radius:3px">United States</span>
+      <span class="ct a-tw" style="padding:1px 5px;border-radius:3px">Taiwan</span>
+      <span class="ct a-kr" style="padding:1px 5px;border-radius:3px">South Korea</span>
+      <span class="ct a-jp" style="padding:1px 5px;border-radius:3px">Japan</span>
+      <span class="ct a-cn" style="padding:1px 5px;border-radius:3px">China</span>
+      <span class="ct a-eu" style="padding:1px 5px;border-radius:3px">Europe / other</span>
+    </div>
+  </div>
+</div>
+
+<div class="view" id="view-cy">
+  <div class="pills" id="cy-pills">
+    <button class="pill on" onclick="setCyV('rank',this)">Ranked overview</button>
+    <button class="pill" onclick="setCyV('cards',this)">All cycle cards</button>
+  </div>
+  <div class="pills cy-filt" id="cy-filt">
+    <span style="font-size:11.0px;color:var(--color-text-tertiary);align-self:center">Filter:</span>
+    <button class="pill on" onclick="fcy('all',this)">All</button>
+    <button class="pill" onclick="fcy('early',this)">Early innings (1–3)</button>
+    <button class="pill" onclick="fcy('bclow',this)">Low cycle risk (≤35)</button>
+    <button class="pill" onclick="fcy('struct',this)">Structurally bullish (≥85)</button>
+  </div>
+  <div id="cy-rank"><div style="overflow-x:auto"><table class="rt" id="rt"></table></div></div>
+  <div class="cy-grid" id="cy-grid" style="display:none"></div>
+</div>
+
+<!-- ── Widget 2 views ── -->
+<div class="view" id="view-ps">
+  <div class="note"><b>Picks &amp; shovels</b> — arms-dealers that sell across the AI hardware stack regardless of which brand wins. <span style="display:inline-block;border-left:3px solid #E24B4A;padding-left:4px;color:#E24B4A;font-weight:500">red border</span> = chokepoint owner. <span class="badge b-hot">hot</span> active now &nbsp;<span class="badge b-str">structural</span> long-duration &nbsp;<span class="badge b-mod">moderate</span> mid-cycle</div>
+  <div class="pills" id="ps-pills">
+    <button class="pill on" onclick="setPsFilter('all',this)">All categories</button>
+  </div>
+  <div id="ps-cont"></div>
+</div>
+
+<div class="view" id="view-el">
+  <div class="bottleneck">
+    <div class="bt" id="el-bt-title"></div>
+    <div class="bb2" id="el-bt-body"></div>
+  </div>
+  <div class="pills" id="el-pills">
+    <button class="pill on" onclick="setElView('chain',this)">Full value chain</button>
+    <button class="pill" onclick="setElView('intx',this)">Energy cross-links</button>
+    <button class="pill" onclick="setElView('ai',this)">AI datacenter demand</button>
+    <button class="pill" onclick="setElView('cycle',this)">Cycle &amp; structure</button>
+  </div>
+  <div id="el-chain"><div class="el-grid" id="el-chain-grid"></div></div>
+  <div id="el-intx" style="display:none"><div class="el-grid" id="el-intx-grid"></div></div>
+  <div id="el-ai" style="display:none"><div id="el-ai-cont"></div></div>
+  <div id="el-cycle" style="display:none"><div id="el-cycle-cont"></div></div>
+</div>
+
+<div class="view" id="view-th">
+  <div class="note"><b>Demand themes</b> — 8 cross-vertical investment themes. Click a theme to explore its supply chain position map, thesis, and portfolio positioning.</div>
+  <div class="th-nav" id="th-nav"></div>
+  <div id="th-detail"></div>
+</div>
+
+<div class="view" id="view-pf">
+  <div id="pf-cont"></div>
+</div>
+
+</div><!-- end #app -->
+
+<script>
+const BASE='https://raw.githubusercontent.com/joeedessa/ai-hardware-research/main/data/';
+
+/* ── Global data ── */
+let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
+let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
+let B_BAND,C_BAND;
+
+/* ── Build state (all lazy except matrix) ── */
+let built={mx:false,vx:false,ex:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false};
+
+/* ── Utilities ── */
+function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
+const scolor=s=>['#E24B4A','#D85A30','#EF9F27','#639922','#1D9E75'][s-1];
+const slabel=s=>['Very low','Low','Moderate','High','Very high'][s-1];
+
+/* ── Tab switching ── */
+function ST(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('view-'+id).classList.add('on');
+  if(!built[id]){
+    if(id==='vx')buildVList();
+    else if(id==='ex')buildExpls();
+    else if(id==='geo')buildGeo();
+    else if(id==='cy')buildCycle();
+    else if(id==='ps')buildPS();
+    else if(id==='el')buildEl();
+    else if(id==='th')buildThemes();
+    else if(id==='pf')buildPortfolio();
+    built[id]=true;
+  }
+}
+
+/* ════════════════════════════
+   WIDGET 1 RENDER FUNCTIONS
+════════════════════════════ */
+function buildMatrix(){
+  const nC=VC_COLS.length;
+  const g=document.getElementById('mxg');
+  g.style.gridTemplateColumns=`70px repeat(${nC},1fr)`;
+  g.appendChild(mk('div',''));
+  VC_COLS.forEach(v=>{
+    const h=mk('div','mch');
+    h.style.cssText=`background:${v.c}18;border:.5px solid ${v.c}44;color:${v.c}`;
+    h.textContent=v.sn;g.appendChild(h);
+  });
+  ROWS.forEach(row=>{
+    const rl=mk('div','mrl');rl.textContent=row.n;g.appendChild(rl);
+    VC_COLS.forEach(v=>{
+      const tags=(MXC[row.id]||{})[v.id]||[];
+      const key=`${row.id}_${v.id}`;
+      const hasDetail=!!DET[key];
+      const cell=mk('div',`mc${hasDetail?' hi':''}`);
+      cell.innerHTML=tags.map(([t,c])=>`<span class="ct ${c}">${t}</span>`).join(' ');
+      if(hasDetail){cell.addEventListener('click',()=>showMxDet(key));}
+      else{cell.addEventListener('click',()=>{ST('vx',document.querySelectorAll('.tab')[1]);loadV(v.id);});}
+      g.appendChild(cell);
+    });
+  });
+  const leg=mk('div','');
+  leg.style.cssText='grid-column:1/-1;display:flex;gap:5px;flex-wrap:wrap;padding-top:3px;border-top:.5px solid var(--color-border-tertiary);font-size:10.0px;color:var(--color-text-tertiary);pointer-events:none';
+  leg.innerHTML='<span style="background:#534AB70A;border:.5px solid #534AB7;padding:1px 5px;border-radius:2px;color:#534AB7;font-weight:500;pointer-events:none">blue cells</span> open analytical detail · other cells navigate to that vertical | '+VC_COLS.map(v=>`<span class="ct ${v.tc}">${v.sn}</span>`).join('');
+  g.appendChild(leg);
+  buildBBand(nC);buildCBand();
+}
+
+function showMxDet(key){
+  const d=document.getElementById('mx-det');
+  const info=DET[key];
+  if(!info){d.classList.remove('on');return;}
+  const flags=(info.f||[]).map(f=>{
+    if(f==='fch')return '<span class="sf fch">⚠ chokepoint</span>';
+    if(f==='fgp')return '<span class="sf fgp">↑ supply gap</span>';
+    if(f==='fgeo')return '<span class="sf fgeo">⚑ geopolitical</span>';
+    return '';
+  }).join('');
+  d.innerHTML=`<div class="det-title">${info.t}</div><div style="margin-bottom:4px">${flags}</div>${info.b}`;
+  d.classList.add('on');
+}
+
+function buildBBand(nC){
+  const cont=document.getElementById('brows');
+  B_BAND.forEach(br=>{
+    const row=mk('div','brow');
+    row.style.gridTemplateColumns=`70px repeat(${nC},1fr)`;
+    const rl=mk('div','brhdr');rl.textContent=br.n;row.appendChild(rl);
+    for(let i=0;i<nC;i++){
+      const c=mk('div','bcell');c.textContent=br.items[i]||'—';row.appendChild(c);
+    }
+    cont.appendChild(row);
+  });
+}
+
+function buildCBand(){
+  const g=document.getElementById('cband');
+  C_BAND.forEach(card=>{
+    const c=mk('div','cc');c.style.borderColor=card.c+'44';
+    c.innerHTML=`<div class="ctit" style="color:${card.c}">${card.t}</div>${card.rows.map(r=>`<div class="crow"><b style="font-size:9.5px;font-weight:500;color:var(--color-text-primary)">${r.n}</b><div class="csub">${r.s}</div></div>`).join('')}`;
+    g.appendChild(c);
+  });
+}
+
+function buildVList(){
+  const el=document.getElementById('vlist');
+  VORDER.forEach(grp=>{
+    const gl=mk('div','vgrp');gl.textContent=grp.g;el.appendChild(gl);
+    grp.ids.forEach(id=>{
+      const v=VC[id];
+      const btn=mk('button','vbtn');
+      btn.dataset.v=id;btn.textContent=v.n;
+      btn.onclick=()=>loadV(id);
+      el.appendChild(btn);
+    });
+  });
+}
+
+function loadV(id){
+  document.querySelectorAll('.vbtn').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.color='';});
+  const btn=document.querySelector(`.vbtn[data-v="${id}"]`);
+  const v=VC[id];if(!v)return;
+  if(btn){btn.classList.add('on');btn.style.background=v.c;btn.style.color='#fff';}
+  let h=`<div class="vnote"><b>${v.n}</b> — ${v.note}</div>`;
+  v.chain.forEach((s,i)=>{
+    const flags=(s.f||[]).map(f=>{
+      if(f==='choke')return `<span class="sfl fc">⚠ choke</span>`;
+      if(f==='gap')return `<span class="sfl fg">↑ supply gap</span>`;
+      if(f==='geo')return `<span class="sfl fge">⚑ geo</span>`;
+      if(f==='cross'){const cid=CROSS_V[id];return cid&&VC[cid]?`<span class="sfl fx" onclick="loadV('${cid}')">⇄ cross-chain → ${VC[cid].n}</span>`:`<span class="sfl fx">⇄ cross-chain</span>`;}
+      if(f==='new')return `<span class="sfl fn">★ new layer</span>`;
+      return '';
+    }).join('');
+    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc" onclick="this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd" style="pointer-events:none">${s.d}</div></div></div>`;
+  });
+  const det=document.getElementById('vdetail');
+  det.innerHTML=h;det.scrollTop=0;
+}
+
+function buildExpls(){
+  const g=document.getElementById('exg');
+  EXPLS.forEach(e=>{
+    const c=mk('div','exc');
+    c.addEventListener('click',()=>c.classList.toggle('on'));
+    const vr=(e.vals||[]).map(v=>`<div class="vr"><div class="vrl">${v.l}</div><div class="vrb"><div class="vrf" style="width:${v.v}%;background:${e.c}aa"></div></div><div class="vrn">${v.n}</div></div>`).join('');
+    c.innerHTML=`<div class="exh"><div class="exd" style="background:${e.c}"></div><div class="exn">${e.n}</div><div class="exch">▼</div></div><div class="exhk">${e.hk}</div><div class="exar">Chain: ${e.ar}</div><div class="exbd">${e.bd}<div style="margin-top:6px;font-size:10.0px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:3px;pointer-events:none">Value capture by layer</div>${vr}</div>`;
+    g.appendChild(c);
+  });
+}
+
+function buildGeo(){
+  const g=document.getElementById('hmg');
+  g.style.gridTemplateColumns='90px repeat(4,1fr)';
+  g.appendChild(mk('div',''));
+  ['Supply concentration','Chokepoint severity','Western policy response','AI-race relevance'].forEach(h=>{const el=mk('div','hm-col');el.textContent=h;g.appendChild(el);});
+  GEO.forEach(row=>{
+    const lbl=mk('div','hm-lbl');lbl.textContent=row.n;lbl.addEventListener('click',()=>showHMDet(row));g.appendChild(lbl);
+    row.scores.forEach(s=>{
+      const cell=mk('div','hm-cell');
+      cell.style.cssText=`background:${scolor(s)}22;border:.5px solid ${scolor(s)}55`;
+      cell.innerHTML=`<span class="hm-score" style="color:${scolor(s)}">${s}</span>`;
+      cell.addEventListener('click',()=>showHMDet(row));g.appendChild(cell);
+    });
+  });
+  const leg=mk('div','');
+  leg.style.cssText='grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;padding-top:3px;border-top:.5px solid var(--color-border-tertiary);font-size:10.0px;color:var(--color-text-tertiary);pointer-events:none';
+  leg.innerHTML=[1,2,3,4,5].map(s=>`<span style="display:inline-flex;align-items:center;gap:2px"><span style="display:inline-block;width:8px;height:8px;background:${scolor(s)}22;border:.5px solid ${scolor(s)}55;border-radius:2px"></span>${slabel(s)}</span>`).join('');
+  g.appendChild(leg);
+  const ag=document.getElementById('amg');
+  ag.style.gridTemplateColumns='90px repeat(4,1fr)';
+  ag.appendChild(mk('div',''));
+  ['Design / IP','Equipment / Tools','Fabrication','Packaging / System'].forEach(h=>{const el=mk('div','am-col');el.textContent=h;ag.appendChild(el);});
+  ACTORS.forEach(row=>{
+    const lbl=mk('div','am-lbl');lbl.textContent=row.n;ag.appendChild(lbl);
+    row.l.forEach(l=>{
+      const c=mk('div',`am-cell ${l.c}`);c.textContent=l.t;
+      c.addEventListener('click',()=>{const d=document.getElementById('am-det');d.innerHTML=`<b style="color:var(--color-text-primary)">${row.n}</b> — ${l.t}`;d.classList.add('on');});
+      ag.appendChild(c);
+    });
+  });
+}
+
+function showHMDet(row){
+  const d=document.getElementById('hm-det');
+  const cols=['Supply concentration','Chokepoint severity','Western policy response','AI-race relevance'];
+  const bars=row.scores.map((s,i)=>`<div style="display:grid;grid-template-columns:130px 1fr 90px;gap:4px;align-items:center;margin-bottom:3px;font-size:11.0px"><span style="color:var(--color-text-tertiary)">${cols[i]}</span><div style="height:4px;border-radius:2px;background:var(--color-background-secondary)"><div style="width:${s*20}%;height:100%;background:${scolor(s)};border-radius:2px"></div></div><span style="font-size:11.0px;font-weight:500;color:${scolor(s)};text-align:right">${slabel(s)} (${s}/5)</span></div>`).join('');
+  d.innerHTML=`<div class="det-title">${row.n}</div>${bars}<div style="margin-top:5px;font-size:11.0px;color:var(--color-text-secondary);line-height:1.5">${row.det}</div>`;
+  d.classList.add('on');
+}
+
+function setGV(id,btn){
+  document.querySelectorAll('#view-geo .pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('g-hm').style.display=id==='hm'?'':'none';
+  document.getElementById('g-am').style.display=id==='am'?'':'none';
+}
+
+function buildCycle(){
+  const sorted=[...CYD].sort((a,b)=>a.inn-b.inn);
+  const t=document.getElementById('rt');
+  t.innerHTML=`<thead><tr><th>#</th><th>Vertical</th><th>Innings</th><th>Structural demand</th><th>Capex gap</th><th>Cycle risk</th><th>Verdict</th></tr></thead><tbody id="rtb"></tbody>`;
+  const b=document.getElementById('rtb');
+  sorted.forEach((cy,i)=>{
+    const ic=cy.inn<=3?'#E24B4A':cy.inn<=6?'#EF9F27':'#888780';
+    const dots=Array(9).fill(0).map((_,j)=>`<span class="id" style="background:${j<cy.inn?(j===cy.inn-1?cy.c:cy.c+'55'):'var(--color-background-secondary)'};border:.5px solid ${cy.c}44;display:inline-block"></span>`).join('');
+    const tr=mk('tr','');
+    tr.innerHTML=`<td style="color:var(--color-text-tertiary);font-weight:500">${i+1}</td><td><div class="rn" onclick="goToCyCard('${cy.id}')"><div class="rdot" style="background:${cy.c}"></div>${cy.n}</div></td><td><div style="display:flex;align-items:center;gap:4px">${dots}<span style="font-size:11.0px;font-weight:500;color:${ic}">${cy.inn}</span></div></td><td><div style="display:flex;align-items:center;gap:4px"><div class="rb"><span class="rf2" style="width:${cy.struct}%;background:${cy.c}"></span></div><span style="font-size:11.0px;font-weight:500;color:${cy.c}">${cy.struct}</span></div></td><td><div style="display:flex;align-items:center;gap:4px"><div class="rb"><span class="rf2" style="width:${cy.capex}%;background:#E24B4A"></span></div><span style="font-size:11.0px;font-weight:500;color:#E24B4A">${cy.capex}</span></div></td><td><div style="display:flex;align-items:center;gap:4px"><div class="rb"><span class="rf2" style="width:${cy.bc}%;background:#EF9F27"></span></div><span style="font-size:11.0px;font-weight:500;color:#EF9F27">${cy.bc}</span></div></td><td><span class="rv" style="background:${cy.vc}22;color:${cy.vc};border:.5px solid ${cy.vc}44">${cy.verdict}</span></td>`;
+    b.appendChild(tr);
+  });
+  const g=document.getElementById('cy-grid');
+  CYD.forEach(cy=>{
+    const c=mk('div','cyc');
+    c.dataset.inn=cy.inn;c.dataset.bc=cy.bc;c.dataset.struct=cy.struct;c.dataset.id=cy.id;
+    c.addEventListener('click',()=>c.classList.toggle('ex'));
+    const dots=Array(9).fill(0).map((_,j)=>`<div class="id" style="background:${j<cy.inn?(j===cy.inn-1?cy.c:cy.c+'55'):'var(--color-background-secondary)'};border:.5px solid ${cy.c}44${j===cy.inn-1?`;box-shadow:0 0 0 2px ${cy.c}33`:''}"></div>`).join('');
+    c.innerHTML=`<div class="cyh"><div class="cyd" style="background:${cy.c}"></div><div class="cyn">${cy.n}</div><div class="cych">▼</div><div class="cyv" style="background:${cy.vc}22;color:${cy.vc};border:.5px solid ${cy.vc}44">${cy.verdict}</div></div><div class="cyr"><div class="cyl">Structural demand</div><div class="cyb"><div class="cyf" style="width:${cy.struct}%;background:${cy.c}"></div></div><div class="cyval" style="color:${cy.c}">${cy.struct}</div></div><div class="cyr"><div class="cyl">Capex under-investment</div><div class="cyb"><div class="cyf" style="width:${cy.capex}%;background:#E24B4A"></div></div><div class="cyval" style="color:#E24B4A">${cy.capex}</div></div><div class="cyr"><div class="cyl">Business cycle risk</div><div class="cyb"><div class="cyf" style="width:${cy.bc}%;background:#EF9F27"></div></div><div class="cyval" style="color:#EF9F27">${cy.bc}</div></div><div><div style="font-size:10.0px;color:var(--color-text-tertiary);margin:3px 0 2px">Innings into structural bull cycle</div><div class="inn">${dots}<span style="font-size:11.0px;font-weight:500;color:${cy.c};margin-left:4px">Inning ${cy.inn} / 9</span></div></div><div class="cysum">${cy.sum}</div>`;
+    g.appendChild(c);
+  });
+}
+
+function goToCyCard(id){
+  document.querySelectorAll('#cy-pills .pill').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#cy-pills .pill')[1].classList.add('on');
+  document.getElementById('cy-rank').style.display='none';
+  document.getElementById('cy-grid').style.display='';
+  document.getElementById('cy-filt').style.display='flex';
+  setTimeout(()=>{
+    const target=[...document.querySelectorAll('.cyc')].find(c=>c.dataset.id===id);
+    if(target){target.classList.add('ex');target.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  },80);
+}
+
+function setCyV(id,btn){
+  document.querySelectorAll('#cy-pills .pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('cy-rank').style.display=id==='rank'?'':'none';
+  document.getElementById('cy-grid').style.display=id==='cards'?'':'none';
+  document.getElementById('cy-filt').style.display=id==='cards'?'flex':'none';
+}
+
+function fcy(type,btn){
+  document.querySelectorAll('#cy-filt .pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.cyc').forEach(c=>{
+    let show=true;
+    if(type==='early')show=parseInt(c.dataset.inn)<=3;
+    if(type==='bclow')show=parseInt(c.dataset.bc)<=35;
+    if(type==='struct')show=parseInt(c.dataset.struct)>=85;
+    c.style.display=show?'':'none';
+  });
+}
+
+/* ════════════════════════════
+   WIDGET 2 RENDER FUNCTIONS
+════════════════════════════ */
+function buildPS(){
+  const cont=document.getElementById('ps-cont');
+  const pills=document.getElementById('ps-pills');
+  PS.forEach(sec=>{
+    const btn=mk('button','pill');
+    btn.textContent=sec.title.split('—')[0].trim();
+    btn.onclick=()=>setPsFilter(sec.id,btn);
+    pills.appendChild(btn);
+  });
+  PS.forEach(sec=>{
+    const s=mk('div','sec');s.dataset.sec=sec.id;
+    const hd=mk('div','sec-head');
+    hd.innerHTML=`<div class="sec-num" style="background:${sec.c}">${sec.id}</div><div class="sec-title">${sec.title}</div><div class="sec-sub">${sec.sub}</div>`;
+    s.appendChild(hd);
+    const why=mk('div','why');
+    why.style.cssText=`border-color:${sec.c};background:${sec.c}08`;
+    why.innerHTML=`<span style="font-size:10.0px;font-weight:500;color:var(--color-text-primary)">Why this category matters: </span>${sec.why}`;
+    s.appendChild(why);
+    const g=mk('div','ps-grid');
+    sec.cards.forEach(card=>{
+      const c=mk('div',`psc${card.hi?' hi':''}`);
+      const bcls=card.badge==='hot'?'b-hot':card.badge==='structural'?'b-str':'b-mod';
+      const bLbl=card.badge==='hot'?'hot':card.badge==='structural'?'structural':'moderate';
+      const srvHtml=(card.srv||[]).map(s=>`<span class="srv">${s}</span>`).join('');
+      c.innerHTML=`<div class="psn">${card.n}<span class="badge ${bcls}">${bLbl}</span></div><div class="psr">${card.r}</div><div class="pst">${card.t}</div><div style="margin-top:3px">${srvHtml}</div>`;
+      g.appendChild(c);
+    });
+    s.appendChild(g);
+    cont.appendChild(s);
+  });
+}
+
+function setPsFilter(id,btn){
+  document.querySelectorAll('#ps-pills .pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.sec').forEach(s=>{s.style.display=(id==='all'||s.dataset.sec===id)?'':'none';});
+}
+
+function buildEl(){
+  const cg=document.getElementById('el-chain-grid');
+  EL_CHAIN.forEach(card=>{
+    const c=mk('div',`elc${card.hi?' hi':''}`);
+    c.addEventListener('click',()=>c.classList.toggle('ex'));
+    c.innerHTML=`<div class="elh"><div class="eld" style="background:${card.c}"></div><div class="eln">${card.n}</div><div class="elch">▼</div></div><div class="elb">${card.role}</div><div class="elt">${card.tick}</div><div class="eld2">${card.det}</div>`;
+    cg.appendChild(c);
+  });
+  const ig=document.getElementById('el-intx-grid');
+  EL_INTX.forEach(ix=>{
+    const c=mk('div','elc');
+    c.innerHTML=`<div class="elh"><div class="eld" style="background:${ix.c}"></div><div class="eln">${ix.n}</div></div><div class="elb">${ix.body}</div><div class="elt">${ix.tick}</div><div style="margin-top:4px;font-size:10.0px;background:var(--color-background-secondary);padding:3px 5px;border-radius:3px;color:var(--color-text-secondary)"><b style="color:var(--color-text-primary)">Demand:</b> ${ix.demand}</div>`;
+    ig.appendChild(c);
+  });
+  const ac=document.getElementById('el-ai-cont');
+  const ag=mk('div','el-grid');
+  EL_AI.forEach(d=>{
+    const c=mk('div','elc');
+    c.innerHTML=`<div class="eln" style="margin-bottom:3px">${d.n}</div><div class="elb">${d.body}</div><div class="elt">${d.tick}</div>`;
+    ag.appendChild(c);
+  });
+  ac.appendChild(ag);
+  const cc=document.getElementById('el-cycle-cont');
+  const cg2=mk('div','el-grid');
+  EL_CYCLE.forEach(cy=>{
+    const c=mk('div','elc');
+    const dots=Array(9).fill(0).map((_,j)=>`<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${j<cy.inn?(j===cy.inn-1?cy.c:cy.c+'55'):'var(--color-background-secondary)'};border:.5px solid ${cy.c}44;margin-right:1px"></span>`).join('');
+    c.innerHTML=`<div class="elh"><div class="eld" style="background:${cy.c}"></div><div class="eln">${cy.n}</div><span class="badge" style="background:${cy.vc}22;color:${cy.vc};border:.5px solid ${cy.vc}44;margin-left:auto;font-size:9.5px;padding:1px 5px;border-radius:3px">${cy.verdict}</span></div>
+    <div style="display:grid;grid-template-columns:80px 1fr 32px;gap:2px;align-items:center;margin-bottom:2px;font-size:10.0px"><span style="color:var(--color-text-tertiary)">Structural</span><div style="height:3px;border-radius:2px;background:var(--color-background-secondary)"><div style="width:${cy.struct}%;height:100%;background:${cy.c};border-radius:2px"></div></div><span style="font-size:10.0px;font-weight:500;color:${cy.c}">${cy.struct}</span></div>
+    <div style="display:grid;grid-template-columns:80px 1fr 32px;gap:2px;align-items:center;margin-bottom:2px;font-size:10.0px"><span style="color:var(--color-text-tertiary)">Capex gap</span><div style="height:3px;border-radius:2px;background:var(--color-background-secondary)"><div style="width:${cy.capex}%;height:100%;background:#E24B4A;border-radius:2px"></div></div><span style="font-size:10.0px;font-weight:500;color:#E24B4A">${cy.capex}</span></div>
+    <div style="display:grid;grid-template-columns:80px 1fr 32px;gap:2px;align-items:center;margin-bottom:3px;font-size:10.0px"><span style="color:var(--color-text-tertiary)">Cycle risk</span><div style="height:3px;border-radius:2px;background:var(--color-background-secondary)"><div style="width:${cy.bc}%;height:100%;background:#EF9F27;border-radius:2px"></div></div><span style="font-size:10.0px;font-weight:500;color:#EF9F27">${cy.bc}</span></div>
+    <div style="font-size:10.0px;color:var(--color-text-tertiary);margin-bottom:2px">Innings: ${dots}<span style="font-weight:500;color:${cy.c}">${cy.inn}/9</span></div>
+    <div class="elb" style="font-size:10.0px">${cy.body}</div>`;
+    cg2.appendChild(c);
+  });
+  cc.appendChild(cg2);
+}
+
+function setElView(id,btn){
+  document.querySelectorAll('#el-pills .pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  ['chain','intx','ai','cycle'].forEach(v=>{document.getElementById('el-'+v).style.display=v===id?'':'none';});
+}
+
+function buildThemes(){
+  const nav=document.getElementById('th-nav');
+  THEMES.forEach(t=>{
+    const btn=mk('div','tn');btn.dataset.id=t.id;
+    btn.innerHTML=`<div class="tn-name" style="color:${t.c}">${t.n}</div><div class="tn-sub">${t.sub}</div>`;
+    btn.addEventListener('click',()=>loadTheme(t.id));
+    nav.appendChild(btn);
+  });
+  loadTheme(THEMES[0].id);
+}
+
+function loadTheme(id){
+  document.querySelectorAll('.tn').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.borderColor='';});
+  const btn=document.querySelector(`.tn[data-id="${id}"]`);
+  const t=THEMES.find(x=>x.id===id);
+  if(btn){btn.classList.add('on');btn.style.background=t.c;btn.style.borderColor=t.c;}
+  const cont=document.getElementById('th-detail');
+  let det=document.getElementById('thd-'+id);
+  if(!det){
+    det=mk('div','th-detail');det.id='thd-'+id;
+    const chain=t.items.map((item,i)=>`<div class="tc-item"><div class="tc-num" style="background:${t.c}">${i+1}</div><div><div class="tc-lbl">${item.lbl}</div><div class="tc-txt">${item.ticks}</div><div class="tc-txt" style="color:var(--color-text-secondary);margin-top:1px">${item.why}</div></div></div>`).join('');
+    const posCards=(t.positions||[]).map(p=>{const[tier,...rest]=p.split(':');return `<div class="pos-card"><div class="pos-tier">${tier}</div><div class="pos-items">${rest.join(':').trim()}</div></div>`;}).join('');
+    const bars=[{l:'Structural demand strength',v:t.struct,c:t.c},{l:'Near-term momentum',v:t.near,c:t.c+'99'},{l:'Business cycle risk',v:t.bc,c:'#EF9F27'}].map(b=>`<div class="vbar"><div class="vbar-lbl">${b.l}</div><div class="vbar-b"><div class="vbar-f" style="width:${b.v}%;background:${b.c}"></div></div><span style="font-size:10.5px;font-weight:500;color:${b.c};min-width:24px;text-align:right">${b.v}</span></div>`).join('');
+    det.innerHTML=`<div class="th-2col"><div><div style="font-size:10.0px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:4px">Supply chain position map</div><div class="th-chain">${chain}</div></div><div class="th-right"><div class="th-box"><div class="th-box-title">Investment thesis</div><div class="th-box-body">${t.thesis}</div></div><div class="th-box"><div class="th-box-title">Portfolio positioning</div><div class="pos-grid">${posCards}</div></div><div class="th-box"><div class="th-box-title">Structure vs. cycle</div>${bars}</div><div class="risk-box"><div class="risk-title">Watch / risk</div><div class="risk-body">${t.risk}</div></div></div></div>`;
+    cont.appendChild(det);
+  }
+  document.querySelectorAll('.th-detail').forEach(d=>d.classList.remove('on'));
+  det.classList.add('on');
+}
+
+function buildPortfolio(){
+  const cont=document.getElementById('pf-cont');
+  const banner=mk('div','banner');
+  banner.innerHTML=`<div class="banner-title">${PORTFOLIO.defining_insight.title}</div><div class="banner-body">${PORTFOLIO.defining_insight.body}</div>`;
+  cont.appendChild(banner);
+  const cg=mk('div','cluster-grid');
+  PORTFOLIO.clusters.forEach(cl=>{
+    const c=mk('div',`cluster ${cl.cls}`);
+    c.innerHTML=`<div class="cluster-title" style="color:${cl.color}">${cl.title}</div><div class="cluster-items">${cl.items.map(i=>`• ${i}`).join('<br>')}</div>`;
+    cg.appendChild(c);
+  });
+  cont.appendChild(cg);
+  const qLabel=mk('div','');qLabel.style.cssText='font-size:10.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px;padding-bottom:3px;border-bottom:.5px solid var(--color-border-tertiary)';
+  qLabel.textContent='The four-question framework for every position';cont.appendChild(qLabel);
+  const qg=mk('div','q4-grid');
+  PORTFOLIO.four_questions.forEach(item=>{
+    const c=mk('div','q4-card');
+    c.innerHTML=`<div class="q4-q">${item.q}</div><div class="q4-a">${item.a}</div>`;
+    qg.appendChild(c);
+  });
+  cont.appendChild(qg);
+  const catLabel=mk('div','');catLabel.style.cssText='font-size:10.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px;padding-bottom:3px;border-bottom:.5px solid var(--color-border-tertiary)';
+  catLabel.textContent='Key catalysts by vertical — now / 12m / 3yr';cont.appendChild(catLabel);
+  const cat_note=mk('div','note');
+  cat_note.innerHTML='<span class="ct-pill ct-now">now</span> already in motion &nbsp;<span class="ct-pill ct-12m">12m</span> next 12 months &nbsp;<span class="ct-pill ct-3y">3yr</span> 2-3 year horizon';
+  cont.appendChild(cat_note);
+  const catg=mk('div','cat-grid');
+  CY_CATS.forEach(cy=>{
+    const c=mk('div','cat-card');
+    const cats=cy.cats.map(cat=>{
+      const tag=cat.includes('(now)')?'ct-now':cat.includes('(12m)')?'ct-12m':cat.includes('(3yr)')?'ct-3y':'ct-on';
+      const label=cat.includes('(now)')?'now':cat.includes('(12m)')?'12m':cat.includes('(3yr)')?'3yr':'ongoing';
+      const text=cat.replace(/\((now|12m|3yr|ongoing)\)/g,'').trim();
+      return `<div style="display:flex;align-items:flex-start;gap:4px;padding:2px 0;border-bottom:.5px solid var(--color-border-tertiary)"><span class="ct-pill ${tag}" style="flex-shrink:0;margin-top:1px">${label}</span><span style="font-size:10.0px;color:var(--color-text-secondary);line-height:1.4">${text}</span></div>`;
+    }).join('');
+    c.innerHTML=`<div class="cat-head"><div class="cat-dot" style="background:${cy.c}"></div><div class="cat-name">${cy.n}</div></div>${cats}`;
+    catg.appendChild(c);
+  });
+  cont.appendChild(catg);
+}
+
+/* ════════════════════════════
+   DATA LOADING (all 9 files)
+════════════════════════════ */
+async function loadData(){
+  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio]=await Promise.all([
+    fetch(BASE+'matrix.json').then(r=>r.json()),
+    fetch(BASE+'explorer.json').then(r=>r.json()),
+    fetch(BASE+'explainers.json').then(r=>r.json()),
+    fetch(BASE+'geopolitical.json').then(r=>r.json()),
+    fetch(BASE+'cycle.json').then(r=>r.json()),
+    fetch(BASE+'picks-shovels.json').then(r=>r.json()),
+    fetch(BASE+'electricity.json').then(r=>r.json()),
+    fetch(BASE+'themes.json').then(r=>r.json()),
+    fetch(BASE+'portfolio.json').then(r=>r.json()),
+  ]);
+
+  /* Widget 1 data */
+  VC_COLS  = matrix.verticals;
+  ROWS     = matrix.chain_stages;
+  MXC      = matrix.cells;
+  DET      = matrix.highlighted_cells;
+  VORDER   = matrix.vertical_order;
+  CROSS_V  = matrix.cross_links;
+  B_BAND   = matrix.b_band;
+  C_BAND   = matrix.c_band;
+  GEO      = geo.heatmap;
+  ACTORS   = geo.actor_map;
+  CYD      = cycle.cycles;
+  VC       = explorer.verticals;
+  EXPLS    = explainers.explainers;
+
+  /* Widget 2 data */
+  PS       = ps.categories;
+  EL_CHAIN = elec.chain;
+  EL_INTX  = elec.intersections;
+  EL_AI    = elec.ai_themes;
+  EL_CYCLE = elec.cycle;
+  THEMES   = themes.themes;
+  PORTFOLIO= portfolio;
+  CY_CATS  = portfolio.catalyst_table;
+
+  /* Populate dynamic content */
+  document.getElementById('integ').innerHTML=`<b style="color:var(--color-text-primary)">Integrated companies:</b> ${matrix.integrated_companies}`;
+  document.getElementById('el-bt-title').textContent=elec.bottleneck.title;
+  document.getElementById('el-bt-body').textContent=elec.bottleneck.body;
+
+  /* Show app */
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='';
+
+  /* Build default tab */
+  buildMatrix();
+  built.mx=true;
+}
+
+loadData().catch(err=>{
+  document.getElementById('loading').textContent='Error loading data: '+err.message;
+});
+</script>
+</body>
+</html>

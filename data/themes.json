@@ -1,0 +1,115 @@
+{
+  "_meta": {
+    "description": "Demand themes — the structural narratives driving the AI hardware supply chain. Each maps a supply-chain position list, an investment thesis, structure-vs-cycle scores (0-100), portfolio positioning tiers, and watch/risk.",
+    "as_of": "2026-05-28"
+  },
+  "themes": [
+    {
+      "id":"compute","n":"AI Compute Buildout","c":"#16A34A","sub":"~$300-400B/yr hyperscaler capex",
+      "items":[
+        {"lbl":"Accelerator silicon","ticks":"NVDA, AMD, AVGO, MRVL","why":"Merchant GPU + custom ASIC — the demand engine"},
+        {"lbl":"Foundry","ticks":"TSM","why":"Every accelerator is a TSMC leading-edge wafer"},
+        {"lbl":"Packaging","ticks":"TSMC CoWoS, ASE, AMKR","why":"The gating capacity constraint on shipments"},
+        {"lbl":"Memory","ticks":"000660.KS, MU","why":"HBM gates GPU output; ~8 stacks per GPU"},
+        {"lbl":"Systems","ticks":"2317.TW, 6669.TW, SMCI, DELL","why":"Rack-scale integration of NVL72-class systems"}
+      ],
+      "positions":["Core: NVDA, TSM, AVGO","Picks-shovels: ASE, Advantest, ALAB","Asia proxies: 6669.TW, 2382.TW, 3661.TW"],
+      "thesis":"The single largest capex cycle in tech history. Hyperscalers + neoclouds + sovereign AI are spending ~$300-400B/yr, and demand still outruns supply at CoWoS and HBM. The durable winners own the bottlenecks (TSMC, SK Hynix) or the platform (Nvidia CUDA, Broadcom ASIC).",
+      "struct":95,"near":85,"bc":55,
+      "risk":"Capex digestion / ROI doubt is the key cycle risk — if hyperscaler returns disappoint, the whole stack de-rates. Watch hyperscaler capex guidance, inference-vs-training mix, and any pause in frontier-model spend."
+    },
+    {
+      "id":"memwall","n":"The Memory Wall (HBM)","c":"#7C3AED","sub":"HBM is the AI supply gate",
+      "items":[
+        {"lbl":"HBM makers","ticks":"000660.KS, MU, 005930.KS","why":"SK Hynix ~62%; all sold out for 2026"},
+        {"lbl":"HBM stacking","ticks":"BESI, 0522.HK","why":"TSV + hybrid bonding equipment"},
+        {"lbl":"Base die (HBM4)","ticks":"TSM","why":"HBM4 logic base die pulls foundry into memory"},
+        {"lbl":"Test","ticks":"6857.T, TER","why":"HBM complexity lengthens test time"}
+      ],
+      "positions":["Core: 000660.KS, MU","Enabler: BESI, Advantest","China watch: CXMT (private)"],
+      "thesis":"HBM is the clearest hard bottleneck in AI — bandwidth, not FLOPS, increasingly gates training. A Korea-centric oligopoly with pricing power and multi-year sold-out books. HBM4 (2026) raises the technical bar and drops TSMC into the stack via the logic base die.",
+      "struct":92,"near":88,"bc":50,
+      "risk":"Memory is historically the most cyclical semi segment. A demand air-pocket or Samsung/CXMT supply surge could break HBM pricing. Watch HBM4 qualification timing and any conventional-DRAM glut bleeding into sentiment."
+    },
+    {
+      "id":"packaging","n":"Advanced Packaging","c":"#0891B2","sub":"Value migrating to the back-end",
+      "items":[
+        {"lbl":"CoWoS / SoIC","ticks":"TSM","why":"The gating bottleneck on AI GPU output"},
+        {"lbl":"OSAT","ticks":"3711.TW, AMKR, 600584.SH","why":"Overflow capacity + advanced packaging"},
+        {"lbl":"Substrates","ticks":"4062.T, 3037.TW, 2802.T","why":"ABF substrate + film constraints"},
+        {"lbl":"Bonding tools","ticks":"BESI, 0522.HK, KLIC","why":"Hybrid bonding enables 3D stacking"}
+      ],
+      "positions":["Core: TSM, BESI","Picks-shovels: ASE, Amkor, Unimicron","Hidden: Ajinomoto (ABF film)"],
+      "thesis":"As transistor scaling slows, performance increasingly comes from packaging — the new Moore's Law. CoWoS is the visible bottleneck; substrates and hybrid-bonding tools are the second-order chokepoints. A multi-year capacity-build story with value shifting front-end to back-end.",
+      "struct":88,"near":80,"bc":45,
+      "risk":"CoWoS capacity is being added aggressively — a swing from shortage to balance would compress the scarcity premium. Watch TSMC packaging capacity adds, FOPLP (panel-level) disruption, and substrate supply normalization."
+    },
+    {
+      "id":"optics","n":"Optical & CPO","c":"#D97706","sub":"Optics content per GPU rising fast",
+      "items":[
+        {"lbl":"Lasers (EML)","ticks":"LITE, COHR, 6503.T","why":"<5 makers; Nvidia spent ~$4B to lock supply"},
+        {"lbl":"Transceiver assembly","ticks":"300308.SZ, 300502.SZ, FN","why":"China ~63% assembly; Fabrinet diversified"},
+        {"lbl":"Optical DSP","ticks":"MRVL, AVGO","why":"The brains of the transceiver — US value capture"},
+        {"lbl":"CPO packaging","ticks":"TSM","why":"Co-packaged optics inflection on TSMC COUPE"}
+      ],
+      "positions":["Core: COHR, LITE","DSP: MRVL, AVGO","Diversified assembly: FN"],
+      "thesis":"Optics is becoming the power and bandwidth bottleneck of AI networking, and content per GPU is scaling sharply (800G→1.6T). EML lasers are a genuine chokepoint; CPO (2026) moves optics onto the package and drops TSMC into photonics. US captures the silicon + laser value; China the assembly.",
+      "struct":85,"near":82,"bc":48,
+      "risk":"CPO timing/adoption is uncertain and could disrupt the pluggable-transceiver model. LPO (linear-drive) could bypass DSPs. Watch CPO ramp at Nvidia/Broadcom and any laser-capacity catch-up easing the EML squeeze."
+    },
+    {
+      "id":"powercool","n":"Datacenter Power & Cooling","c":"#65A30D","sub":"The binding physical constraint",
+      "items":[
+        {"lbl":"Power & thermal systems","ticks":"VRT, ETN","why":"Power + liquid cooling at rack scale"},
+        {"lbl":"Power supplies","ticks":"2308.TW, 2301.TW, MPWR","why":"48V-to-chip for 1kW+ GPUs"},
+        {"lbl":"Cooling components","ticks":"3017.TW, 3324.TWO","why":"Cold plates, CDUs; ~76% liquid by 2026"},
+        {"lbl":"Onsite power","ticks":"GEV, CMI, CAT","why":"Gas turbines + nuclear PPAs (cross to energy)"}
+      ],
+      "positions":["Core: VRT","Asia component: Delta 2308.TW, AVC","Energy cross-link: GEV (see Hard Assets)"],
+      "thesis":"Power availability and heat rejection — not chips — are now the binding constraints on AI deployment. Liquid cooling jumps from ~15% to ~76% of the mix by 2026, CDU capacity is short, and grid/transformer lead times gate sites. The deepest cross-link from AI hardware into the energy supply chain.",
+      "struct":90,"near":83,"bc":50,
+      "risk":"A datacenter capex slowdown hits this directly. Cooling tech is fragmenting (cold plate vs immersion) — backing the wrong standard is a risk. Watch power-availability headlines, transformer lead times, and liquid-cooling attach rates."
+    },
+    {
+      "id":"humanoid","n":"Humanoid Robotics","c":"#DC2626","sub":"~28-40 actuators per robot",
+      "items":[
+        {"lbl":"Reducers","ticks":"6324.T, 6268.T, 688017.SH","why":"Harmonic + RV gearing — costliest joint part"},
+        {"lbl":"Screws & motors","ticks":"6481.T, NSK, GSA, 300124.SZ","why":"Roller screws + torque motors; a humanoid bottleneck"},
+        {"lbl":"Actuator assembly","ticks":"002050.SZ","why":"Sanhua exclusive Tier-1 Optimus assembler"},
+        {"lbl":"Robot brain","ticks":"NVDA (Jetson Thor)","why":"Embodied-AI compute links to accelerators"},
+        {"lbl":"Sensing","ticks":"6758.T, HSAI, NOVT (ATI)","why":"Vision, lidar, force/torque for manipulation"}
+      ],
+      "positions":["Core (incumbent): 6324.T, 6268.T","China localization: 300124.SZ, 002050.SZ, 688017.SH","Brain: NVDA"],
+      "thesis":"Humanoids create an entirely new precision-motion BOM. The supply chain — not the AI — is the hard part: reducers, roller screws and torque motors are Japanese/European chokepoints that China is racing to localize and cost-down. The clearest pure-plays sit in the actuator components, not the robot brands.",
+      "struct":80,"near":55,"bc":60,
+      "risk":"Timeline + unit-volume risk is high — humanoid deployment forecasts are speculative and could slip years. China cost-down could crush component margins. Watch Optimus/Figure production numbers and actual reducer/screw order flow vs hype."
+    },
+    {
+      "id":"glasses","n":"AI / Smart Glasses","c":"#9333EA","sub":"The consumer on-ramp to AR",
+      "items":[
+        {"lbl":"Micro-displays","ticks":"6758.T, HIMX, JBD (private)","why":"OLEDoS/LCoS/microLED — make-or-break component"},
+        {"lbl":"Waveguides","ticks":"Lumus (private), VUZI","why":"Getting the image to the eye in a glasses form"},
+        {"lbl":"High-index glass","ticks":"GLW, Schott, 5218.T","why":"Substrate the waveguide is etched into"},
+        {"lbl":"AR SoC","ticks":"QCOM","why":"De-facto smart-glasses compute"},
+        {"lbl":"Assembly / OEM","ticks":"META, 002241.SZ, Xreal","why":"Goertek light engines; Meta drives the BOM"}
+      ],
+      "positions":["Compute: QCOM","Optics: GLW; Himax HIMX","Assembly proxy: Goertek 002241.SZ"],
+      "thesis":"Meta's Ray-Ban breakout proved a consumer market for AI-camera glasses ahead of full AR. The two unsolved problems — micro-displays and waveguides — are deep chokepoints with no clear winner yet, which makes the component layer (displays, glass, SoC) more investable than the device brands.",
+      "struct":70,"near":50,"bc":55,
+      "risk":"Earliest-stage theme here — full AR remains years out and display/waveguide tech is unsettled (cost, yield, FOV). Most pure-plays are private (Lumus, JBD). Watch Meta/Apple device unit sales and any display-tech standardization."
+    },
+    {
+      "id":"sovereign","n":"Sovereign AI & Reshoring","c":"#2563EB","sub":"Policy-driven supply diversification",
+      "items":[
+        {"lbl":"US/EU fabs","ticks":"TSM (AZ), INTC, GFS, AMKR","why":"CHIPS Act + EU Chips Act capacity"},
+        {"lbl":"Domestic memory/packaging","ticks":"MU, AMKR","why":"US-supply-security premium"},
+        {"lbl":"Sovereign clouds","ticks":"NVDA, hyperscalers","why":"National AI compute mandates"},
+        {"lbl":"China self-sufficiency","ticks":"SMIC, CXMT, NAURA, Huawei","why":"The parallel, sanctioned stack"}
+      ],
+      "positions":["Western reshoring: AMKR, MU, GFS","Equipment beneficiaries: AMAT, LRCX","China stack (separate risk): SMIC, 002371.SZ"],
+      "thesis":"Governments now treat AI compute as strategic infrastructure, funding domestic fabs, packaging and sovereign clouds. This bifurcates the supply chain (a Western stack + a Chinese stack) and creates policy-driven demand and supply-security premia — but also subsidy-dependent overcapacity risk.",
+      "struct":78,"near":65,"bc":45,
+      "risk":"Subsidy-driven capacity can become overcapacity (esp. mature nodes); reshored fabs face cost/yield disadvantages. Policy can reverse (the May→July 2025 EDA on/off). Watch CHIPS disbursements, China curbs, and mature-node price wars."
+    }
+  ]
+}

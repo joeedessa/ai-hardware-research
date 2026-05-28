@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "description": "Geopolitical lens. heatmap: chokepoint scored 1-5 on [supply concentration, chokepoint severity, Western policy response, AI-race relevance]. actor_map: who controls each broad stage by country (Design/IP, Equipment, Fabrication, Packaging/System).",
+    "as_of": "2026-05-28",
+    "score_scale": "1=Very low, 2=Low, 3=Moderate, 4=High, 5=Very high",
+    "actor_classes": {"a-us":"US","a-tw":"Taiwan","a-kr":"S. Korea","a-jp":"Japan","a-cn":"China","a-eu":"Europe/other"}
+  },
+  "heatmap": [
+    {"n":"EUV lithography","scores":[5,5,3,5],"det":"ASML (Netherlands) is the sole EUV maker; Zeiss optics + Cymer source are single-source within it. The hardest-to-replicate node in the supply chain. NL+US+Japan jointly bar advanced tools to China — a binding policy lever. China's SMEE is ~a decade behind. There is no leading-edge AI silicon without ASML."},
+    {"n":"Leading-edge foundry (Taiwan)","scores":[5,5,4,5],"det":"TSMC has ~90%+ of <5nm logic, overwhelmingly in Taiwan — the single largest geographic concentration risk in the AI era. Arizona/Japan/Germany fabs diversify at the margin but the centre of gravity stays in Taiwan. A Taiwan disruption would halt the global AI buildout; this is the defining tail risk."},
+    {"n":"HBM memory (Korea)","scores":[5,4,2,5],"det":"HBM gates AI GPU shipments and is ~95% Korean (SK Hynix + Samsung) plus Micron (US). SK Hynix ~62% share and Nvidia's lead supplier. All sold out for 2026. Less politicized than logic, but a Korea-centric single point of dependency for every accelerator. China (CXMT) years behind."},
+    {"n":"Advanced packaging / CoWoS","scores":[5,4,3,5],"det":"TSMC CoWoS is the gating bottleneck on AI GPU output; concentrated in Taiwan with ABF substrates from Japan (Ibiden/Shinko) and Taiwan (Unimicron). Amkor's Arizona fab is the main Western reshoring response. Capacity, not technology, is the constraint here — and it compounds the Taiwan concentration."},
+    {"n":"EDA & design IP (US/UK)","scores":[5,4,4,4],"det":"Synopsys + Cadence (~70%+) + Arm gate all advanced design — a US/UK chokepoint and a fast on/off lever (BIS halted China EDA sales May 2025, reversed July 2025 in a rare-earth swap). China's Empyrean is far behind on full-flow. The clearest example of Western leverage in the stack."},
+    {"n":"Photoresist & silicon wafers (Japan)","scores":[5,4,2,4],"det":"Japan controls ~80-90% of advanced photoresist (JSR, TOK, Shin-Etsu, Fujifilm) and ~50%+ of 300mm wafers (Shin-Etsu, SUMCO). Quiet, under-discussed upstream chokepoints sitting above even TSMC. Japan demonstrated willingness to use materials leverage (vs Korea, 2019)."},
+    {"n":"Optical lasers & transceivers","scores":[4,4,2,4],"det":"EML lasers are made by <5 firms (Lumentum, Coherent, Mitsubishi, Sumitomo, Broadcom) — a deep chokepoint Nvidia spent ~$4B to lock. China dominates transceiver module assembly (~63%; InnoLight+Eoptolink ~60% of Nvidia 800G) but US silicon (DSPs) + lasers capture the value. A split US-value / China-assembly structure."},
+    {"n":"Robotics precision motion","scores":[4,3,2,4],"det":"Harmonic/RV reducers (Harmonic Drive, Nabtesco ~60%), roller screws (NSK/THK/GSA) and torque motors are historically Japanese/European chokepoints. China (Inovance, Green Harmonic, Sanhua) is aggressively localizing to cut humanoid cost — Optimus Gen-3 reportedly ~70% China-sourced. The contested frontier of the next hardware wave."},
+    {"n":"AR optics & micro-displays","scores":[3,3,1,3],"det":"The make-or-break AR components: waveguides (Lumus/Israel, Dispelix, DigiLens), high-index glass (Schott, Corning, Ohara) and micro-displays (Sony OLEDoS, JBD microLED). Pre-mass-market so not yet politicized, but China (Goertek) already dominates device assembly and is moving up into displays (BOE, JBD)."},
+    {"n":"China domestic compute (SMIC/Huawei)","scores":[4,4,5,5],"det":"China's parallel stack — SMIC 7nm + Huawei Ascend + CXMT HBM — is the central US-China tech-war front and the most heavily policy-targeted node (Entity List, EDA/WFE/HBM curbs). Fenced off from TSMC + Nvidia + EUV; progressing on DUV multipatterning at high cost. The self-sufficiency drive is a national priority."},
+    {"n":"Datacenter power & cooling","scores":[3,4,2,4],"det":"The binding physical constraint on the AI buildout is now power and cooling, not chips. Grid access, multi-year transformer lead times and the jump to liquid cooling (~76% of mix by 2026) gate deployment. Less a country chokepoint than an infrastructure one — but it's where AI hardware meets the energy supply chain (cross-link to the Hard Assets map)."}
+  ],
+  "actor_map": [
+    {"n":"United States","l":[
+      {"t":"EDA, GPU/ASIC design, CUDA — dominant","c":"a-us"},
+      {"t":"WFE: AMAT, Lam, KLA — co-lead","c":"a-us"},
+      {"t":"Intel/Micron fabs; reshoring (CHIPS Act)","c":"a-us"},
+      {"t":"Amkor AZ; system design Nvidia/Dell","c":"a-us"}
+    ]},
+    {"n":"Taiwan","l":[
+      {"t":"ASIC design svcs Alchip, GUC, MediaTek","c":"a-tw"},
+      {"t":"Limited (buys WFE)","c":"a-tw"},
+      {"t":"TSMC ~90% leading-edge — keystone","c":"a-tw"},
+      {"t":"CoWoS, ASE OSAT, Foxconn/Quanta/Wiwynn ODM","c":"a-tw"}
+    ]},
+    {"n":"South Korea","l":[
+      {"t":"Memory + foundry design (Samsung)","c":"a-kr"},
+      {"t":"Limited","c":"a-kr"},
+      {"t":"DRAM/HBM/NAND Samsung+SK Hynix; Samsung foundry","c":"a-kr"},
+      {"t":"HBM stacking (MR-MUF); OLEDoS","c":"a-kr"}
+    ]},
+    {"n":"Japan","l":[
+      {"t":"Limited (Socionext, Renesas niches)","c":"a-jp"},
+      {"t":"TEL, Screen, Advantest; Zeiss-rival optics","c":"a-jp"},
+      {"t":"Wafers (Shin-Etsu/SUMCO), resist (JSR/TOK), Kioxia","c":"a-jp"},
+      {"t":"Substrates Ibiden/Shinko; reducers, Sony, lasers","c":"a-jp"}
+    ]},
+    {"n":"China","l":[
+      {"t":"Empyrean EDA; Arm-alt RISC-V; Huawei/Cambricon","c":"a-cn"},
+      {"t":"NAURA, AMEC localizing; no EUV","c":"a-cn"},
+      {"t":"SMIC 7nm (capped), CXMT/YMTC memory","c":"a-cn"},
+      {"t":"JCET OSAT; InnoLight optics; Goertek/Inovance assembly","c":"a-cn"}
+    ]},
+    {"n":"Europe / other","l":[
+      {"t":"Arm (UK); Lumus AR (Israel)","c":"a-eu"},
+      {"t":"ASML (NL) EUV; Zeiss, Trumpf (DE); BESI (NL); VAT (CH)","c":"a-eu"},
+      {"t":"GlobalFoundries (DE), Infineon, ST, Tower (IL)","c":"a-eu"},
+      {"t":"AT&S substrates (AT); Schott AR glass (DE)","c":"a-eu"}
+    ]}
+  ]
+}

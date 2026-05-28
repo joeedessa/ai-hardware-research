@@ -1,0 +1,249 @@
+{
+  "_meta": {
+    "description": "Universe matrix — 13 verticals × 10 universal hardware supply-chain stages. Each cell has entries (label + style class) and optional highlighted analytical detail. Ex-materials.",
+    "as_of": "2026-05-28",
+    "style_classes": {
+      "v0": "EDA & IP — indigo", "v1": "WFE — sky", "v2": "Foundry — blue",
+      "v3": "Memory — violet", "v4": "Packaging — cyan", "v5": "Accelerators — green",
+      "v6": "Networking — emerald", "v7": "DC Infra — lime", "v8": "Optical — amber",
+      "v9": "Actuators — red", "va": "Sensing — rose", "vb": "Micro-displays — pink", "vc": "AR Optics — purple"
+    }
+  },
+  "verticals": [
+    {"id":"eda","sn":"EDA/IP","c":"#4F46E5","tc":"v0"},
+    {"id":"wfe","sn":"WFE","c":"#0EA5E9","tc":"v1"},
+    {"id":"fdy","sn":"Foundry","c":"#2563EB","tc":"v2"},
+    {"id":"mem","sn":"Memory","c":"#7C3AED","tc":"v3"},
+    {"id":"pkg","sn":"Packaging","c":"#0891B2","tc":"v4"},
+    {"id":"acc","sn":"Accel/GPU","c":"#16A34A","tc":"v5"},
+    {"id":"net","sn":"Network","c":"#059669","tc":"v6"},
+    {"id":"dci","sn":"DC Infra","c":"#65A30D","tc":"v7"},
+    {"id":"opt","sn":"Optical","c":"#D97706","tc":"v8"},
+    {"id":"act","sn":"Actuators","c":"#DC2626","tc":"v9"},
+    {"id":"sen","sn":"Sensing","c":"#E11D48","tc":"va"},
+    {"id":"dsp","sn":"Displays","c":"#DB2777","tc":"vb"},
+    {"id":"arx","sn":"AR Optics","c":"#9333EA","tc":"vc"}
+  ],
+  "chain_stages": [
+    {"id":"ip","n":"Design IP & EDA"},
+    {"id":"ds","n":"Architecture & design"},
+    {"id":"eq","n":"Capital equipment"},
+    {"id":"in","n":"Inputs & substrates"},
+    {"id":"ff","n":"Front-end fabrication"},
+    {"id":"bp","n":"Packaging, assembly & test"},
+    {"id":"mi","n":"Module / sub-system"},
+    {"id":"si","n":"System integration / ODM"},
+    {"id":"em","n":"End-market & deployment"},
+    {"id":"sw","n":"Software & standards"}
+  ],
+  "cells": {
+    "ip": {
+      "eda": [["EDA SNPS,CDNS,Siemens","v0"],["Arm IP; RISC-V","v0"]],
+      "wfe": [],
+      "fdy": [["PDKs / design rules","v2"]],
+      "mem": [],
+      "pkg": [["UCIe chiplet standard","v4"]],
+      "acc": [["CUDA / ROCm IP","v5"]],
+      "net": [],
+      "dci": [],
+      "opt": [["Photonic IP / PDKs","v8"]],
+      "act": [],
+      "sen": [],
+      "dsp": [],
+      "arx": [["AR SoC IP Qualcomm","vc"]]
+    },
+    "ds": {
+      "eda": [["Chip architecture","v0"],["ASIC svcs Alchip,GUC","v0"]],
+      "wfe": [["Tool R&D ASML,AMAT","v1"]],
+      "fdy": [["Process R&D TSMC,Samsung,Intel","v2"],["Fabless NVDA,AMD,QCOM","v2"]],
+      "mem": [["Memory process R&D","v3"]],
+      "pkg": [["2.5D/3D R&D CoWoS,SoIC","v4"]],
+      "acc": [["GPU NVDA,AMD","v5"],["Custom ASIC AVGO,MRVL","v5"],["China Huawei,Cambricon","v5"]],
+      "net": [["Switch silicon AVGO,MRVL,Nvidia","v6"]],
+      "dci": [["Rack/system architecture","v7"]],
+      "opt": [["Photonic design COHR,LITE","v8"],["Optical DSP MRVL,AVGO","v8"]],
+      "act": [["Actuator design","v9"],["Humanoids Tesla,Figure,Unitree","v9"]],
+      "sen": [["Robot brain Jetson Thor","va"],["Foundation models GR00T","va"]],
+      "dsp": [["Display R&D microLED/OLEDoS/LCoS","vb"]],
+      "arx": [["Optical arch waveguide/pancake","vc"],["AR SoC Qualcomm","vc"]]
+    },
+    "eq": {
+      "eda": [],
+      "wfe": [["Litho ASML EUV","v1"],["Etch/depo AMAT,LRCX,TEL,KLA","v1"],["China NAURA,AMEC","v1"]],
+      "fdy": [],
+      "mem": [],
+      "pkg": [["Hybrid bonders BESI,AMAT","v4"],["ASMPT,KLIC","v4"]],
+      "acc": [],
+      "net": [],
+      "dci": [],
+      "opt": [],
+      "act": [],
+      "sen": [],
+      "dsp": [],
+      "arx": [["Nanoimprint EVG,Canon,SUSS","vc"]]
+    },
+    "in": {
+      "eda": [["Photomask PLAB,Toppan","v0"],["EUV blanks Hoya,AGC","v0"]],
+      "wfe": [["Resist JSR,TOK,Shin-Etsu","v1"],["Optics Zeiss; source Cymer","v1"],["Valves VAT; MKS","v1"]],
+      "fdy": [["Wafers Shin-Etsu,SUMCO,GlobalWafers","v2"]],
+      "mem": [],
+      "pkg": [["ABF substrate Ibiden,Shinko,Unimicron","v4"],["ABF film Ajinomoto","v4"]],
+      "acc": [],
+      "net": [],
+      "dci": [["PSU Delta,Lite-On","v7"]],
+      "opt": [["EML lasers LITE,COHR,Mitsubishi","v8"],["VCSEL,photodiode","v8"]],
+      "act": [["Reducers Harmonic Drive,Nabtesco","v9"],["Screws NSK,THK,GSA","v9"],["Motors Nidec,Inovance","v9"]],
+      "sen": [["Image Sony,Omnivision","va"],["Lidar Hesai; IMU Bosch,TDK","va"],["F/T sensors ATI","va"]],
+      "dsp": [["Driver IC Himax,Novatek,Raydium","vb"]],
+      "arx": [["High-index glass Corning,Schott,Ohara","vc"],["SiC COHR,SICC","vc"]]
+    },
+    "ff": {
+      "eda": [],
+      "wfe": [],
+      "fdy": [["Leading-edge TSMC N2/A16","v2"],["Mature UMC,GF,Tower","v2"],["China SMIC 7nm,Hua Hong","v2"]],
+      "mem": [["DRAM Samsung,SK Hynix,Micron","v3"],["NAND Kioxia,SanDisk","v3"],["China CXMT,YMTC","v3"]],
+      "pkg": [],
+      "acc": [["TSMC dependency","v5"]],
+      "net": [],
+      "dci": [],
+      "opt": [["Si-photonics TSMC COUPE","v8"]],
+      "act": [],
+      "sen": [],
+      "dsp": [["CMOS backplane TSMC,UMC,X-Fab","vb"]],
+      "arx": []
+    },
+    "bp": {
+      "eda": [],
+      "wfe": [],
+      "fdy": [["Wafer sort Advantest,TER","v2"]],
+      "mem": [["HBM stacking SK Hynix MR-MUF","v3"],["TSV; bonders BESI,ASMPT","v3"]],
+      "pkg": [["CoWoS/SoIC TSMC","v4"],["OSAT ASE,Amkor,JCET,PTI","v4"],["Test KYEC,Advantest","v4"]],
+      "acc": [["CoWoS + HBM gate","v5"]],
+      "net": [["Optical interconnect handoff","v6"]],
+      "dci": [],
+      "opt": [["CPO packaging TSMC","v8"],["Module assembly InnoLight,Eoptolink,Fabrinet","v8"]],
+      "act": [],
+      "sen": [],
+      "dsp": [["microLED JBD,Porotech,AUO","vb"],["OLEDoS Sony,BOE; LCoS Himax,Omnivision","vb"]],
+      "arx": [["Waveguide fab; combiner Lumus,Dispelix,DigiLens","vc"]]
+    },
+    "mi": {
+      "eda": [["Interface IP SerDes,HBM PHY,UCIe","v0"]],
+      "wfe": [["Subsystems VAT,MKS,AEIS","v1"]],
+      "fdy": [],
+      "mem": [["Controllers Phison,SIMO; CXL","v3"],["DIMM / MRDIMM modules","v3"]],
+      "pkg": [],
+      "acc": [["Board/SXM; baseboards ODMs","v5"],["Retimers Astera ALAB","v5"]],
+      "net": [["Retimers ALAB; AEC Credo","v6"],["DPU/NIC BlueField","v6"]],
+      "dci": [["VRM MPWR,Vicor","v7"],["Liquid cooling Vertiv,Auras,AVC; CDU","v7"]],
+      "opt": [["800G/1.6T pluggables","v8"],["Connectors Corning,Senko","v8"]],
+      "act": [["Actuator assy Sanhua","v9"],["Drives/encoders Yaskawa,Renishaw","v9"]],
+      "sen": [["Perception SW Isaac/Omniverse","va"]],
+      "dsp": [["Light engine Goertek","vb"]],
+      "arx": [["Sensors eye-track Tobii; SLAM","vc"]]
+    },
+    "si": {
+      "eda": [],
+      "wfe": [["Tool assembly ASML,AMAT,TEL","v1"]],
+      "fdy": [],
+      "mem": [],
+      "pkg": [],
+      "acc": [["GPU server / NVL72 SMCI,Dell,HPE","v5"]],
+      "net": [["Switches Arista,Cisco","v6"],["White-box Accton,Celestica","v6"]],
+      "dci": [["Server ODM Foxconn,Quanta,Wiwynn,Wistron","v7"],["SMCI,Dell,HPE","v7"]],
+      "opt": [],
+      "act": [["Humanoid assy Optimus,Unitree,UBTech","v9"],["Arms Fanuc,Yaskawa,ABB,KUKA","v9"]],
+      "sen": [],
+      "dsp": [],
+      "arx": [["Glasses assy Goertek,Luxshare","vc"],["OEM Meta,Apple,Xreal,Rokid","vc"]]
+    },
+    "em": {
+      "eda": [["Heads every chip","v0"]],
+      "wfe": [["Fab capex TSMC,Samsung,Micron","v1"]],
+      "fdy": [["All fabless + IDM demand","v2"]],
+      "mem": [["HBM→GPU; DDR5→servers","v3"]],
+      "pkg": [["Finished AI GPUs/CPUs","v4"]],
+      "acc": [["Hyperscalers,neoclouds,sovereign AI","v5"]],
+      "net": [["100k+ GPU cluster fabric","v6"]],
+      "dci": [["Cloud capacity; colo DLR,EQIX","v7"],["Onsite power GEV (cross)","v7"]],
+      "opt": [["Optics per GPU scaling; OCS","v8"]],
+      "act": [["Industrial + humanoid deployment","v9"]],
+      "sen": [["Autonomy,AMR,surgical ISRG","va"]],
+      "dsp": [["Vision Pro,Quest,Orion,glasses","vb"]],
+      "arx": [["Ray-Ban breakout; enterprise AR","vc"]]
+    },
+    "sw": {
+      "eda": [["Verify/emulate; license model","v0"]],
+      "wfe": [["Install & field service","v1"]],
+      "fdy": [["Yield ramp; PDK ecosystem","v2"]],
+      "mem": [],
+      "pkg": [],
+      "acc": [["CUDA moat; ROCm,Triton,vLLM","v5"]],
+      "net": [["NVLink vs UALink; IB vs Ethernet","v6"]],
+      "dci": [["DCIM, orchestration","v7"]],
+      "opt": [["LPO vs DSP; CPO standards","v8"]],
+      "act": [["Motion control; embodied AI","v9"]],
+      "sen": [["VSLAM; sim-to-real","va"]],
+      "dsp": [],
+      "arx": [["Android XR; AR ecosystem","vc"]]
+    }
+  },
+  "highlighted_cells": {
+    "eq_wfe": {"t":"Wafer-Fab Equipment — Lithography (the deepest chokepoint in tech)","f":["fch","fgeo"],"b":"ASML (Netherlands) is the sole maker of EUV lithography. Within it, Carl Zeiss SMT (Germany) is the exclusive EUV optics supplier and Cymer (ASML-owned, US) the light source — single-source within a monopoly. High-NA EUV (~$380M/tool) is deploying first at Intel (14A, Dec 2025) and Samsung; TSMC is notably holding back, sticking with 0.33-NA EUV + multipatterning for A14/A16. US+NL+Japan jointly restrict advanced tools to China; SMEE is far behind, with sub-10nm scanners unlikely before ~2030."},
+    "ff_fdy": {"t":"Foundry — Leading-edge logic (the defining geopolitical risk of the AI era)","f":["fch","fgeo"],"b":"TSMC (2330.TW) has ~90%+ of <5nm logic; N2 (2nm nanosheet) entered volume production Q4 2025, A16 (backside power) H2 2026. TSMC Fab 18 in Tainan is the single most strategically important industrial site on earth. Arizona fabs (N4/N3) are ramping for geographic diversification but the centre of gravity remains Taiwan. Samsung (Korea) and Intel (US) are the only other leading-edge players; SMIC (China) is capped at ~7nm by export controls."},
+    "bp_pkg": {"t":"Advanced Packaging — TSMC CoWoS (the gating bottleneck on AI GPU output)","f":["fch","fgp"],"b":"CoWoS (chip-on-wafer-on-substrate) is the single capacity constraint that has gated Nvidia/AMD AI GPU shipments since 2023. TSMC is doubling CoWoS capacity yearly (AP6/AP7 in Chiayi) and outsourcing overflow to ASE, Amkor and SPIL. Rubin Ultra was reportedly re-architected over CoWoS-L yield. Secondary chokepoints: ABF substrates (Ibiden, Shinko, Unimicron; Ajinomoto's ABF film is a hidden near-monopoly) and hybrid-bonding tools (BESI). Panel-level packaging (FOPLP) is the next-gen escape."},
+    "bp_mem": {"t":"Memory — HBM (THE supply gate on AI accelerators; a Korea chokepoint)","f":["fch","fgp"],"b":"High-Bandwidth Memory gates AI GPU shipments and is concentrated in Korea. SK Hynix leads (~62% HBM, Q2 2025) and is Nvidia's lead supplier; Micron ~21% (overtook Samsung); Samsung ~17%, clearing Nvidia HBM4 qualification. Each Blackwell GPU carries ~8 HBM stacks; all three suppliers are sold out for 2026. HBM4 (2026) integrates a logic base die fabbed at TSMC — pulling the foundry into the memory stack. China (CXMT) is sampling HBM3 but years behind."},
+    "ds_acc": {"t":"AI Accelerators — Nvidia/CUDA vs the custom-ASIC counter-trend","f":["fch"],"b":"Nvidia holds ~80-90% of merchant AI silicon (Blackwell→Rubin cadence) defended by the CUDA software moat. The structural counter-trend is hyperscaler custom ASICs — Google TPU + Meta MTIA + OpenAI (Broadcom-designed); AWS Trainium + Microsoft Maia (Marvell). Broadcom + Marvell control ~95% of custom co-design; custom shipments are projected +44.6% in 2026 (~28% of AI servers). The real bottlenecks sit upstream at TSMC CoWoS and SK Hynix HBM, not in the design houses."},
+    "in_opt": {"t":"Optical — EML lasers (the deepest optical chokepoint)","f":["fch","fgp"],"b":"Fewer than five firms make EML lasers at scale: Lumentum, Coherent, Mitsubishi Electric (6503.T), Sumitomo, Broadcom. Nvidia committed ~$4B (~$2B each to Lumentum + Coherent) in 2026 to lock laser supply, pushing EML lead times past 2027 for everyone else. China dominates transceiver module assembly (~63% global; InnoLight + Eoptolink ~60% of Nvidia 800G) but US silicon (Marvell/Broadcom DSPs) + lasers capture the value. CPO on TSMC COUPE is the 2026 inflection."},
+    "in_act": {"t":"Robotics — Precision motion parts (Japan chokepoint, China localizing)","f":["fch","fgeo"],"b":"Humanoids need ~28-40 actuators each; the costliest precision parts are historically Japanese chokepoints: harmonic/strain-wave reducers (Harmonic Drive 6324.T), cycloidal/RV reducers (Nabtesco ~60% share), and planetary roller screws (NSK, THK, plus Germany's GSA — the primary Optimus supplier). China is aggressively localizing all three to cut cost: Green Harmonic (688017.SH, targeting Optimus supply), Inovance (motors/drives), and Sanhua (exclusive Tier-1 Optimus actuator assembler). Optimus Gen-3 is reportedly ~70% China-sourced."},
+    "bp_dsp": {"t":"Micro-displays — the make-or-break AR component","f":["fch","fgp"],"b":"Near-eye displays (tiny, ultra-bright, high-PPI) are an unsolved AR bottleneck. No clear winner among microLED (brightest, lowest yield — JBD dominant, plus Porotech, AUO), OLEDoS (premium MR — Sony powers Apple Vision Pro; BOE), and LCoS (mature/cheap for waveguides — Himax, Omnivision inside the Meta Ray-Ban Display). Mass-transfer/efficiency yield on full-color microLED is the long-term endgame problem. Goertek (China) dominates light-engine assembly."},
+    "bp_arx": {"t":"AR Optics — Waveguide combiners (the other make-or-break component)","f":["fch","fgp"],"b":"Getting the image to the eye in a glasses form factor is the second unsolved AR problem. Reflective/geometric waveguides: Lumus (Israel — inside the $799 Meta Ray-Ban Display). Diffractive: Dispelix, DigiLens, WaveOptics (Snap), Vuzix. Low light-efficiency, rainbow artifacts and yield make this a deep chokepoint. Upstream: high-index glass (Schott supplies Ray-Ban Display glass; Corning, Ohara, Hoya) and emerging SiC waveguides (index ~2.7, used in Meta Orion; no mature commercial supply chain yet)."},
+    "ip_eda": {"t":"EDA & IP — US duopoly + Arm (a fast on/off geopolitical lever)","f":["fch","fgeo"],"b":"Synopsys + Cadence (~70%+ of design software) plus Arm's CPU IP gate virtually all advanced design — the highest-margin, most defensible layer of the universe. Proven to be a fast on/off lever: BIS halted EDA exports to China in May 2025 and reversed it ~July 2025 in a rare-earth-for-tools trade. China's Empyrean (301269.SZ) cannot match full-flow leading-edge. RISC-V is rising as a license-risk hedge, China-favored."},
+    "in_fdy": {"t":"Foundry inputs — 300mm silicon wafers (a quiet Japan chokepoint)","f":["fch","fgeo"],"b":"Shin-Etsu (4063.T) + SUMCO (3436.T) of Japan supply ~50%+ of the world's 300mm polished/epi wafers; GlobalWafers (Taiwan) and Siltronic (Germany) round out the oligopoly. Every leading-edge chip starts on one of these wafers. Upstream of even TSMC, this is one of the least-discussed but hardest-to-replace Japanese strongholds — mirroring Japan's grip on photoresist and precision reducers."},
+    "si_dci": {"t":"Datacenter Infrastructure — Taiwan ODMs + the power/cooling wall","f":["fch","fgp"],"b":"Taiwan ODMs build the world's AI servers: Foxconn, Quanta, Wiwynn (~50% of hyperscale AI-server procurement), Wistron, Inventec. The binding constraint has shifted from chips to power and cooling: liquid cooling jumps from ~15% (2024) to ~76% of the mix by 2026 (GB200 mandates it), CDU capacity is the cooling bottleneck, and grid access + multi-year transformer lead times gate the buildout. This is the deepest cross-link into the energy supply chain."}
+  },
+  "b_band": [
+    {"n":"Key chokepoint","items":["Arm IP + EDA duopoly","ASML EUV / Zeiss optics","TSMC N2 (Taiwan)","SK Hynix HBM (Korea)","TSMC CoWoS","Nvidia CUDA","Broadcom switch silicon","Taiwan server ODMs","EML lasers <5 makers","Nabtesco/Harmonic Drive","Sony image sensors","microLED yield","Waveguides + high-index glass"]},
+    {"n":"China localizing","items":["Empyrean (EDA)","NAURA,AMEC (WFE)","SMIC,Hua Hong","CXMT,YMTC","JCET,TFME (OSAT)","Huawei,Cambricon","—","Inspur,ODMs","InnoLight,Eoptolink","Inovance,Green Harmonic,Sanhua","Hesai,RoboSense","JBD,BOE,Raysolve","Goertek,Xreal,Rokid"]},
+    {"n":"Key Japan supplier","items":["Hoya/AGC mask blanks","TEL,Screen; JSR resist","Shin-Etsu,SUMCO wafers","Kioxia (NAND)","Ibiden,Shinko substrates","—","—","—","Mitsubishi,Sumitomo EML","Harmonic Drive,Nabtesco,NSK,THK","Sony,Keyence,TDK","Sony OLEDoS","Ohara,Hoya glass"]}
+  ],
+  "c_band": [
+    {"t":"Capital equipment & tools (across the stack)","c":"#0EA5E9","rows":[
+      {"n":"Lithography","s":"ASML (EUV monopoly); Canon, Nikon (DUV); Zeiss optics + Cymer source within ASML"},
+      {"n":"Etch / deposition / CMP","s":"Applied Materials AMAT, Lam Research LRCX, Tokyo Electron 8035.T, Screen 7735.T"},
+      {"n":"Metrology / inspection","s":"KLA KLAC (leader); Hitachi High-Tech; Onto Innovation ONTO"},
+      {"n":"Packaging / bonding","s":"BE Semiconductor BESI (hybrid bonding), ASMPT 0522.HK, Kulicke & Soffa KLIC"},
+      {"n":"Test (ATE)","s":"Advantest 6857.T + Teradyne TER duopoly; FormFactor FORM (probe cards)"},
+      {"n":"Subsystems","s":"VAT VACN.SW (valves), MKS MKSI, Advanced Energy AEIS, Ichor ICHR"}
+    ]},
+    {"t":"The Asian chokepoints","c":"#DC2626","rows":[
+      {"n":"Taiwan","s":"TSMC (foundry+CoWoS+COUPE), ASE (OSAT), Foxconn/Quanta/Wiwynn (ODM), UMC, MediaTek, Delta"},
+      {"n":"South Korea","s":"Samsung + SK Hynix (HBM + DRAM + NAND + foundry + OLEDoS) — the memory chokepoint"},
+      {"n":"Japan","s":"Shin-Etsu/SUMCO wafers, JSR/TOK resist, TEL/Screen tools, Ibiden/Shinko substrates, Harmonic Drive/Nabtesco, Sony, Hoya"},
+      {"n":"China","s":"SMIC, CXMT/YMTC, InnoLight/Eoptolink, Inovance/Green Harmonic/Sanhua, Hesai, JBD, Goertek — localizing fast"},
+      {"n":"Netherlands","s":"ASML — the EUV monopoly; ASM International ASMI (ALD); Besi (hybrid bonding)"},
+      {"n":"Israel / others","s":"Lumus (AR waveguides), Tower (foundry); Germany: Zeiss, Trumpf, Infineon, GSA"}
+    ]},
+    {"t":"AI datacenter physical stack","c":"#65A30D","rows":[
+      {"n":"Compute","s":"Nvidia NVDA (GPU), AMD AMD; custom ASIC Broadcom AVGO + Marvell MRVL"},
+      {"n":"Memory","s":"HBM SK Hynix 000660.KS, Micron MU, Samsung — sold out through 2026"},
+      {"n":"Networking","s":"Broadcom (switch silicon), Arista ANET (systems), Astera ALAB / Credo CRDO (connectivity)"},
+      {"n":"Optical","s":"Coherent COHR, Lumentum LITE (lasers); Fabrinet FN (assembly); InnoLight, Eoptolink"},
+      {"n":"Power","s":"Vertiv VRT, Eaton ETN, Delta 2308.TW (PSU); onsite gas GE Vernova GEV"},
+      {"n":"Cooling","s":"Vertiv (liquid cooling), Auras 3324.TWO, AVC 3017.TW; CDU bottleneck"}
+    ]}
+  ],
+  "vertical_order": [
+    {"g":"Semiconductor Stack","ids":["eda","wfe","fdy","mem","pkg"]},
+    {"g":"AI Compute & DC","ids":["acc","net","dci"]},
+    {"g":"Optical","ids":["opt"]},
+    {"g":"Robotics","ids":["act","sen"]},
+    {"g":"Smart Glasses & AR","ids":["dsp","arx"]}
+  ],
+  "cross_links": {
+    "eda":"fdy","wfe":"fdy","fdy":"pkg","mem":"pkg","pkg":"acc",
+    "acc":"dci","net":"opt","dci":"acc","opt":"net",
+    "act":"sen","sen":"act","dsp":"arx","arx":"dsp"
+  },
+  "integrated_companies": "TSMC (foundry + CoWoS packaging + COUPE silicon photonics) · Samsung (DRAM/HBM/NAND + foundry + OLEDoS display) · Broadcom AVGO (custom ASIC + switch silicon + optical DSP + CPO) · Nvidia NVDA (GPU + NVLink + BlueField DPU + Jetson Thor robotics + ~$4B laser investment) · Foxconn 2317.TW (server ODM + components + EV) · Sony 6758.T (CMOS image sensors + OLEDoS micro-displays + lasers) · Goertek 002241.SZ (acoustics + AR/VR light engines + device assembly) · Inovance 300124.SZ (motors + drives + screws + humanoid actuators)"
+}
