@@ -3,3 +3,6 @@
 .env
 node_modules/
 *.log
+
+# Source research inputs (memos, tweets, notes) — PROPRIETARY, keep OUT of the public repo
+memos/
