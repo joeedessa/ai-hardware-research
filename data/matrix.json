@@ -229,7 +229,7 @@
       {"n":"Memory","s":"HBM SK Hynix 000660.KS, Micron MU, Samsung — sold out through 2026"},
       {"n":"Networking","s":"Broadcom (switch silicon), Arista ANET (systems), Astera ALAB / Credo CRDO (connectivity)"},
       {"n":"Optical","s":"Coherent COHR, Lumentum LITE (lasers); Fabrinet FN (assembly); InnoLight, Eoptolink"},
-      {"n":"Power","s":"Vertiv VRT, Eaton ETN, Delta 2308.TW (PSU); onsite gas GE Vernova GEV"},
+      {"n":"Power","s":"Vertiv VRT, Eaton ETN, Delta 2308.TW (PSU); 800V-HVDC wide-bandgap SiC/GaN: Wolfspeed WOLF, onsemi ON, STM, Navitas NVTS; onsite gas GE Vernova GEV"},
       {"n":"Cooling","s":"Vertiv (liquid cooling), Auras 3324.TWO, AVC 3017.TW; CDU bottleneck"}
     ]}
   ],
