@@ -280,6 +280,9 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div class="tab" onclick="ST('el',this)">Power &amp; Cooling</div>
   <div class="tab" onclick="ST('th',this)">Demand Themes</div>
   <div class="tab" onclick="ST('pf',this)">Portfolio Summary</div>
+  <!-- Meta tab -->
+  <div class="tab-group-sep"></div>
+  <div class="tab" onclick="ST('sr',this)">Sources</div>
 </div>
 
 <!-- ── Widget 1 views ── -->
@@ -381,6 +384,11 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div id="pf-cont"></div>
 </div>
 
+<div class="view" id="view-sr">
+  <div class="note">References for thesis claims added or enriched on the dashboard. Each company record's <b>sources</b> field links here; the <b>Cited by</b> count is the reverse index. Older records (predating 2026-05-29) are not yet tagged.</div>
+  <div id="sr-cont"></div>
+</div>
+
 </div><!-- end #app -->
 
 <script>
@@ -390,9 +398,10 @@ const BASE='https://raw.githubusercontent.com/joeedessa/ai-hardware-research/mai
 let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
+let SOURCES,COMPANIES;
 
 /* ── Build state (all lazy except matrix) ── */
-let built={mx:false,vx:false,ex:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false};
+let built={mx:false,vx:false,ex:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false};
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
@@ -414,6 +423,7 @@ function ST(id,el){
     else if(id==='el')buildEl();
     else if(id==='th')buildThemes();
     else if(id==='pf')buildPortfolio();
+    else if(id==='sr')buildSources();
     built[id]=true;
   }
 }
@@ -791,11 +801,38 @@ function buildPortfolio(){
   cont.appendChild(catg);
 }
 
+/* ── Sources tab ── */
+function buildSources(){
+  const cont=document.getElementById('sr-cont');
+  // Reverse index: source id -> [records]
+  const cited={};
+  COMPANIES.forEach(c=>(c.sources||[]).forEach(s=>{(cited[s]=cited[s]||[]).push(c);}));
+  // Type-badge colors
+  const badge={memo:'#4F46E5',press:'#0EA5E9',web:'#16A34A',xlsx:'#D97706',repo:'#6B7280'};
+  const html=SOURCES.map(s=>{
+    const list=cited[s.id]||[];
+    const bg=badge[s.type]||'#6B7280';
+    const url=s.url?`<a href="${s.url}" target="_blank" rel="noopener" style="color:var(--color-text-info);text-decoration:none;word-break:break-all">${s.url}</a>`:`<span style="color:var(--color-text-tertiary)">(private / local source)</span>`;
+    const tickers=list.length?`<div style="font-size:10.5px;margin-top:5px"><b style="color:var(--color-text-secondary)">Cited by ${list.length} record${list.length===1?'':'s'}:</b> ${list.map(c=>`<span title="${(c.name||'').replace(/"/g,'&quot;')} — ${(c.chain_layer||'').replace(/"/g,'&quot;')}" style="display:inline-block;background:var(--color-background-info);color:var(--color-text-info);padding:1px 5px;border-radius:2px;margin:1px;font-size:10px;border:.5px solid var(--color-border-info)">${c.ticker}</span>`).join('')}</div>`:'';
+    return `<div style="border:.5px solid var(--color-border-tertiary);border-radius:4px;padding:8px 10px;margin-bottom:8px;background:var(--color-background-secondary)">
+      <div style="font-size:12.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px">${s.title}</div>
+      <div style="font-size:10.5px;color:var(--color-text-tertiary);margin-bottom:5px">
+        <span style="display:inline-block;background:${bg}22;color:${bg};padding:1px 6px;border-radius:2px;font-weight:600;text-transform:uppercase;font-size:9.5px;letter-spacing:.3px;margin-right:6px">${s.type}</span>
+        ${s.author} · ${s.date}
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px;line-height:1.45">${s.notes}</div>
+      <div style="font-size:11px">${url}</div>
+      ${tickers}
+    </div>`;
+  }).join('');
+  cont.innerHTML=html;
+}
+
 /* ════════════════════════════
-   DATA LOADING (all 9 files)
+   DATA LOADING
 ════════════════════════════ */
 async function loadData(){
-  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio]=await Promise.all([
+  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies]=await Promise.all([
     fetch(BASE+'matrix.json').then(r=>r.json()),
     fetch(BASE+'explorer.json').then(r=>r.json()),
     fetch(BASE+'explainers.json').then(r=>r.json()),
@@ -805,6 +842,8 @@ async function loadData(){
     fetch(BASE+'electricity.json').then(r=>r.json()),
     fetch(BASE+'themes.json').then(r=>r.json()),
     fetch(BASE+'portfolio.json').then(r=>r.json()),
+    fetch(BASE+'sources.json').then(r=>r.json()),
+    fetch(BASE+'companies.json').then(r=>r.json()),
   ]);
 
   /* Widget 1 data */
@@ -831,6 +870,8 @@ async function loadData(){
   THEMES   = themes.themes;
   PORTFOLIO= portfolio;
   CY_CATS  = portfolio.catalyst_table;
+  SOURCES  = sources.sources;
+  COMPANIES= companies.companies;
 
   /* Populate dynamic content */
   document.getElementById('integ').innerHTML=`<b style="color:var(--color-text-primary)">Integrated companies:</b> ${matrix.integrated_companies}`;
