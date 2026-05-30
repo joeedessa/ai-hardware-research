@@ -30,6 +30,8 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 .tab.on{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
 .tab-group-sep{width:1px;background:var(--color-border-tertiary);margin:4px 4px 0;flex-shrink:0}
 .view{display:none}.view.on{display:block}
+.ticklink{color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;border-radius:2px;padding:0 1px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:.95em}
+.ticklink:hover{background:var(--color-background-info)}
 .note{font-size:11.0px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:3px;padding:3px 6px;margin-bottom:5px;line-height:1.5}
 .note b{color:var(--color-text-secondary);font-weight:500}
 .pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
@@ -420,6 +422,7 @@ let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS;
+let TICKER_RE,TICKER_MAP;
 let CO_STATE={q:'',v:null,conv:null,theme:null,sort:'conv'};
 let GL_STATE={q:'',cat:null};
 
@@ -430,6 +433,25 @@ let built={mx:false,co:false,vx:false,ex:false,gl:false,geo:false,cy:false,ps:fa
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
 const scolor=s=>['#E24B4A','#D85A30','#EF9F27','#639922','#1D9E75'][s-1];
 const slabel=s=>['Very low','Low','Moderate','High','Very high'][s-1];
+/* Linkify ticker mentions in prose so they open the Companies tab filtered. */
+function linkifyTickers(s){
+  if(!s||!TICKER_RE) return s||'';
+  return String(s).replace(TICKER_RE, m=>{
+    const nm=(TICKER_MAP&&TICKER_MAP[m])?` — ${TICKER_MAP[m]}`:'';
+    return `<span class="ticklink" data-tk="${m}" title="Filter Companies by ${m}${nm}">${m}</span>`;
+  });
+}
+function jumpToCompanies(tk){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  const coTab=Array.from(document.querySelectorAll('.tab')).find(t=>(t.getAttribute('onclick')||'').includes("'co'"));
+  if(coTab) coTab.classList.add('on');
+  document.getElementById('view-co').classList.add('on');
+  if(!built.co){ buildCompanies(); built.co=true; }
+  CO_STATE.q=tk; CO_STATE.v=null; CO_STATE.conv=null; CO_STATE.theme=null;
+  const si=document.getElementById('co-search'); if(si) si.value=tk;
+  renderCoPills(); renderCo();
+}
 
 /* ── Tab switching ── */
 function ST(id,el){
@@ -552,7 +574,7 @@ function loadV(id){
       if(f==='new')return `<span class="sfl fn">★ new layer</span>`;
       return '';
     }).join('');
-    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc" onclick="this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd" style="pointer-events:none">${s.d}</div></div></div>`;
+    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc" onclick="if(event.target.classList.contains('ticklink'))return;this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd">${linkifyTickers(s.d)}</div></div></div>`;
   });
   const det=document.getElementById('vdetail');
   det.innerHTML=h;det.scrollTop=0;
@@ -564,7 +586,7 @@ function buildExpls(){
     const c=mk('div','exc');
     c.addEventListener('click',()=>c.classList.toggle('on'));
     const vr=(e.vals||[]).map(v=>`<div class="vr"><div class="vrl">${v.l}</div><div class="vrb"><div class="vrf" style="width:${v.v}%;background:${e.c}aa"></div></div><div class="vrn">${v.n}</div></div>`).join('');
-    c.innerHTML=`<div class="exh"><div class="exd" style="background:${e.c}"></div><div class="exn">${e.n}</div><div class="exch">▼</div></div><div class="exhk">${e.hk}</div><div class="exar">Chain: ${e.ar}</div><div class="exbd">${e.bd}<div style="margin-top:6px;font-size:10.0px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:3px;pointer-events:none">Value capture by layer</div>${vr}</div>`;
+    c.innerHTML=`<div class="exh"><div class="exd" style="background:${e.c}"></div><div class="exn">${e.n}</div><div class="exch">▼</div></div><div class="exhk">${e.hk}</div><div class="exar">Chain: ${e.ar}</div><div class="exbd">${linkifyTickers(e.bd)}<div style="margin-top:6px;font-size:10.0px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:3px;pointer-events:none">Value capture by layer</div>${vr}</div>`;
     g.appendChild(c);
   });
 }
@@ -919,7 +941,7 @@ function renderCoCard(c){
       <span style="font-size:10px;color:var(--color-text-tertiary)">${c.geo}</span>
     </div>
     <div style="font-size:10.5px;color:var(--color-text-secondary);margin-bottom:3px;font-weight:500">${c.chain_layer||''}</div>
-    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.45">${c.thesis_note||''}</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.45">${linkifyTickers(c.thesis_note||'')}</div>
     ${footer}
   </div>`;
 }
@@ -1082,6 +1104,21 @@ async function loadData(){
   THEMES_REG = (companies._meta && companies._meta.themes_registry) || [];
   GLOSSARY = glossary.glossary;
   GL_CATS = glossary._meta.categories || {};
+
+  /* Build ticker regex + map for cross-link clickability across all prose.
+     Skip 2-char alpha-only tickers (ON, MU, GM) to avoid English false positives. */
+  TICKER_MAP={}; COMPANIES.forEach(c=>{TICKER_MAP[c.ticker]=c.name;});
+  const escaped=COMPANIES
+    .filter(c=>c.ticker.length>=3 || /\./.test(c.ticker))
+    .map(c=>c.ticker.replace(/[.\\$+?^()|[\]{}]/g,'\\$&'))
+    .sort((a,b)=>b.length-a.length);
+  TICKER_RE=new RegExp('\\b('+escaped.join('|')+')(?![\\w.-])','g');
+
+  /* One-time delegated click handler for .ticklink */
+  document.addEventListener('click',e=>{
+    const el=e.target.closest('.ticklink'); if(!el) return;
+    e.preventDefault(); jumpToCompanies(el.dataset.tk);
+  });
 
   /* Last-updated stamp */
   const conv3 = COMPANIES.filter(c=>c.conviction===3).length;
