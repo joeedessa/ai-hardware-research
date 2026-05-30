@@ -266,9 +266,12 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 <div id="loading">Loading AI hardware research data…</div>
 <div class="w" id="app" style="display:none">
 
+<div id="updated-stamp" style="font-size:10px;color:var(--color-text-tertiary);text-align:right;padding:0 2px 4px 0"></div>
+
 <div class="tabs">
   <!-- Widget 1 tabs -->
   <div class="tab on" onclick="ST('mx',this)">Universe matrix</div>
+  <div class="tab" onclick="ST('co',this)">Companies</div>
   <div class="tab" onclick="ST('vx',this)">Chain explorer</div>
   <div class="tab" onclick="ST('ex',this)">How it works</div>
   <div class="tab" onclick="ST('geo',this)">Geopolitical</div>
@@ -280,9 +283,16 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div class="tab" onclick="ST('el',this)">Power &amp; Cooling</div>
   <div class="tab" onclick="ST('th',this)">Demand Themes</div>
   <div class="tab" onclick="ST('pf',this)">Portfolio Summary</div>
-  <!-- Meta tab -->
+  <!-- Meta tabs -->
   <div class="tab-group-sep"></div>
   <div class="tab" onclick="ST('sr',this)">Sources</div>
+  <div class="tab" onclick="ST('xc',this)">Excluded</div>
+</div>
+
+<!-- ── Companies browser ── -->
+<div class="view" id="view-co">
+  <div class="note">Browse all <b id="co-count-total"></b> investable names. Search across name/ticker/thesis/chain-layer. Filter by vertical, conviction, theme. Each card shows the chain layer, thesis, sources cited, and themes — click a theme chip to filter.</div>
+  <div id="co-cont"></div>
 </div>
 
 <!-- ── Widget 1 views ── -->
@@ -389,6 +399,11 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div id="sr-cont"></div>
 </div>
 
+<div class="view" id="view-xc">
+  <div class="note">Names that came up in source memos but were deliberately NOT added — scope discipline made explicit. Categories: software/SaaS, fintech, cybersecurity, auto OEMs, AV services, defense-pure, service robots, raw materials (→ Hard Assets sibling), bitcoin-infra, speculative, lagging-edge memory, end-customer.</div>
+  <div id="xc-cont"></div>
+</div>
+
 </div><!-- end #app -->
 
 <script>
@@ -398,10 +413,11 @@ const BASE='https://raw.githubusercontent.com/joeedessa/ai-hardware-research/mai
 let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
-let SOURCES,COMPANIES;
+let SOURCES,COMPANIES,EXCLUDED,THEMES_REG;
+let CO_STATE={q:'',v:null,conv:null,theme:null,sort:'conv'};
 
 /* ── Build state (all lazy except matrix) ── */
-let built={mx:false,vx:false,ex:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false};
+let built={mx:false,co:false,vx:false,ex:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
@@ -423,7 +439,9 @@ function ST(id,el){
     else if(id==='el')buildEl();
     else if(id==='th')buildThemes();
     else if(id==='pf')buildPortfolio();
+    else if(id==='co')buildCompanies();
     else if(id==='sr')buildSources();
+    else if(id==='xc')buildExcluded();
     built[id]=true;
   }
 }
@@ -801,6 +819,124 @@ function buildPortfolio(){
   cont.appendChild(catg);
 }
 
+/* ── Companies browser ── */
+function buildCompanies(){
+  const cont=document.getElementById('co-cont');
+  cont.innerHTML=`
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+      <input id="co-search" type="text" placeholder="Search ticker, name, thesis, chain layer..." style="flex:1;min-width:220px;font-size:11.5px;padding:4px 8px;border:.5px solid var(--color-border-secondary);border-radius:3px;font-family:var(--font-sans);color:var(--color-text-primary)">
+      <select id="co-sort" style="font-size:11px;padding:3px 6px;border:.5px solid var(--color-border-secondary);border-radius:3px;font-family:var(--font-sans)">
+        <option value="conv">Sort: conviction ↓</option>
+        <option value="name">Sort: name A→Z</option>
+        <option value="vert">Sort: vertical</option>
+      </select>
+    </div>
+    <div class="pills" id="co-v-pills" style="margin-bottom:4px"></div>
+    <div class="pills" id="co-conv-pills" style="margin-bottom:4px"></div>
+    <div class="pills" id="co-theme-pills" style="margin-bottom:4px"></div>
+    <div id="co-results-meta" style="font-size:10.5px;color:var(--color-text-tertiary);margin:6px 0 6px"></div>
+    <div id="co-list"></div>`;
+  document.getElementById('co-search').addEventListener('input',e=>{CO_STATE.q=e.target.value;renderCo();});
+  document.getElementById('co-sort').addEventListener('change',e=>{CO_STATE.sort=e.target.value;renderCo();});
+  renderCoPills();
+  renderCo();
+}
+
+function renderCoPills(){
+  const vP=document.getElementById('co-v-pills');
+  vP.innerHTML=`<span style="font-size:10px;color:var(--color-text-tertiary);margin-right:4px;align-self:center">Vertical:</span>`+
+    (VC_COLS||[]).map(v=>{
+      const on=CO_STATE.v===v.id;
+      const sty=on?`background:${v.c}22;color:${v.c};border-color:${v.c}`:`border-color:${v.c}55`;
+      return `<span class="pill${on?' on':''}" style="${sty}" onclick="CO_STATE.v=CO_STATE.v==='${v.id}'?null:'${v.id}';renderCoPills();renderCo();">${v.sn}</span>`;
+    }).join('')+
+    (CO_STATE.v?`<span class="pill" style="color:var(--color-text-tertiary);border-style:dashed" onclick="CO_STATE.v=null;renderCoPills();renderCo();">clear</span>`:'');
+  const cnv=[{v:3,l:'3 · chokepoint',c:'#16A34A'},{v:2,l:'2 · interested',c:'#3B82F6'},{v:1,l:'1 · monitor',c:'#9CA3AF'}];
+  const cP=document.getElementById('co-conv-pills');
+  cP.innerHTML=`<span style="font-size:10px;color:var(--color-text-tertiary);margin-right:4px;align-self:center">Conviction:</span>`+
+    cnv.map(x=>{
+      const on=CO_STATE.conv===x.v;
+      const sty=on?`background:${x.c}22;color:${x.c};border-color:${x.c}`:'';
+      return `<span class="pill${on?' on':''}" style="${sty}" onclick="CO_STATE.conv=CO_STATE.conv===${x.v}?null:${x.v};renderCoPills();renderCo();">${x.l}</span>`;
+    }).join('');
+  const tP=document.getElementById('co-theme-pills');
+  tP.innerHTML=`<span style="font-size:10px;color:var(--color-text-tertiary);margin-right:4px;align-self:center">Theme:</span>`+
+    (THEMES_REG||[]).map(t=>{
+      const on=CO_STATE.theme===t.id;
+      const b=(t.blurb||'').replace(/"/g,'&quot;');
+      return `<span class="pill${on?' on':''}" title="${b}" onclick="CO_STATE.theme=CO_STATE.theme==='${t.id}'?null:'${t.id}';renderCoPills();renderCo();">${t.label}</span>`;
+    }).join('');
+}
+
+function renderCo(){
+  const list=document.getElementById('co-list');
+  const meta=document.getElementById('co-results-meta');
+  let arr=COMPANIES.slice();
+  const q=(CO_STATE.q||'').toLowerCase().trim();
+  if(q) arr=arr.filter(c=>{
+    return (c.ticker||'').toLowerCase().includes(q) ||
+           (c.name||'').toLowerCase().includes(q) ||
+           (c.chain_layer||'').toLowerCase().includes(q) ||
+           (c.thesis_note||'').toLowerCase().includes(q);
+  });
+  if(CO_STATE.v) arr=arr.filter(c=>c.vertical===CO_STATE.v);
+  if(CO_STATE.conv) arr=arr.filter(c=>c.conviction===CO_STATE.conv);
+  if(CO_STATE.theme) arr=arr.filter(c=>(c.themes||[]).includes(CO_STATE.theme));
+  if(CO_STATE.sort==='conv') arr.sort((a,b)=>b.conviction-a.conviction || (a.name||'').localeCompare(b.name||''));
+  else if(CO_STATE.sort==='name') arr.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  else if(CO_STATE.sort==='vert') arr.sort((a,b)=>(a.vertical+a.name).localeCompare(b.vertical+b.name));
+  meta.innerHTML=`<b>${arr.length}</b> of <b>${COMPANIES.length}</b> names${(q||CO_STATE.v||CO_STATE.conv||CO_STATE.theme)?` <span style="margin-left:8px;cursor:pointer;color:var(--color-text-info)" onclick="CO_STATE={q:'',v:null,conv:null,theme:null,sort:CO_STATE.sort};document.getElementById('co-search').value='';renderCoPills();renderCo();">clear all filters ✕</span>`:''}`;
+  list.innerHTML=arr.map(renderCoCard).join('') || `<div style="padding:16px;text-align:center;color:var(--color-text-tertiary);font-size:11px">No matches.</div>`;
+}
+
+function renderCoCard(c){
+  const vc=(VC_COLS||[]).find(v=>v.id===c.vertical)||{c:'#6B7280',sn:c.vertical};
+  const convColor={1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[c.conviction]||'#9CA3AF';
+  const convLabel={1:'monitor',2:'interested',3:'chokepoint owner'}[c.conviction]||'';
+  const themes=(c.themes||[]).map(t=>{
+    const tm=(THEMES_REG||[]).find(x=>x.id===t)||{label:t};
+    return `<span style="display:inline-block;background:#F3F4F6;color:var(--color-text-secondary);padding:1px 5px;border-radius:2px;margin:1px;font-size:9.5px;cursor:pointer;border:.5px solid #E5E7EB" onclick="CO_STATE.theme='${t}';renderCoPills();renderCo();" title="filter by ${tm.label}">${tm.label}</span>`;
+  }).join('');
+  const srcs=(c.sources||[]).map(s=>{
+    const short=s.replace(/^citrini-/,'').replace(/-\d{4}-\d{2}$/,'');
+    return `<span style="display:inline-block;background:var(--color-background-info);color:var(--color-text-info);padding:1px 5px;border-radius:2px;margin:1px;font-size:9.5px;border:.5px solid var(--color-border-info)" title="${s}">${short}</span>`;
+  }).join('');
+  const footer=(srcs||themes)?`<div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${srcs?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-right:2px">src:</span>${srcs}`:''}${themes?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-left:${srcs?'6px':'0'};margin-right:2px">themes:</span>${themes}`:''}</div>`:'';
+  return `<div style="border:.5px solid var(--color-border-tertiary);border-radius:4px;padding:7px 10px;margin-bottom:5px;background:#fff">
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px">
+      <span style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;font-weight:600;color:var(--color-text-primary)">${c.ticker}</span>
+      <span style="font-size:12.5px;color:var(--color-text-primary);font-weight:500">${c.name}</span>
+      <span style="display:inline-block;background:${vc.c}22;color:${vc.c};padding:1px 6px;border-radius:2px;font-size:9.5px;font-weight:600;letter-spacing:.2px">${(vc.sn||c.vertical).toUpperCase()}</span>
+      <span title="${convLabel}" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--color-text-tertiary)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${convColor}"></span>${c.conviction}</span>
+      <span style="font-size:10px;color:var(--color-text-tertiary)">${c.geo}</span>
+    </div>
+    <div style="font-size:10.5px;color:var(--color-text-secondary);margin-bottom:3px;font-weight:500">${c.chain_layer||''}</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.45">${c.thesis_note||''}</div>
+    ${footer}
+  </div>`;
+}
+
+/* ── Excluded tab ── */
+function buildExcluded(){
+  const cont=document.getElementById('xc-cont');
+  // Group by category
+  const groups={};
+  EXCLUDED.forEach(x=>{(groups[x.category]=groups[x.category]||[]).push(x);});
+  const order=['software-saas','cybersecurity','payments-fintech','auto-oem','av-services','defense-pure','service-robots','raw-materials','bitcoin-infra','speculative','lagging-edge-memory','end-customer','ticker-conflict'];
+  const sorted=order.filter(k=>groups[k]).concat(Object.keys(groups).filter(k=>!order.includes(k)));
+  cont.innerHTML=sorted.map(cat=>{
+    const items=groups[cat];
+    return `<div style="margin-bottom:10px">
+      <div style="font-size:11.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px;padding-bottom:3px;border-bottom:.5px solid var(--color-border-tertiary)">${cat.replace(/-/g,' ').toUpperCase()} <span style="font-weight:400;color:var(--color-text-tertiary);font-size:10px">· ${items.length}</span></div>
+      ${items.map(x=>`<div style="font-size:11px;padding:3px 0;border-bottom:.5px solid #F3F4F6">
+        <span style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:11px;font-weight:600;color:var(--color-text-primary);margin-right:6px">${x.ticker}</span>
+        <span style="color:var(--color-text-primary);font-weight:500">${x.name}</span>
+        <span style="color:var(--color-text-secondary);margin-left:6px">— ${x.reason}</span>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
 /* ── Sources tab ── */
 function buildSources(){
   const cont=document.getElementById('sr-cont');
@@ -832,7 +968,7 @@ function buildSources(){
    DATA LOADING
 ════════════════════════════ */
 async function loadData(){
-  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies]=await Promise.all([
+  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded]=await Promise.all([
     fetch(BASE+'matrix.json').then(r=>r.json()),
     fetch(BASE+'explorer.json').then(r=>r.json()),
     fetch(BASE+'explainers.json').then(r=>r.json()),
@@ -844,6 +980,7 @@ async function loadData(){
     fetch(BASE+'portfolio.json').then(r=>r.json()),
     fetch(BASE+'sources.json').then(r=>r.json()),
     fetch(BASE+'companies.json').then(r=>r.json()),
+    fetch(BASE+'excluded.json').then(r=>r.json()),
   ]);
 
   /* Widget 1 data */
@@ -872,6 +1009,14 @@ async function loadData(){
   CY_CATS  = portfolio.catalyst_table;
   SOURCES  = sources.sources;
   COMPANIES= companies.companies;
+  EXCLUDED = excluded.excluded;
+  THEMES_REG = (companies._meta && companies._meta.themes_registry) || [];
+
+  /* Last-updated stamp */
+  const conv3 = COMPANIES.filter(c=>c.conviction===3).length;
+  document.getElementById('updated-stamp').innerHTML =
+    `<b>${COMPANIES.length}</b> names · <b>${conv3}</b> conviction-3 · as of <b>${companies._meta.as_of}</b>`;
+  document.getElementById('co-count-total').textContent = COMPANIES.length;
 
   /* Populate dynamic content */
   document.getElementById('integ').innerHTML=`<b style="color:var(--color-text-primary)">Integrated companies:</b> ${matrix.integrated_companies}`;

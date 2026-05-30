@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "description": "Names that came up in source memos but were deliberately NOT added to the dashboard, with the reason. Scope discipline is value: this list documents the curation rules so the 'why isn't X here?' question is answered. Categories: software-saas, payments-fintech, cybersecurity, auto-oem, av-services, defense-pure, service-robots, raw-materials (→ Hard Assets sibling), bitcoin-infra, speculative, lagging-edge-memory, ticker-conflict, end-customer.",
+    "as_of": "2026-05-30",
+    "categories": {
+      "software-saas": "Software / SaaS layer — out of scope for a hardware dashboard",
+      "payments-fintech": "Payments rails / stablecoin / fintech — out of scope",
+      "cybersecurity": "Cybersecurity software — out of scope",
+      "auto-oem": "Auto OEM end-customer — not a supply-chain chokepoint",
+      "av-services": "Robotaxi / autonomous-vehicle services — not hardware supply chain",
+      "defense-pure": "Defense-pure name — outside the AI hardware supply chain focus",
+      "service-robots": "Service / sidewalk / hospitality robots — niche, not chokepoint",
+      "raw-materials": "Raw material — belongs in the sibling Hard Assets dashboard",
+      "bitcoin-infra": "Bitcoin-mining-to-AI conversions — adjacent, deferred",
+      "speculative": "Too speculative or too binary-outcome for the curated map",
+      "lagging-edge-memory": "Legacy DDR3/DDR4/NOR squeeze — deferred (could be added later)",
+      "ticker-conflict": "Source had a likely-wrong ticker; deferred until verified",
+      "end-customer": "Pure end-customer (hyperscaler / brand) — not a supply chain layer"
+    }
+  },
+  "excluded": [
+    { "ticker": "NET",      "name": "Cloudflare",                "reason": "Software/CDN; agentic infrastructure layer is software, not hardware chokepoint", "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "AKAM",     "name": "Akamai Technologies",       "reason": "CDN/software — out of scope",                                                     "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "FSLY",     "name": "Fastly",                    "reason": "CDN/software — out of scope",                                                     "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "ATEN",     "name": "A10 Networks",              "reason": "ADC/load-balancing software — out of scope",                                      "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "VRSN",     "name": "VeriSign",                  "reason": "DNS registry — software/services",                                                "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "FFIV",     "name": "F5",                        "reason": "Load balancer / API gateway software",                                            "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "TWLO",     "name": "Twilio",                    "reason": "Communications APIs/software",                                                    "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "BAND",     "name": "Bandwidth",                 "reason": "Telephony APIs/services",                                                         "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "DOCU",     "name": "DocuSign",                  "reason": "Enterprise SaaS",                                                                 "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "DDOG",     "name": "Datadog",                   "reason": "Observability SaaS",                                                              "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "DOCN",     "name": "DigitalOcean",              "reason": "Managed cloud services",                                                          "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "RXT",      "name": "Rackspace",                 "reason": "Hosting/managed services",                                                        "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "BSY",      "name": "Bentley Systems",           "reason": "Infrastructure CAD/digital-twin software",                                        "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "ADSK",     "name": "Autodesk",                  "reason": "Design software",                                                                 "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "VNET",     "name": "VNET Group",                "reason": "China datacenter SERVICES (vs. hardware) — borderline; deferred",                "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
+
+    { "ticker": "CRCL",     "name": "Circle Internet Group",     "reason": "Stablecoin payments — fintech",                                                   "category": "payments-fintech",  "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "COIN",     "name": "Coinbase",                  "reason": "Crypto exchange",                                                                 "category": "payments-fintech",  "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "PYPL",     "name": "PayPal",                    "reason": "Payments rail",                                                                   "category": "payments-fintech",  "source_ref": ["citrini-agentic-2026-03"] },
+
+    { "ticker": "PANW",     "name": "Palo Alto Networks",        "reason": "Cybersecurity SaaS",                                                              "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03","citrini-muscle-2026-02"] },
+    { "ticker": "OKTA",     "name": "Okta",                      "reason": "Identity / cybersecurity SaaS",                                                   "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "ZS",       "name": "Zscaler",                   "reason": "Cybersecurity SaaS (zero-trust)",                                                 "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "SAIL",     "name": "SailPoint",                 "reason": "Identity governance SaaS",                                                        "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03"] },
+    { "ticker": "CRWD",     "name": "CrowdStrike",               "reason": "Cybersecurity SaaS",                                                              "category": "cybersecurity",     "source_ref": ["citrini-muscle-2026-02"] },
+    { "ticker": "RBRK",     "name": "Rubrik",                    "reason": "Cybersecurity SaaS",                                                              "category": "cybersecurity",     "source_ref": ["citrini-muscle-2026-02"] },
+
+    { "ticker": "TM",       "name": "Toyota Motor",              "reason": "Auto OEM — end customer, robotics is tiny optionality",                           "category": "auto-oem",          "source_ref": ["citrini-thematic-2025-05"] },
+    { "ticker": "HMC",      "name": "Honda Motor",               "reason": "Auto OEM with humanoid optionality (Avatar/Asimo) — diversified, not chokepoint","category": "auto-oem",          "source_ref": ["citrini-thematic-2025-05","citrini-primer-2025-05"] },
+    { "ticker": "APTV",     "name": "Aptiv",                     "reason": "Auto tech / ADAS — end-customer adjacency",                                       "category": "auto-oem",          "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "MGA",      "name": "Magna International",       "reason": "Auto Tier-1",                                                                     "category": "auto-oem",          "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "DE",       "name": "Deere & Co",                "reason": "Ag equipment / autonomous tractors — adjacent",                                   "category": "auto-oem",          "source_ref": ["citrini-thematic-2025-05"] },
+
+    { "ticker": "PONY",     "name": "Pony.ai",                   "reason": "Robotaxi services — not hardware supply chain",                                  "category": "av-services",       "source_ref": ["citrini-roboupd-2025-07"] },
+    { "ticker": "LAZR",     "name": "Luminar",                   "reason": "Auto-focused lidar; AI dashboard covers lidar via robotics-side names",          "category": "av-services",       "source_ref": ["citrini-primer-2025-05"] },
+
+    { "ticker": "CW",       "name": "Curtiss-Wright",            "reason": "Defense-pure; outside AI hardware focus",                                         "category": "defense-pure",      "source_ref": ["citrini-roboupd-2025-07"] },
+    { "ticker": "DCO",      "name": "Ducommun",                  "reason": "Defense-pure",                                                                    "category": "defense-pure",      "source_ref": ["citrini-roboupd-2025-07"] },
+    { "ticker": "LASR",     "name": "nLIGHT",                    "reason": "Defense photonics (III-V) — out of AI-infra core",                                "category": "defense-pure",      "source_ref": ["citrini-light-2026-03"] },
+
+    { "ticker": "SERV",     "name": "Serve Robotics",            "reason": "Sidewalk-delivery robots — niche service robotics",                               "category": "service-robots",    "source_ref": ["citrini-thematic-2025-05"] },
+    { "ticker": "RR",       "name": "Richtech Robotics",         "reason": "Hospitality / food-service robots — narrow niche",                                "category": "service-robots",    "source_ref": ["citrini-thematic-2025-05"] },
+
+    { "ticker": "MP",       "name": "MP Materials",              "reason": "Rare-earth refiner → belongs in Hard Assets sibling dashboard",                   "category": "raw-materials",     "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "6880.HK",  "name": "JL Mag",                    "reason": "Rare-earth permanent magnets → Hard Assets sibling",                              "category": "raw-materials",     "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "LYC.AU",   "name": "Lynas Rare Earths",         "reason": "Rare-earth mining → Hard Assets sibling",                                         "category": "raw-materials",     "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "5706.T",   "name": "Mitsui Kinzoku",            "reason": "HVLP copper foil bottleneck — specialty materials → Hard Assets sibling",         "category": "raw-materials",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "8358.TW",  "name": "Co-Tech",                   "reason": "HVLP copper foil — specialty materials → Hard Assets sibling",                   "category": "raw-materials",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "2383.TW",  "name": "Elite Material",            "reason": "CCL — specialty materials → Hard Assets sibling",                                "category": "raw-materials",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "6213.TW",  "name": "ITEQ",                      "reason": "CCL — specialty materials → Hard Assets sibling",                                "category": "raw-materials",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "300750.SZ","name": "CATL",                      "reason": "Battery → Hard Assets sibling (energy storage)",                                  "category": "raw-materials",     "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "002594.SZ","name": "BYD",                       "reason": "EV + battery → Hard Assets sibling",                                              "category": "raw-materials",     "source_ref": ["citrini-roboupd-2025-07"] },
+
+    { "ticker": "HUT",      "name": "Hut 8",                     "reason": "Bitcoin-mining-to-AI conversion — energy/crypto adjacency",                       "category": "bitcoin-infra",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "WYFI",     "name": "WhiteFiber",                "reason": "Bitcoin-mining-to-AI conversion",                                                 "category": "bitcoin-infra",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "DGXX",     "name": "Digi Power X",              "reason": "Bitcoin-mining-to-AI conversion",                                                 "category": "bitcoin-infra",     "source_ref": ["citrini-inherit-2026-05"] },
+    { "ticker": "WULF",     "name": "TeraWulf",                  "reason": "Bitcoin-mining DC; Google TPU pilot tenant — adjacency",                          "category": "bitcoin-infra",     "source_ref": ["citrini-tpu-2025-11"] },
+
+    { "ticker": "POET",     "name": "Poet Technologies",         "reason": "Speculative wafer-level photonic interposer — binary-outcome bet",                "category": "speculative",       "source_ref": ["citrini-light-2026-03"] },
+
+    { "ticker": "2408.TW",  "name": "Nanya Technology",          "reason": "Legacy memory (DDR4/3) — deferred; could promote later",                          "category": "lagging-edge-memory","source_ref": ["citrini-muscle-2026-02"] },
+    { "ticker": "2344.TW",  "name": "Winbond",                   "reason": "Legacy memory — deferred",                                                        "category": "lagging-edge-memory","source_ref": ["citrini-muscle-2026-02"] },
+    { "ticker": "2337.TW",  "name": "Macronix",                  "reason": "NOR flash 30% Q1 price hike — deferred",                                          "category": "lagging-edge-memory","source_ref": ["citrini-muscle-2026-02"] },
+
+    { "ticker": "BMW.DE",   "name": "BMW",                       "reason": "Auto OEM — end customer (Figure pilot deployment site)",                          "category": "end-customer",      "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "GM",       "name": "General Motors",            "reason": "Auto OEM — end customer",                                                         "category": "end-customer",      "source_ref": ["citrini-primer-2025-05"] },
+    { "ticker": "GXO",      "name": "GXO Logistics",             "reason": "End-customer for warehouse robots (Apptronik pilot)",                             "category": "end-customer",      "source_ref": ["citrini-primer-2025-05"] }
+  ]
+}
