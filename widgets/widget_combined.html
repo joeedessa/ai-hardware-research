@@ -274,6 +274,7 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div class="tab" onclick="ST('co',this)">Companies</div>
   <div class="tab" onclick="ST('vx',this)">Chain explorer</div>
   <div class="tab" onclick="ST('ex',this)">How it works</div>
+  <div class="tab" onclick="ST('gl',this)">Glossary</div>
   <div class="tab" onclick="ST('geo',this)">Geopolitical</div>
   <div class="tab" onclick="ST('cy',this)">Cycle &amp; innings</div>
   <!-- Separator -->
@@ -314,6 +315,11 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 <div class="view" id="view-ex">
   <div class="note"><b>Chain explainers</b> — how each chain works, where value is captured, and the structural demand thesis. Click any card to expand.</div>
   <div class="exg" id="exg"></div>
+</div>
+
+<div class="view" id="view-gl">
+  <div class="note">Glossary of <b id="gl-count"></b> terms — every acronym + process + component used across the dashboard. Filter by category or search to find a term. Click a <b>see also</b> link to jump to a related entry.</div>
+  <div id="gl-cont"></div>
 </div>
 
 <div class="view" id="view-geo">
@@ -413,11 +419,12 @@ const BASE='https://raw.githubusercontent.com/joeedessa/ai-hardware-research/mai
 let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
-let SOURCES,COMPANIES,EXCLUDED,THEMES_REG;
+let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS;
 let CO_STATE={q:'',v:null,conv:null,theme:null,sort:'conv'};
+let GL_STATE={q:'',cat:null};
 
 /* ── Build state (all lazy except matrix) ── */
-let built={mx:false,co:false,vx:false,ex:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
+let built={mx:false,co:false,vx:false,ex:false,gl:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
@@ -440,6 +447,7 @@ function ST(id,el){
     else if(id==='th')buildThemes();
     else if(id==='pf')buildPortfolio();
     else if(id==='co')buildCompanies();
+    else if(id==='gl')buildGlossary();
     else if(id==='sr')buildSources();
     else if(id==='xc')buildExcluded();
     built[id]=true;
@@ -916,6 +924,66 @@ function renderCoCard(c){
   </div>`;
 }
 
+/* ── Glossary tab ── */
+function buildGlossary(){
+  document.getElementById('gl-count').textContent=GLOSSARY.length;
+  const cont=document.getElementById('gl-cont');
+  cont.innerHTML=`
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+      <input id="gl-search" type="text" placeholder="Search term or definition..." style="flex:1;min-width:220px;font-size:11.5px;padding:4px 8px;border:.5px solid var(--color-border-secondary);border-radius:3px;font-family:var(--font-sans);color:var(--color-text-primary)">
+    </div>
+    <div class="pills" id="gl-cat-pills" style="margin-bottom:4px"></div>
+    <div id="gl-meta" style="font-size:10.5px;color:var(--color-text-tertiary);margin:6px 0"></div>
+    <div id="gl-list"></div>`;
+  document.getElementById('gl-search').addEventListener('input',e=>{GL_STATE.q=e.target.value;renderGl();});
+  renderGlPills();
+  renderGl();
+}
+function renderGlPills(){
+  const p=document.getElementById('gl-cat-pills');
+  const cats=Object.keys(GL_CATS);
+  p.innerHTML=`<span style="font-size:10px;color:var(--color-text-tertiary);margin-right:4px;align-self:center">Category:</span>`+
+    cats.map(c=>{
+      const on=GL_STATE.cat===c;
+      const label=(GL_CATS[c]||c).split('(')[0].trim();
+      return `<span class="pill${on?' on':''}" title="${(GL_CATS[c]||'').replace(/"/g,'&quot;')}" onclick="GL_STATE.cat=GL_STATE.cat==='${c}'?null:'${c}';renderGlPills();renderGl();">${label}</span>`;
+    }).join('');
+}
+function renderGl(){
+  const list=document.getElementById('gl-list');
+  const meta=document.getElementById('gl-meta');
+  const q=(GL_STATE.q||'').toLowerCase().trim();
+  let arr=GLOSSARY.slice();
+  if(q) arr=arr.filter(t=>
+    (t.term||'').toLowerCase().includes(q) ||
+    (t.expansion||'').toLowerCase().includes(q) ||
+    (t.definition||'').toLowerCase().includes(q));
+  if(GL_STATE.cat) arr=arr.filter(t=>t.category===GL_STATE.cat);
+  arr.sort((a,b)=>(a.term||'').localeCompare(b.term||''));
+  meta.innerHTML=`<b>${arr.length}</b> of <b>${GLOSSARY.length}</b> terms${(q||GL_STATE.cat)?` <span style="margin-left:8px;cursor:pointer;color:var(--color-text-info)" onclick="GL_STATE={q:'',cat:null};document.getElementById('gl-search').value='';renderGlPills();renderGl();">clear ✕</span>`:''}`;
+  // Group by category
+  const byC={}; arr.forEach(t=>{(byC[t.category]=byC[t.category]||[]).push(t);});
+  const catOrder=['process','memory','ai-compute','networking','optics','power','robotics','ar-displays','industry'];
+  const ordered=catOrder.filter(c=>byC[c]).concat(Object.keys(byC).filter(c=>!catOrder.includes(c)));
+  const catColor={process:'#0EA5E9',memory:'#7C3AED','ai-compute':'#16A34A',networking:'#059669',optics:'#D97706',power:'#65A30D',robotics:'#DC2626','ar-displays':'#9333EA',industry:'#6B7280'};
+  list.innerHTML=ordered.map(c=>{
+    const items=byC[c];
+    const cc=catColor[c]||'#6B7280';
+    return `<div style="margin-bottom:12px">
+      <div style="font-size:11.5px;font-weight:600;color:${cc};margin-bottom:4px;padding-bottom:3px;border-bottom:.5px solid ${cc}33;text-transform:uppercase;letter-spacing:.4px">${c.replace(/-/g,' ')} <span style="color:var(--color-text-tertiary);font-weight:400;text-transform:none;letter-spacing:0">· ${items.length}</span></div>
+      ${items.map(t=>{
+        const see=(t.see_also||[]).map(x=>`<span style="display:inline-block;color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;margin-right:6px" onclick="GL_STATE.q='${x.replace(/'/g,\"\\\\\\'\")}';GL_STATE.cat=null;document.getElementById('gl-search').value='${x.replace(/'/g,\"\\\\\\'\")}';renderGlPills();renderGl();">${x}</span>`).join('');
+        const exp=t.expansion?` <span style="color:var(--color-text-tertiary);font-size:11px;font-weight:400">— ${t.expansion}</span>`:'';
+        return `<div style="border:.5px solid var(--color-border-tertiary);border-left:2px solid ${cc};border-radius:3px;padding:6px 9px;margin-bottom:4px;background:#fff">
+          <div style="font-size:12px;font-weight:600;color:var(--color-text-primary)">${t.term}${exp}</div>
+          <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5;margin-top:3px">${t.definition}</div>
+          ${see?`<div style="font-size:10.5px;color:var(--color-text-tertiary);margin-top:4px"><b>see also:</b> ${see}</div>`:''}
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('') || `<div style="padding:16px;text-align:center;color:var(--color-text-tertiary);font-size:11px">No matches.</div>`;
+}
+
 /* ── Excluded tab ── */
 function buildExcluded(){
   const cont=document.getElementById('xc-cont');
@@ -968,7 +1036,7 @@ function buildSources(){
    DATA LOADING
 ════════════════════════════ */
 async function loadData(){
-  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded]=await Promise.all([
+  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded,glossary]=await Promise.all([
     fetch(BASE+'matrix.json').then(r=>r.json()),
     fetch(BASE+'explorer.json').then(r=>r.json()),
     fetch(BASE+'explainers.json').then(r=>r.json()),
@@ -981,6 +1049,7 @@ async function loadData(){
     fetch(BASE+'sources.json').then(r=>r.json()),
     fetch(BASE+'companies.json').then(r=>r.json()),
     fetch(BASE+'excluded.json').then(r=>r.json()),
+    fetch(BASE+'glossary.json').then(r=>r.json()),
   ]);
 
   /* Widget 1 data */
@@ -1011,6 +1080,8 @@ async function loadData(){
   COMPANIES= companies.companies;
   EXCLUDED = excluded.excluded;
   THEMES_REG = (companies._meta && companies._meta.themes_registry) || [];
+  GLOSSARY = glossary.glossary;
+  GL_CATS = glossary._meta.categories || {};
 
   /* Last-updated stamp */
   const conv3 = COMPANIES.filter(c=>c.conviction===3).length;
