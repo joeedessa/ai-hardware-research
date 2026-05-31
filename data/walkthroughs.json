@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "description": "End-to-end walk-throughs of a single product's dependency chain. Each step lists the supply-chain layer, the key listed actors (tickers — clickable to filter Companies), and a short paragraph of context. Ties the abstract chokepoints in the matrix and chain explorer to a concrete physical object.",
+    "as_of": "2026-05-31"
+  },
+  "walkthroughs": [
+    {
+      "id": "blackwell-gpu",
+      "title": "Inside one Blackwell GPU (the GB200)",
+      "subtitle": "From transistor to AI rack — the dependency chain of a single Nvidia AI accelerator.",
+      "color": "#16A34A",
+      "intro": "An NVL72 rack contains 72 Blackwell GPUs liquid-cooled together; each GPU is itself a multi-die package on a silicon interposer. Tracing one of those GPUs back to the wafer touches every major chokepoint on this dashboard. Here are the ~25 steps.",
+      "steps": [
+        { "n":"EDA & IP",                "key":["SNPS","CDNS","ARM","AWE.L"],         "text":"The chip starts as code. Synopsys + Cadence software handle synthesis, place-and-route, simulation; Arm provides CPU IP for the Grace-Hopper companion CPU; Alphawave + Synopsys provide HBM-PHY and UCIe chiplet-interconnect IP." },
+        { "n":"Architecture & design",   "key":["NVDA"],                              "text":"Nvidia owns the GPU architecture (Blackwell) and the software platform (CUDA, NVLink, NCCL). Defines the die — usually 2 reticle-limit compute dies stitched together with a 10TB/s NV-HBI interconnect." },
+        { "n":"Photomasks & EUV blanks", "key":["7741.T"],                            "text":"The mask carries the design pattern. Photomasks from Photronics PLAB, Toppan 7911.T, DNP. The EUV mask blanks underneath them are a Japanese near-monopoly: Hoya (7741.T) + AGC." },
+        { "n":"Lithography",             "key":["ASML"],                              "text":"ASML's High-NA EUV scanners (~$380M each) print the smallest features. Zeiss (Germany) supplies the optics — single-source within ASML's monopoly. Cymer (US, ASML-owned) is the tin-plasma light source." },
+        { "n":"Process tools",           "key":["AMAT","LRCX","KLAC","8035.T","ASM.AS","SMHN.DE","ONTO","6857.T"],"text":"AMAT (broadest), Lam (etch/depo), KLA (metrology), TEL (coat/develop + etch). ASM International leads the ALD steps now critical for GAAFET nanosheets. SUSS handles photomask cleaning at ~90% TSMC share. Onto + Advantest add inspection + test." },
+        { "n":"Subsystems inside the tools","key":["VACN.SW","MKSI"],                 "text":"Inside every process tool: vacuum valves (VAT — near-monopoly chokepoint), gas/flow controllers (MKS), RF generators, motion stages." },
+        { "n":"Wafers",                  "key":["4063.T","3436.T"],                   "text":"The chip is built on a 300mm polished silicon wafer. Shin-Etsu + SUMCO (Japan) supply ~50%+ together — a quiet pre-TSMC chokepoint." },
+        { "n":"Photoresist",             "key":["4063.T","4186.T"],                   "text":"Japan controls ~80-90% of advanced photoresist — JSR, Tokyo Ohka (4186.T), Shin-Etsu (4063.T), Fujifilm. Used for export-control leverage." },
+        { "n":"Foundry (front-end)",     "key":["TSM"],                               "text":"TSMC fabricates the dies on N3 (today) → N2 (2026 volume) → A16 (H2 2026, backside power). Fab 18 in Tainan handles ~90%+ of leading-edge — the single most strategically important industrial site on earth." },
+        { "n":"HBM stacks (memory)",     "key":["000660.KS","MU","005930.KS"],        "text":"The GPU sits next to 8 HBM stacks. SK Hynix leads (~62%, MR-MUF process), Micron ~21% (overtook Samsung), Samsung ~17% and clearing Nvidia HBM4 qual. All three sold out for 2026." },
+        { "n":"HBM known-good-die test", "key":["FORM","6857.T"],                     "text":"Before stacking, each HBM die is probed via MEMS probe cards contacting thousands of 40µm-pitch microbumps — the hardest test in the industry. FormFactor + Micronics Japan near-duopoly." },
+        { "n":"HBM bonding",             "key":["BESI.AS","0522.HK","042700.KS"],     "text":"Stacking happens via hybrid bonding (BESI's lead, ASMPT #2) or TC bonding (Hanmi ~90% HBM4). HBM4E shifts toward hybrid bonding — Hanmi's chokepoint is at risk." },
+        { "n":"Advanced packaging (CoWoS)","key":["TSM"],                             "text":"TSMC mounts the GPU dies + HBM stacks on a silicon interposer (CoWoS-S/-L/-R). CoWoS capacity is the gating bottleneck on AI GPU output since 2023; TSMC doubles yearly and outsources overflow." },
+        { "n":"IC substrate (ABF)",      "key":["4062.T","3037.TW","2802.T"],         "text":"The packaged module sits on an ABF (Ajinomoto Build-up Film) substrate. Ibiden + Unimicron + Shinko + Nan Ya + AT&S share the ABF-substrate market. Ajinomoto (2802.T) makes the insulating film itself — a hidden near-monopoly." },
+        { "n":"OSAT overflow",           "key":["3711.TW","AMKR"],                    "text":"Once CoWoS capacity saturates, TSMC outsources to ASE (world #1 OSAT), Amkor (US/Korea, $7B Arizona fab), SPIL." },
+        { "n":"Module + baseboard",      "key":["2317.TW"],                           "text":"The packaged GPU is mounted into an SXM module; SXMs go on an HGX baseboard. Foxconn (Hon Hai 2317.TW) builds the baseboards." },
+        { "n":"BMC + Server management", "key":["5274.TWO"],                          "text":"Every Hopper/Blackwell server needs a Baseboard Management Controller (BMC) to monitor power/health independently of the host CPU. ASPEED has ~100% of Nvidia GPU-rack BMCs (87 chips per NVL72) — an 'ASML-like' near-monopoly." },
+        { "n":"Networking silicon",      "key":["AVGO","ALAB","CRDO","SITM"],         "text":"Inside the rack: Broadcom Tomahawk 6 'Davisson' switch silicon (102.4 Tb/s), Nvidia ConnectX NICs / NVLink switches, Astera Labs retimers, Credo AECs. SiTime MEMS timing on every 1.6T module." },
+        { "n":"Optics (transceivers/CPO)","key":["COHR","LITE","MTSI","FN","CIEN"],   "text":"Each GPU drives 6 transceivers consuming ~180W. Nvidia committed ~$4B to lock EML laser supply at Lumentum + Coherent. MACOM photodiodes (>60% of 200G), Fabrinet contract-builds. Co-packaged optics (CPO) on TSMC COUPE for the 2026 Quantum-X/Spectrum-X ramp." },
+        { "n":"Fiber + connectors",      "key":["GLW","5801.T","5802.T"],             "text":"Corning fiber + connectivity. Japan majors Furukawa (5801.T) + Sumitomo Electric (5802.T) supply MT/MPO ferrules, rollable-ribbon cable, and DFB lasers — Nvidia has locked Furukawa DFB chips long-term." },
+        { "n":"Rack assembly (NVL72)",   "key":["2317.TW","2382.TW","6669.TW"],       "text":"Taiwan ODMs assemble the 72-GPU rack-scale unit. Foxconn, Quanta, Wiwynn together build ~the world's AI servers. Wiwynn alone is ~50% of hyperscale AI-server procurement." },
+        { "n":"Power delivery — board",  "key":["MPWR","2308.TW"],                    "text":"On each board, MPS (Monolithic Power) is Nvidia's reference VRM incumbent — multi-phase steps the intermediate-bus voltage down to ~0.7V at thousands of amps. Delta Electronics supplies the PSUs." },
+        { "n":"Power delivery — rack (800V HVDC)","key":["WOLF","STM","NVTS","AIXA.DE"],"text":"Rubin-era racks transition to 800V-DC distribution (Nvidia's 29-member 800VDC alliance). Wide-bandgap silicon (SiC + GaN) goes from ~0% to ~64% of rack power BOM. Wolfspeed owns the 200mm SiC fab; AIXTRON owns the MOCVD upstream of every GaN device." },
+        { "n":"Liquid cooling",          "key":["VRT","3017.TW","3324.TWO"],          "text":"NVL72 mandates liquid cooling — cold plates touch every GPU; CDUs (coolant distribution units) feed the rack. Vertiv leads systems; Auras + AVC for cold plates. CDU capacity is the cooling bottleneck (market ~$1B → ~$7.7B)." },
+        { "n":"Datacenter facility",     "key":["EQIX","DLR"],                        "text":"The rack lives inside a colo (Equinix, Digital Realty) or hyperscaler self-build. Power-grid access + permitting is the constraint — not capital. Solid-state transformers (SST) are the upstream inflection — Eaton, ABB, Hitachi Energy, GE Vernova racing for 2027." },
+        { "n":"Onsite power generation", "key":["GEV"],                               "text":"AI is now ~4% of US electricity (2026). Behind-the-meter gas turbines (GE Vernova), generators (Cummins, Caterpillar), nuclear PPAs/SMRs. The deepest cross-link from AI hardware into the Hard Assets / energy supply chain." }
+      ],
+      "outro": "Every step has either a near-monopoly chokepoint or a tight oligopoly. The whole dashboard is the map of who owns which one."
+    },
+    {
+      "id": "tesla-optimus",
+      "title": "Inside a Tesla Optimus humanoid",
+      "subtitle": "The dependency chain of one ~28-actuator humanoid robot — the joint, not the AI, is the cost.",
+      "color": "#DC2626",
+      "intro": "An Optimus carries ~28 actuator kits and lives or dies on the precision-motion supply chain. Each joint is roughly half the cost of the robot. Citrini's BOM teardown: actuators dominate; AI compute is a rounding error. Citrini also estimates Gen-3 is ~70% China-sourced.",
+      "steps": [
+        { "n":"Brain (AI compute)",      "key":["NVDA"],                              "text":"The robot 'brain' runs an embodied-AI model. Nvidia Jetson Thor (Blackwell, ~2,070 FP4 TFLOPS, GA 2025) is the de-facto standard; Tesla also runs in-house silicon. Adopted by Unitree, UBTech, AgiBot." },
+        { "n":"Foundation model (VLA)",  "key":["NVDA"],                              "text":"Vision-Language-Action models collapse see/think/move into one pipeline. Nvidia GR00T is the open humanoid-scale VLA + Isaac Sim training pipeline; Tesla, Figure (Helix), Physical Intelligence (π₀), Skild have proprietary stacks." },
+        { "n":"Sensing — vision",        "key":["6758.T","CGNX"],                     "text":"CMOS image sensors (Sony 6758.T dominant). Industrial cameras (Cognex, Keyence, Basler). Sony's sensor lead is a Japanese chokepoint." },
+        { "n":"Sensing — depth/lidar",   "key":["HSAI","688322.SH"],                  "text":"3D perception for navigation: Hesai (China cost leader >1.6M units 2025, Nvidia robotics partner), RoboSense. Structured-light/ToF: Orbbec." },
+        { "n":"Sensing — IMU + position","key":["6762.T","ADI","MELE.BR","ALGM"],     "text":"Inertial measurement (TDK InvenSense ICM-42688 widely used; ADI ADIS; Bosch). Magnetic position sensing per joint (Melexis, Allegro 'in every joint'). Lidar receivers/photodiodes (Hamamatsu)." },
+        { "n":"Sensing — force/torque",  "key":["NOVT","603662.SH"],                  "text":"Six-axis F/T sensors for dexterous manipulation. ATI (Novanta), Bota Systems, Sunrise Instruments, Keli Sensing (China #1). Tactile / e-skin is still a gap — mostly startups." },
+        { "n":"Motors — frameless torque","key":["RRX","ALNT","6594.T","600580.SH"], "text":"~28 frameless torque motor kits per Optimus. Kollmorgen (Regal Rexnord), Allient (US motion-control platform), Nidec, Wolong Electric (China)." },
+        { "n":"Rare-earth magnets",      "key":[],                                    "text":"Each motor needs rare-earth magnets — ~$20 of magnet content per humanoid. MP Materials (MP), JL Mag (6880.HK), Lynas (LYC.AU). These sit in the sibling Hard Assets map, not this dashboard." },
+        { "n":"Reducers — harmonic",     "key":["6324.T","688017.SH"],                "text":"High-precision strain-wave reducers for robot wrist/elbow joints. Harmonic Drive (Japan, near-monopoly); China challenger Leaderdrive a.k.a. Green Harmonic (688017.SH ~25%+ targeting Optimus). The single costliest part of a joint." },
+        { "n":"Reducers — RV / cycloidal","key":["6268.T","002472.SZ"],               "text":"High-torque RV reducers for hip/shoulder joints. Nabtesco ~60% globally (Japan), Sumitomo Heavy Fine Cyclo. China challenger: Shuanghuan Driveline (002472.SZ). Mirrors Japan's grip on WFE chemicals + precision optics." },
+        { "n":"Planetary gearbox",       "key":[],                                    "text":"Cheaper rotary workhorse for lower-cost joints. Apex Dynamics (4583.TW, Taiwan #1) ships >450k/yr." },
+        { "n":"Linear — planetary roller screw","key":["6481.T","6471.T","603009.SH","300100.SZ","SHA.DE"],"text":"The humanoid linear-actuation bottleneck — Optimus uses ~14 per robot. THK + NSK + Germany's GSA (primary Optimus supplier) at the top. China second-sources: Beite (¥1.85bn plant), Ningbo Shuanglin (scaling to 300K/yr for Optimus). Schaeffler ships a full joint module (gear + bearing + motor) at ~€1,500/bot — courting Figure + Agility." },
+        { "n":"Drives + encoders",       "key":["6506.T","300124.SZ"],                "text":"Servo drives + position/torque feedback. Yaskawa (6506.T), Inovance (China motion-control champion), Renishaw + Heidenhain encoders." },
+        { "n":"Tesla T-Chain actuator assembly","key":["002050.SZ","601689.SH"],     "text":"Tesla's exclusive Tier-1 actuator suppliers. Sanhua Intelligent (002050.SZ) — $685M order Oct 2025; the clearest listed Optimus proxy. Tuopu Group (601689.SH) — auto-parts base pivoting to humanoid actuators." },
+        { "n":"Battery / energy",        "key":[],                                    "text":"~$1-2k battery content per humanoid; CATL + BYD batteries inside Chinese humanoids (Unitree). Belongs to the Hard Assets / energy sibling map. 'Watt-hours per meter' is the new MPG for robotics economics." },
+        { "n":"Final assembly + integration","key":["TSLA"],                          "text":"Tesla integrates in-house (~70% China-sourced for Gen-3 per reports). Competitors: Figure AI, Agility, Apptronik, Boston Dynamics (Hyundai), Unitree (G1 at $16k), UBTech, AgiBot." }
+      ],
+      "outro": "Citrini's punchline: 'the hard part of a humanoid isn't the AI — it's the gearbox.' Until China can cost-down reducers + screws + motors enough to make humanoids economic, the actuator-component layer is more investable than the robot brands."
+    }
+  ]
+}

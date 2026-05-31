@@ -276,6 +276,7 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div class="tab" onclick="ST('co',this)">Companies</div>
   <div class="tab" onclick="ST('vx',this)">Chain explorer</div>
   <div class="tab" onclick="ST('ex',this)">How it works</div>
+  <div class="tab" onclick="ST('wt',this)">Walk-throughs</div>
   <div class="tab" onclick="ST('gl',this)">Glossary</div>
   <div class="tab" onclick="ST('geo',this)">Geopolitical</div>
   <div class="tab" onclick="ST('cy',this)">Cycle &amp; innings</div>
@@ -317,6 +318,11 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 <div class="view" id="view-ex">
   <div class="note"><b>Chain explainers</b> — how each chain works, where value is captured, and the structural demand thesis. Click any card to expand.</div>
   <div class="exg" id="exg"></div>
+</div>
+
+<div class="view" id="view-wt">
+  <div class="note">End-to-end <b>walk-throughs</b> — trace one physical product through every supply-chain layer. Tickers in the prose are clickable; click any to jump to the Companies tab filtered to that record. The dashboard's whole chokepoint map shows up as concrete steps.</div>
+  <div id="wt-cont"></div>
 </div>
 
 <div class="view" id="view-gl">
@@ -421,13 +427,13 @@ const BASE='https://raw.githubusercontent.com/joeedessa/ai-hardware-research/mai
 let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
-let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS;
+let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
 let CO_STATE={q:'',v:null,conv:null,theme:null,sort:'conv'};
 let GL_STATE={q:'',cat:null};
 
 /* ── Build state (all lazy except matrix) ── */
-let built={mx:false,co:false,vx:false,ex:false,gl:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
+let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
@@ -469,6 +475,7 @@ function ST(id,el){
     else if(id==='th')buildThemes();
     else if(id==='pf')buildPortfolio();
     else if(id==='co')buildCompanies();
+    else if(id==='wt')buildWalkthroughs();
     else if(id==='gl')buildGlossary();
     else if(id==='sr')buildSources();
     else if(id==='xc')buildExcluded();
@@ -946,6 +953,38 @@ function renderCoCard(c){
   </div>`;
 }
 
+/* ── Walk-throughs tab ── */
+function buildWalkthroughs(){
+  const cont=document.getElementById('wt-cont');
+  cont.innerHTML=WALKTHROUGHS.map((w,wi)=>{
+    const c=w.color||'#534AB7';
+    const steps=w.steps.map((s,i)=>{
+      const chips=(s.key||[]).map(tk=>{
+        const nm=(TICKER_MAP&&TICKER_MAP[tk])?TICKER_MAP[tk]:tk;
+        return `<span class="ticklink" data-tk="${tk}" title="Filter Companies by ${tk} — ${nm}" style="display:inline-block;margin:1px 2px;font-size:10px;padding:1px 5px;background:${c}10;border:.5px solid ${c}55;border-radius:2px">${tk}</span>`;
+      }).join('');
+      return `<div style="display:flex;gap:8px;padding:7px 0;border-bottom:.5px solid #F3F4F6">
+        <div style="flex:0 0 24px;display:flex;flex-direction:column;align-items:center">
+          <div style="background:${c};color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">${i+1}</div>
+          ${i<w.steps.length-1?`<div style="width:1px;flex:1;background:${c}33;min-height:6px;margin-top:2px"></div>`:''}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:2px">${s.n}</div>
+          ${chips?`<div style="margin-bottom:3px">${chips}</div>`:''}
+          <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5">${linkifyTickers(s.text)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div style="border:.5px solid var(--color-border-tertiary);border-left:3px solid ${c};border-radius:4px;padding:10px 14px;margin-bottom:10px;background:#fff">
+      <div style="font-size:13.5px;font-weight:600;color:var(--color-text-primary)">${w.title}</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">${w.subtitle||''}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:6px;padding:6px 8px;background:${c}08;border-radius:3px;border-left:2px solid ${c}55">${linkifyTickers(w.intro||'')}</div>
+      <div style="margin:6px 0 6px 0">${steps}</div>
+      ${w.outro?`<div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5;padding:6px 8px;background:${c}08;border-radius:3px;border-left:2px solid ${c}55;font-style:italic">${linkifyTickers(w.outro)}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
 /* ── Glossary tab ── */
 function buildGlossary(){
   document.getElementById('gl-count').textContent=GLOSSARY.length;
@@ -1058,7 +1097,7 @@ function buildSources(){
    DATA LOADING
 ════════════════════════════ */
 async function loadData(){
-  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded,glossary]=await Promise.all([
+  const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded,glossary,walkthroughs]=await Promise.all([
     fetch(BASE+'matrix.json').then(r=>r.json()),
     fetch(BASE+'explorer.json').then(r=>r.json()),
     fetch(BASE+'explainers.json').then(r=>r.json()),
@@ -1072,6 +1111,7 @@ async function loadData(){
     fetch(BASE+'companies.json').then(r=>r.json()),
     fetch(BASE+'excluded.json').then(r=>r.json()),
     fetch(BASE+'glossary.json').then(r=>r.json()),
+    fetch(BASE+'walkthroughs.json').then(r=>r.json()),
   ]);
 
   /* Widget 1 data */
@@ -1104,6 +1144,7 @@ async function loadData(){
   THEMES_REG = (companies._meta && companies._meta.themes_registry) || [];
   GLOSSARY = glossary.glossary;
   GL_CATS = glossary._meta.categories || {};
+  WALKTHROUGHS = walkthroughs.walkthroughs;
 
   /* Build ticker regex + map for cross-link clickability across all prose.
      Skip 2-char alpha-only tickers (ON, MU, GM) to avoid English false positives. */
