@@ -946,6 +946,7 @@ function renderCoCard(c){
       <span style="display:inline-block;background:${vc.c}22;color:${vc.c};padding:1px 6px;border-radius:2px;font-size:9.5px;font-weight:600;letter-spacing:.2px">${(vc.sn||c.vertical).toUpperCase()}</span>
       <span title="${convLabel}" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--color-text-tertiary)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${convColor}"></span>${c.conviction}</span>
       <span style="font-size:10px;color:var(--color-text-tertiary)">${c.geo}</span>
+      ${c.last_touched?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto" title="Thesis last touched">↻ ${c.last_touched}</span>`:''}
     </div>
     <div style="font-size:10.5px;color:var(--color-text-secondary);margin-bottom:3px;font-weight:500">${c.chain_layer||''}</div>
     <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.45">${linkifyTickers(c.thesis_note||'')}</div>
@@ -1168,7 +1169,7 @@ async function loadData(){
   document.getElementById('co-count-total').textContent = COMPANIES.length;
 
   /* Populate dynamic content */
-  document.getElementById('integ').innerHTML=`<b style="color:var(--color-text-primary)">Integrated companies:</b> ${matrix.integrated_companies}`;
+  document.getElementById('integ').innerHTML=`<b style="color:var(--color-text-primary)">Integrated companies:</b> ${linkifyTickers(matrix.integrated_companies)}`;
   document.getElementById('el-bt-title').textContent=elec.bottleneck.title;
   document.getElementById('el-bt-body').textContent=elec.bottleneck.body;
 
