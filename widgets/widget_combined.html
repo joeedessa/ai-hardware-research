@@ -1154,7 +1154,10 @@ function renderGl(){
     return `<div style="margin-bottom:12px">
       <div style="font-size:11.5px;font-weight:600;color:${cc};margin-bottom:4px;padding-bottom:3px;border-bottom:.5px solid ${cc}33;text-transform:uppercase;letter-spacing:.4px">${c.replace(/-/g,' ')} <span style="color:var(--color-text-tertiary);font-weight:400;text-transform:none;letter-spacing:0">· ${items.length}</span></div>
       ${items.map(t=>{
-        const see=(t.see_also||[]).map(x=>`<span style="display:inline-block;color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;margin-right:6px" onclick="GL_STATE.q='${x.replace(/'/g,\"\\\\\\'\")}';GL_STATE.cat=null;document.getElementById('gl-search').value='${x.replace(/'/g,\"\\\\\\'\")}';renderGlPills();renderGl();">${x}</span>`).join('');
+        const see=(t.see_also||[]).map(x=>{
+          const esc=x.replace(/'/g,"\\'");
+          return `<span style="display:inline-block;color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;margin-right:6px" onclick="GL_STATE.q='${esc}';GL_STATE.cat=null;document.getElementById('gl-search').value='${esc}';renderGlPills();renderGl();">${x}</span>`;
+        }).join('');
         const exp=t.expansion?` <span style="color:var(--color-text-tertiary);font-size:11px;font-weight:400">— ${t.expansion}</span>`:'';
         return `<div style="border:.5px solid var(--color-border-tertiary);border-left:2px solid ${cc};border-radius:3px;padding:6px 9px;margin-bottom:4px;background:#fff">
           <div style="font-size:12px;font-weight:600;color:var(--color-text-primary)">${t.term}${exp}</div>
