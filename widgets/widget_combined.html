@@ -279,6 +279,7 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
   <div class="tab" onclick="ST('wt',this)">Walk-throughs</div>
   <div class="tab" onclick="ST('gl',this)">Glossary</div>
   <div class="tab" onclick="ST('geo',this)">Geopolitical</div>
+  <div class="tab" onclick="ST('hm',this)">Chokepoint Map</div>
   <div class="tab" onclick="ST('cy',this)">Cycle &amp; innings</div>
   <!-- Separator -->
   <div class="tab-group-sep"></div>
@@ -354,6 +355,11 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
       <span class="ct a-eu" style="padding:1px 5px;border-radius:3px">Europe / other</span>
     </div>
   </div>
+</div>
+
+<div class="view" id="view-hm">
+  <div class="note"><b>Where do the chokepoints sit?</b> 148 companies × 13 verticals × 9 chokepoint geographies. Cell value = conviction-3 names (the "chokepoint owners"). Background heat-tint reads the Asian-chokepoint thesis at a glance. Click any cell to expand the tickers in that intersection (clickable).</div>
+  <div id="hm-cont"></div>
 </div>
 
 <div class="view" id="view-cy">
@@ -433,7 +439,7 @@ let CO_STATE={q:'',v:null,conv:null,theme:null,sort:'conv'};
 let GL_STATE={q:'',cat:null};
 
 /* ── Build state (all lazy except matrix) ── */
-let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
+let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,hm:false,cy:false,ps:false,el:false,th:false,pf:false,sr:false,xc:false};
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
@@ -469,6 +475,7 @@ function ST(id,el){
     if(id==='vx')buildVList();
     else if(id==='ex')buildExpls();
     else if(id==='geo')buildGeo();
+    else if(id==='hm')buildChokeMap();
     else if(id==='cy')buildCycle();
     else if(id==='ps')buildPS();
     else if(id==='el')buildEl();
@@ -854,6 +861,119 @@ function buildPortfolio(){
     catg.appendChild(c);
   });
   cont.appendChild(catg);
+}
+
+/* ── Chokepoint Map (conviction × geography) ── */
+function buildChokeMap(){
+  const cont=document.getElementById('hm-cont');
+  // Geo buckets — what an investor cares about for chokepoints
+  const BUCKETS=[
+    {id:'TW', label:'Taiwan',      flag:'🇹🇼', match:['TW']},
+    {id:'KR', label:'Korea',       flag:'🇰🇷', match:['KR','KQ']},
+    {id:'JP', label:'Japan',       flag:'🇯🇵', match:['JP']},
+    {id:'CN', label:'China',       flag:'🇨🇳', match:['CN','HK']},
+    {id:'US', label:'US',          flag:'🇺🇸', match:['US']},
+    {id:'NL', label:'Netherlands', flag:'🇳🇱', match:['NL']},
+    {id:'DE', label:'Germany',     flag:'🇩🇪', match:['DE','AT']},
+    {id:'EU+',label:'Other EU',    flag:'🇪🇺', match:['CH','FR','BE','FI','SE','IT','UK']},
+    {id:'OTH',label:'Other',       flag:'🌐', match:['IL','TH']}
+  ];
+  function bucket(geo){
+    const primary=(geo||'').split(/[\/]/)[0].toUpperCase();
+    for(const b of BUCKETS){ if(b.match.includes(primary)) return b.id; }
+    return 'OTH';
+  }
+  // grid[vert][bucket]={conv3,conv2,conv1,total,tickers:[]}
+  const grid={};
+  VC_COLS.forEach(v=>{ grid[v.id]={}; BUCKETS.forEach(b=>grid[v.id][b.id]={c3:0,c2:0,c1:0,t:0,ts:[]}); });
+  // Totals per row + column
+  const rowTotal={},colTotal={};
+  VC_COLS.forEach(v=>rowTotal[v.id]={c3:0,c2:0,c1:0,t:0});
+  BUCKETS.forEach(b=>colTotal[b.id]={c3:0,c2:0,c1:0,t:0});
+  let grandTotal={c3:0,c2:0,c1:0,t:0};
+  COMPANIES.forEach(c=>{
+    const g=bucket(c.geo); const v=c.vertical;
+    if(!grid[v]||!grid[v][g]) return;
+    const cell=grid[v][g];
+    cell.t++; cell[`c${c.conviction}`]++; cell.ts.push(c);
+    rowTotal[v].t++; rowTotal[v][`c${c.conviction}`]++;
+    colTotal[g].t++; colTotal[g][`c${c.conviction}`]++;
+    grandTotal.t++; grandTotal[`c${c.conviction}`]++;
+  });
+  // Heat intensity by conv-3 count: 0=blank, 1=light, 2=med, 3+=dark
+  function cellStyle(cell){
+    if(cell.t===0) return 'background:#FAFAFA;color:#D1D5DB;';
+    const c3=cell.c3;
+    if(c3>=3) return `background:#16A34A55;color:#0a4a25;`;
+    if(c3===2) return `background:#16A34A33;color:#0a4a25;`;
+    if(c3===1) return `background:#16A34A1A;color:#0a4a25;`;
+    if(cell.c2>=2) return `background:#3B82F614;color:var(--color-text-secondary);`;
+    return `background:#FFFFFF;color:var(--color-text-secondary);`;
+  }
+  // Build header row
+  const colCount=BUCKETS.length+2; // 1 vert-label col + N geo cols + 1 total col
+  let html=`<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:130px repeat(${BUCKETS.length},minmax(58px,1fr)) 60px;gap:2px;min-width:780px;font-family:var(--font-sans)">`;
+  // Top-left blank
+  html+=`<div></div>`;
+  // Geo header row
+  BUCKETS.forEach(b=>{
+    html+=`<div style="text-align:center;font-size:10.5px;font-weight:600;color:var(--color-text-secondary);padding:4px 2px" title="${b.label}">${b.flag}<br>${b.id}</div>`;
+  });
+  html+=`<div style="text-align:center;font-size:10.5px;font-weight:600;color:var(--color-text-tertiary);padding:4px 2px">Σ</div>`;
+  // Body rows
+  VC_COLS.forEach(v=>{
+    const vc=v.c;
+    html+=`<div style="display:flex;align-items:center;font-size:10.5px;color:var(--color-text-primary);padding:0 6px;border-left:3px solid ${vc};background:${vc}0A">${v.sn}</div>`;
+    BUCKETS.forEach(b=>{
+      const cell=grid[v.id][b.id];
+      const sty=cellStyle(cell);
+      const title=`${v.sn} × ${b.label}: ${cell.t} names (3:${cell.c3} · 2:${cell.c2} · 1:${cell.c1})${cell.t?'\\nTickers: '+cell.ts.map(c=>c.ticker).join(', '):''}`;
+      const inner=cell.t?`<div style="font-size:13px;font-weight:600">${cell.c3||''}</div><div style="font-size:9px;color:var(--color-text-tertiary);margin-top:-1px">${cell.t}</div>`:`<div style="font-size:11px;color:#E5E7EB">·</div>`;
+      html+=`<div class="hm-cell" data-v="${v.id}" data-g="${b.id}" title="${title}" style="${sty}padding:4px 2px;text-align:center;cursor:${cell.t?'pointer':'default'};border-radius:2px;min-height:40px;display:flex;flex-direction:column;justify-content:center;align-items:center">${inner}</div>`;
+    });
+    const rt=rowTotal[v.id];
+    html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:600;color:var(--color-text-secondary);background:#F9FAFB;border-radius:2px;display:flex;flex-direction:column;justify-content:center"><span>${rt.c3||'·'}</span><span style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${rt.t}</span></div>`;
+  });
+  // Totals row
+  html+=`<div style="display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--color-text-tertiary);padding:0 6px;background:#F9FAFB">Σ</div>`;
+  BUCKETS.forEach(b=>{
+    const ct=colTotal[b.id];
+    html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:600;color:var(--color-text-secondary);background:#F9FAFB;border-radius:2px"><div>${ct.c3||'·'}</div><div style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${ct.t}</div></div>`;
+  });
+  html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:700;color:var(--color-text-primary);background:#16A34A22;border-radius:2px"><div>${grandTotal.c3}</div><div style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${grandTotal.t}</div></div>`;
+  html+=`</div></div>`;
+  // Legend
+  html+=`<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:6px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+    <span><b>Big number</b> = conviction-3 chokepoint owners in cell · <b>Small</b> = total names</span>
+    <span>Heat by conv-3:
+      <span style="display:inline-block;width:14px;height:10px;background:#16A34A1A;border:.5px solid #E5E7EB;vertical-align:middle"></span>1
+      <span style="display:inline-block;width:14px;height:10px;background:#16A34A33;border:.5px solid #E5E7EB;vertical-align:middle"></span>2
+      <span style="display:inline-block;width:14px;height:10px;background:#16A34A55;border:.5px solid #E5E7EB;vertical-align:middle"></span>3+
+    </span>
+  </div>`;
+  // Detail panel
+  html+=`<div id="hm-detail" style="margin-top:10px"></div>`;
+  cont.innerHTML=html;
+  // Attach click handlers
+  cont.querySelectorAll('.hm-cell').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const v=el.dataset.v, g=el.dataset.g;
+      const cell=grid[v][g];
+      const det=document.getElementById('hm-detail');
+      if(!cell.t){ det.innerHTML=''; return; }
+      const vc=VC_COLS.find(x=>x.id===v);
+      const b=BUCKETS.find(x=>x.id===g);
+      const chips=cell.ts.sort((a,b)=>b.conviction-a.conviction).map(c=>{
+        const cnv={1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[c.conviction];
+        return `<span class="ticklink" data-tk="${c.ticker}" title="${c.name.replace(/"/g,'&quot;')} — ${c.chain_layer.replace(/"/g,'&quot;')}" style="display:inline-block;margin:2px 3px;font-size:10.5px;padding:1px 6px;background:#fff;border:.5px solid ${cnv};border-left:3px solid ${cnv};border-radius:2px">${c.ticker} <span style="color:var(--color-text-tertiary);font-size:9.5px">${c.conviction}</span></span>`;
+      }).join('');
+      det.innerHTML=`<div style="border:.5px solid var(--color-border-tertiary);border-left:3px solid ${vc.c};border-radius:4px;padding:8px 10px;background:#fff">
+        <div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:2px">${vc.sn} × ${b.flag} ${b.label}</div>
+        <div style="font-size:10.5px;color:var(--color-text-tertiary);margin-bottom:6px">${cell.t} names · ${cell.c3} chokepoint-3 · ${cell.c2} interested-2 · ${cell.c1} monitor-1 — click any ticker to filter Companies</div>
+        ${chips}
+      </div>`;
+    });
+  });
 }
 
 /* ── Companies browser ── */
