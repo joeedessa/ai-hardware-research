@@ -19,18 +19,8 @@
     }
   },
   "excluded": [
-    { "ticker": "NET",      "name": "Cloudflare",                "reason": "Software/CDN; agentic infrastructure layer is software, not hardware chokepoint", "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "AKAM",     "name": "Akamai Technologies",       "reason": "CDN/software — out of scope",                                                     "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "FSLY",     "name": "Fastly",                    "reason": "CDN/software — out of scope",                                                     "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "ATEN",     "name": "A10 Networks",              "reason": "ADC/load-balancing software — out of scope",                                      "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "VRSN",     "name": "VeriSign",                  "reason": "DNS registry — software/services",                                                "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "FFIV",     "name": "F5",                        "reason": "Load balancer / API gateway software",                                            "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "TWLO",     "name": "Twilio",                    "reason": "Communications APIs/software",                                                    "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "BAND",     "name": "Bandwidth",                 "reason": "Telephony APIs/services",                                                         "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "DOCU",     "name": "DocuSign",                  "reason": "Enterprise SaaS",                                                                 "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "DDOG",     "name": "Datadog",                   "reason": "Observability SaaS",                                                              "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "DOCN",     "name": "DigitalOcean",              "reason": "Managed cloud services",                                                          "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "RXT",      "name": "Rackspace",                 "reason": "Hosting/managed services",                                                        "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "BSY",      "name": "Bentley Systems",           "reason": "Infrastructure CAD/digital-twin software",                                        "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "ADSK",     "name": "Autodesk",                  "reason": "Design software",                                                                 "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "VNET",     "name": "VNET Group",                "reason": "China datacenter SERVICES (vs. hardware) — borderline; deferred",                "category": "software-saas",     "source_ref": ["citrini-agentic-2026-03"] },
@@ -39,10 +29,8 @@
     { "ticker": "COIN",     "name": "Coinbase",                  "reason": "Crypto exchange",                                                                 "category": "payments-fintech",  "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "PYPL",     "name": "PayPal",                    "reason": "Payments rail",                                                                   "category": "payments-fintech",  "source_ref": ["citrini-agentic-2026-03"] },
 
-    { "ticker": "PANW",     "name": "Palo Alto Networks",        "reason": "Cybersecurity SaaS",                                                              "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03","citrini-muscle-2026-02"] },
     { "ticker": "OKTA",     "name": "Okta",                      "reason": "Identity / cybersecurity SaaS",                                                   "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "ZS",       "name": "Zscaler",                   "reason": "Cybersecurity SaaS (zero-trust)",                                                 "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03"] },
-    { "ticker": "SAIL",     "name": "SailPoint",                 "reason": "Identity governance SaaS",                                                        "category": "cybersecurity",     "source_ref": ["citrini-agentic-2026-03"] },
     { "ticker": "CRWD",     "name": "CrowdStrike",               "reason": "Cybersecurity SaaS",                                                              "category": "cybersecurity",     "source_ref": ["citrini-muscle-2026-02"] },
     { "ticker": "RBRK",     "name": "Rubrik",                    "reason": "Cybersecurity SaaS",                                                              "category": "cybersecurity",     "source_ref": ["citrini-muscle-2026-02"] },
 
