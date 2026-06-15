@@ -80,6 +80,8 @@
 
     { "ticker": "POET",     "name": "Poet Technologies",         "reason": "Speculative wafer-level photonic interposer — binary-outcome bet",                "category": "speculative",       "source_ref": ["citrini-light-2026-03"] },
 
+    { "ticker": "603667.SH","name": "ZD Leader (Wuzhou Xinchun?)","reason": "Source memo had conflicting tickers — '603667 CH' was attributed to both Zhejiang XCC/Wuzhou Xinchun (bearings/screws) AND Moons' Electric (Moons' is actually 002351.SZ). Defer until disambiguated.", "category": "ticker-conflict",   "source_ref": ["citrini-primer-2025-05","citrini-roboupd-2025-07"] },
+
     { "ticker": "2408.TW",  "name": "Nanya Technology",          "reason": "Legacy memory (DDR4/3) — deferred; could promote later",                          "category": "lagging-edge-memory","source_ref": ["citrini-muscle-2026-02"] },
     { "ticker": "2344.TW",  "name": "Winbond",                   "reason": "Legacy memory — deferred",                                                        "category": "lagging-edge-memory","source_ref": ["citrini-muscle-2026-02"] },
     { "ticker": "2337.TW",  "name": "Macronix",                  "reason": "NOR flash 30% Q1 price hike — deferred",                                          "category": "lagging-edge-memory","source_ref": ["citrini-muscle-2026-02"] },
