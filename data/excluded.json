@@ -71,6 +71,7 @@
     { "ticker": "6213.TW",  "name": "ITEQ",                      "reason": "CCL — specialty materials → Hard Assets sibling",                                "category": "raw-materials",     "source_ref": ["citrini-inherit-2026-05"] },
     { "ticker": "300750.SZ","name": "CATL",                      "reason": "Battery → Hard Assets sibling (energy storage)",                                  "category": "raw-materials",     "source_ref": ["citrini-primer-2025-05"] },
     { "ticker": "002594.SZ","name": "BYD",                       "reason": "EV + battery → Hard Assets sibling",                                              "category": "raw-materials",     "source_ref": ["citrini-roboupd-2025-07"] },
+    { "ticker": "4047.T",   "name": "Kanto Denka",               "reason": "Fluorine chemicals + WF6 electronic gases — specialty chemicals → Hard Assets",  "category": "raw-materials",     "source_ref": ["citrini-inherit-2026-05"] },
 
     { "ticker": "HUT",      "name": "Hut 8",                     "reason": "Bitcoin-mining-to-AI conversion — energy/crypto adjacency",                       "category": "bitcoin-infra",     "source_ref": ["citrini-inherit-2026-05"] },
     { "ticker": "WYFI",     "name": "WhiteFiber",                "reason": "Bitcoin-mining-to-AI conversion",                                                 "category": "bitcoin-infra",     "source_ref": ["citrini-inherit-2026-05"] },
