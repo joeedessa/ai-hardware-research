@@ -4,33 +4,54 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI Hardware Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Fraunces:ital,opsz,wght@0,9..144,500..600;1,9..144,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ── Standalone CSS variables ── */
+/* ── Design tokens ── */
 :root{
-  --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  --color-text-primary:#111827;
-  --color-text-secondary:#374151;
-  --color-text-tertiary:#6B7280;
-  --color-text-info:#1D4ED8;
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  --color-text-primary:#16181D;
+  --color-text-secondary:#3D424D;
+  --color-text-tertiary:#70757F;
+  --color-text-info:#3730C9;
   --color-background-primary:#FFFFFF;
-  --color-background-secondary:#F9FAFB;
-  --color-background-info:#EFF6FF;
-  --color-border-tertiary:#E5E7EB;
-  --color-border-secondary:#D1D5DB;
-  --color-border-info:#BFDBFE;
+  --color-background-secondary:#F5F5F2;
+  --color-background-info:#EEEEFB;
+  --color-border-tertiary:#E7E6E1;
+  --color-border-secondary:#D3D2CC;
+  --color-border-info:#C7C5F4;
+  --accent:#4F46E5;
+  --paper:#FBFAF7;
+  --shadow-1:0 1px 2px rgba(22,24,29,.05);
+  --shadow-2:0 4px 16px rgba(22,24,29,.08),0 1px 3px rgba(22,24,29,.05);
+  --shadow-3:0 12px 40px rgba(22,24,29,.16),0 2px 8px rgba(22,24,29,.08);
 }
-body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
-#loading{font-size:15.0px;color:#6B7280;padding:20px;text-align:center}
+body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:#4F46E522}
+#loading{font-size:15.0px;color:#70757F;padding:20px;text-align:center}
 
 /* ── Shared base ── */
 *{box-sizing:border-box}
 .w{padding:.4rem 0;font-family:var(--font-sans)}
-.tabs{display:flex;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:6px;overflow-x:auto}
-.tab{padding:4px 11px;font-size:12.0px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-.5px;white-space:nowrap}
-.tab.on{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+/* Masthead */
+.mast{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 2px 10px;flex-wrap:wrap}
+.mast-title{font-family:var(--font-display);font-size:21px;font-weight:600;letter-spacing:-.01em;color:var(--color-text-primary);line-height:1.1}
+.mast-title em{font-style:italic;font-weight:500;color:var(--accent)}
+.mast-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
+.mast-sub b{color:var(--color-text-secondary);font-weight:600;font-variant-numeric:tabular-nums}
+.mast-froth{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:500;color:#B32B2A;background:#E24B4A10;border:.5px solid #E24B4A33;border-radius:20px;padding:3px 10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.mast-froth:hover{background:#E24B4A1C;box-shadow:var(--shadow-1)}
+.tabs{display:flex;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:8px;overflow-x:auto;position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:6px 11px;font-size:12.0px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-.5px;white-space:nowrap;border-radius:6px 6px 0 0;transition:color .12s,background .12s}
+.tab:hover{color:var(--color-text-primary);background:var(--color-background-secondary)}
+.tab.on{color:var(--color-text-primary);border-bottom-color:var(--accent);font-weight:600}
 .tab-group-sep{width:1px;background:var(--color-border-tertiary);margin:4px 4px 0;flex-shrink:0}
 .view{display:none}.view.on{display:block}
-.ticklink{color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;border-radius:2px;padding:0 1px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:.95em}
+.ticklink{color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;border-radius:2px;padding:0 1px;font-family:var(--font-mono);font-size:.92em}
 .ticklink:hover{background:var(--color-background-info)}
 .note{font-size:11.0px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:3px;padding:3px 6px;margin-bottom:5px;line-height:1.5}
 .note b{color:var(--color-text-secondary);font-weight:500}
@@ -178,6 +199,44 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 .fm-sig.ex .fm-chev{transform:rotate(180deg)}
 .fm-sig-d{font-size:10.5px;color:var(--color-text-secondary);line-height:1.55;margin-top:5px;display:none}
 .fm-sig.ex .fm-sig-d{display:block}
+/* ── Detail drawer (company / theme drill-down) ── */
+#drawer-bk{position:fixed;inset:0;background:rgba(22,24,29,.28);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:90;opacity:0;pointer-events:none;transition:opacity .22s}
+#drawer-bk.on{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,92vw);background:var(--color-background-primary);z-index:95;box-shadow:var(--shadow-3);transform:translateX(calc(100% + 20px));transition:transform .26s cubic-bezier(.32,.72,.28,1);display:flex;flex-direction:column;border-left:.5px solid var(--color-border-tertiary)}
+#drawer.on{transform:translateX(0)}
+.dw-accent{height:3px;flex-shrink:0}
+.dw-head{display:flex;align-items:center;gap:8px;padding:12px 16px 10px;border-bottom:.5px solid var(--color-border-tertiary);flex-shrink:0}
+.dw-back{font-size:16px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 6px;border-radius:5px;line-height:1}
+.dw-back:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.dw-close{margin-left:auto;font-size:15px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 7px;border-radius:5px;line-height:1}
+.dw-close:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.dw-tick{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--color-text-primary)}
+.dw-name{font-family:var(--font-display);font-size:16px;font-weight:500;color:var(--color-text-primary);line-height:1.15}
+.dw-body{overflow-y:auto;padding:14px 16px 18px;flex:1;overscroll-behavior:contain}
+.dw-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.dw-badge{font-size:9.5px;font-weight:600;letter-spacing:.03em;padding:2.5px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
+.dw-sect{font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin:14px 0 5px}
+.dw-sect:first-child{margin-top:0}
+.dw-layer{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.dw-thesis{font-size:12px;line-height:1.62;color:var(--color-text-secondary)}
+.dw-chip{display:inline-block;font-size:10px;font-weight:500;padding:2.5px 8px;border-radius:20px;margin:2px 3px 2px 0;cursor:pointer;border:.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:var(--color-background-primary);transition:all .12s}
+.dw-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--color-background-info)}
+.dw-src{font-size:10.5px;color:var(--color-text-secondary);padding:5px 8px;border:.5px solid var(--color-border-tertiary);border-radius:6px;margin-bottom:4px;line-height:1.45}
+.dw-src b{font-weight:600;color:var(--color-text-primary)}
+.dw-src .dt{color:var(--color-text-tertiary);font-variant-numeric:tabular-nums}
+.dw-peer{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;cursor:pointer;transition:background .12s;min-width:0}
+.dw-peer:hover{background:var(--color-background-secondary)}
+.dw-peer .tk{font-family:var(--font-mono);font-size:10.5px;font-weight:600;flex-shrink:0;min-width:52px}
+.dw-peer .nm{font-size:11px;color:var(--color-text-primary);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dw-peer .ly{font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+.dw-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dw-act{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.dw-btn{font-size:10.5px;font-weight:500;padding:5px 11px;border-radius:7px;cursor:pointer;border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);text-decoration:none;transition:all .12s}
+.dw-btn:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--shadow-1)}
+.dw-vgroup{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;margin:10px 0 3px;color:var(--color-text-secondary)}
+.dw-hint{font-size:9.5px;color:var(--color-text-tertiary);text-align:center;padding:8px;border-top:.5px solid var(--color-border-tertiary);flex-shrink:0}
+.co-card{cursor:pointer;transition:border-color .14s,box-shadow .14s}
+.co-card:hover{border-color:var(--color-border-secondary)!important;box-shadow:var(--shadow-2)}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);text-align:left;padding:4px 6px;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap}
@@ -288,7 +347,13 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 <div id="loading">Loading AI hardware research data…</div>
 <div class="w" id="app" style="display:none">
 
-<div id="updated-stamp" style="font-size:10px;color:var(--color-text-tertiary);text-align:right;padding:0 2px 4px 0"></div>
+<header class="mast">
+  <div>
+    <div class="mast-title">AI Hardware <em>Research</em></div>
+    <div class="mast-sub" id="updated-stamp"></div>
+  </div>
+  <span class="mast-froth" id="mast-froth" style="display:none"><span class="fm-pulse"></span><span>Froth Monitor</span></span>
+</header>
 
 <div class="tabs">
   <!-- Widget 1 tabs -->
@@ -1102,9 +1167,9 @@ function renderCoCard(c){
     return `<span style="display:inline-block;background:var(--color-background-info);color:var(--color-text-info);padding:1px 5px;border-radius:2px;margin:1px;font-size:9.5px;border:.5px solid var(--color-border-info)" title="${s}">${short}</span>`;
   }).join('');
   const footer=(srcs||themes)?`<div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${srcs?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-right:2px">src:</span>${srcs}`:''}${themes?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-left:${srcs?'6px':'0'};margin-right:2px">themes:</span>${themes}`:''}</div>`:'';
-  return `<div style="border:.5px solid var(--color-border-tertiary);border-radius:4px;padding:7px 10px;margin-bottom:5px;background:#fff">
+  return `<div class="co-card" data-tk="${c.ticker}" style="border:.5px solid var(--color-border-tertiary);border-radius:7px;padding:7px 10px;margin-bottom:5px;background:#fff;box-shadow:var(--shadow-1)">
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px">
-      <span style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;font-weight:600;color:var(--color-text-primary)">${c.ticker}</span>
+      <span style="font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--color-text-primary)">${c.ticker}</span>
       <span style="font-size:12.5px;color:var(--color-text-primary);font-weight:500">${c.name}</span>
       <span style="display:inline-block;background:${vc.c}22;color:${vc.c};padding:1px 6px;border-radius:2px;font-size:9.5px;font-weight:600;letter-spacing:.2px">${(vc.sn||c.vertical).toUpperCase()}</span>
       <span title="${convLabel}" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--color-text-tertiary)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${convColor}"></span>${c.conviction}</span>
@@ -1328,9 +1393,19 @@ async function loadData(){
 
   /* One-time delegated click handler for .ticklink */
   document.addEventListener('click',e=>{
-    const el=e.target.closest('.ticklink'); if(!el) return;
-    e.preventDefault(); jumpToCompanies(el.dataset.tk);
+    const el=e.target.closest('.ticklink');
+    if(el){ e.preventDefault(); openCompanyDrawer(el.dataset.tk); return; }
+    const card=e.target.closest('.co-card');
+    if(card && !e.target.closest('span[onclick],a')) openCompanyDrawer(card.dataset.tk);
   });
+
+  /* Masthead froth pill → Cycle tab */
+  if(FROTH){
+    const fp=document.getElementById('mast-froth');
+    fp.style.display='';
+    fp.title=FROTH.headline;
+    fp.onclick=()=>{const t=[...document.querySelectorAll('.tab')].find(x=>(x.getAttribute('onclick')||'').includes("'cy'"));if(t)t.click();};
+  }
 
   /* Last-updated stamp */
   const conv3 = COMPANIES.filter(c=>c.conviction===3).length;
@@ -1355,6 +1430,107 @@ async function loadData(){
 loadData().catch(err=>{
   document.getElementById('loading').textContent='Error loading data: '+err.message;
 });
+
+/* ════════════════════════════
+   DETAIL DRAWER — company / theme drill-down
+════════════════════════════ */
+let DW_STACK=[];
+function vinfo(id){
+  const v=(VC_COLS||[]).find(x=>x.id===id);
+  if(v) return {n:v.sn||v.n||id,c:v.c||'#6B7280'};
+  const cy=(CYD||[]).find(x=>x.id===id);
+  if(cy) return {n:cy.n,c:cy.c};
+  return {n:(id||'').toUpperCase(),c:'#6B7280'};
+}
+function openCompanyDrawer(tk,push=true){
+  const c=(COMPANIES||[]).find(x=>x.ticker===tk); if(!c) {jumpToCompanies(tk); return;}
+  if(push) DW_STACK.push({t:'co',k:tk});
+  const v=vinfo(c.vertical);
+  const convColor={1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[c.conviction]||'#9CA3AF';
+  const convLabel={1:'1 · monitor',2:'2 · interested',3:'3 · chokepoint owner'}[c.conviction]||'';
+  const themes=(c.themes||[]).map(t=>{
+    const tm=(THEMES_REG||[]).find(x=>x.id===t)||{label:t};
+    return `<span class="dw-chip" onclick="openThemeDrawer('${t}')">${tm.label}</span>`;
+  }).join('');
+  const srcs=(c.sources||[]).map(sid=>{
+    const s=(SOURCES||[]).find(x=>x.id===sid);
+    if(!s) return `<div class="dw-src">${sid}</div>`;
+    const t=s.url?`<a href="${s.url}" target="_blank" rel="noopener" style="color:var(--color-text-info);text-decoration:none">${s.title}</a>`:s.title;
+    return `<div class="dw-src"><b>${t}</b><br><span class="dt">${s.author} · ${s.date}</span></div>`;
+  }).join('');
+  const peers=(COMPANIES||[]).filter(x=>x.vertical===c.vertical&&x.ticker!==c.ticker)
+    .sort((a,b)=>b.conviction-a.conviction||(a.name||'').localeCompare(b.name||'')).slice(0,8)
+    .map(p=>`<div class="dw-peer" onclick="openCompanyDrawer('${p.ticker}')"><span class="dw-dot" style="background:${{1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[p.conviction]||'#9CA3AF'}"></span><span class="tk">${p.ticker}</span><span class="nm">${p.name}</span><span class="ly">${p.chain_layer||''}</span></div>`).join('');
+  const yq='https://finance.yahoo.com/quote/'+encodeURIComponent(c.ticker);
+  renderDrawer(v.c,
+    `<span class="dw-tick">${c.ticker}</span><span class="dw-name">${c.name}</span>`,
+    `<div class="dw-badges">
+       <span class="dw-badge" style="background:${v.c}1A;color:${v.c}">${v.n.toUpperCase()}</span>
+       <span class="dw-badge" style="background:${convColor}1A;color:${convColor}"><span class="dw-dot" style="background:${convColor};width:6px;height:6px"></span>${convLabel}</span>
+       <span class="dw-badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">${c.geo||''}</span>
+       <span class="dw-badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">${c.structure||''}</span>
+       ${c.last_touched?`<span class="dw-badge" style="background:var(--color-background-secondary);color:var(--color-text-tertiary)" title="thesis last touched">↻ ${c.last_touched}</span>`:''}
+     </div>
+     <div class="dw-sect">Chain layer</div><div class="dw-layer">${c.chain_layer||'—'}</div>
+     <div class="dw-sect">Thesis</div><div class="dw-thesis">${linkifyTickers(c.thesis_note||'')}</div>
+     ${themes?`<div class="dw-sect">Themes</div><div>${themes}</div>`:''}
+     ${srcs?`<div class="dw-sect">Sources</div>${srcs}`:''}
+     ${peers?`<div class="dw-sect">Same vertical — ${v.n}</div>${peers}`:''}
+     <div class="dw-act">
+       <a class="dw-btn" href="${yq}" target="_blank" rel="noopener">Yahoo Finance ↗</a>
+       <span class="dw-btn" onclick="closeDrawer();jumpToCompanies('${c.ticker.replace(/'/g,"\\'")}')">Open in Companies tab</span>
+     </div>`);
+}
+function openThemeDrawer(id,push=true){
+  const tm=(THEMES_REG||[]).find(x=>x.id===id)||{label:id,blurb:''};
+  if(push) DW_STACK.push({t:'th',k:id});
+  const members=(COMPANIES||[]).filter(c=>(c.themes||[]).includes(id));
+  const byV={};
+  members.forEach(c=>{(byV[c.vertical]=byV[c.vertical]||[]).push(c);});
+  const groups=Object.keys(byV).map(vid=>{
+    const v=vinfo(vid);
+    const rows=byV[vid].sort((a,b)=>b.conviction-a.conviction).map(p=>
+      `<div class="dw-peer" onclick="openCompanyDrawer('${p.ticker}')"><span class="dw-dot" style="background:${{1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[p.conviction]||'#9CA3AF'}"></span><span class="tk">${p.ticker}</span><span class="nm">${p.name}</span><span class="ly">${p.chain_layer||''}</span></div>`).join('');
+    return `<div class="dw-vgroup"><span class="dw-dot" style="background:${v.c}"></span>${v.n}</div>${rows}`;
+  }).join('');
+  renderDrawer('#4F46E5',
+    `<span class="dw-name">${tm.label}</span>`,
+    `<div class="dw-thesis" style="margin-bottom:4px">${tm.blurb||''}</div>
+     <div class="dw-sect">${members.length} name${members.length===1?'':'s'} tagged</div>${groups||'<div class="dw-thesis">No tagged records yet.</div>'}
+     <div class="dw-act"><span class="dw-btn" onclick="closeDrawer();jumpToCompanies('');CO_STATE.theme='${id}';renderCoPills();renderCo();">Filter Companies tab</span></div>`);
+}
+function renderDrawer(accent,head,body){
+  document.getElementById('dw-accent').style.background=accent;
+  document.getElementById('dw-title').innerHTML=head;
+  document.getElementById('dw-content').innerHTML=body;
+  document.getElementById('dw-back').style.display=DW_STACK.length>1?'':'none';
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('drawer-bk').classList.add('on');
+  document.getElementById('dw-content').parentElement.scrollTop=0;
+}
+function drawerBack(){
+  if(DW_STACK.length<2) return;
+  DW_STACK.pop();
+  const p=DW_STACK[DW_STACK.length-1];
+  if(p.t==='co') openCompanyDrawer(p.k,false); else openThemeDrawer(p.k,false);
+}
+function closeDrawer(){
+  DW_STACK=[];
+  document.getElementById('drawer').classList.remove('on');
+  document.getElementById('drawer-bk').classList.remove('on');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
 </script>
+<div id="drawer-bk" onclick="closeDrawer()"></div>
+<aside id="drawer" role="dialog" aria-label="Detail panel">
+  <div class="dw-accent" id="dw-accent"></div>
+  <div class="dw-head">
+    <button class="dw-back" id="dw-back" onclick="drawerBack()" style="display:none" title="Back">‹</button>
+    <div id="dw-title" style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0"></div>
+    <button class="dw-close" onclick="closeDrawer()" title="Close (Esc)">✕</button>
+  </div>
+  <div class="dw-body"><div id="dw-content"></div></div>
+  <div class="dw-hint">esc to close · click any ticker anywhere to open this panel</div>
+</aside>
 </body>
 </html>
