@@ -1264,21 +1264,24 @@ function buildSources(){
    DATA LOADING
 ════════════════════════════ */
 async function loadData(){
+  /* Local dev: bust HTTP cache so edits show on every reload. Deployed: cache fine. */
+  const Q=BASE.startsWith('..')?('?t='+Date.now()):'';
+  const fetchJ=n=>fetch(BASE+n+Q).then(r=>r.json());
   const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded,glossary,walkthroughs]=await Promise.all([
-    fetch(BASE+'matrix.json').then(r=>r.json()),
-    fetch(BASE+'explorer.json').then(r=>r.json()),
-    fetch(BASE+'explainers.json').then(r=>r.json()),
-    fetch(BASE+'geopolitical.json').then(r=>r.json()),
-    fetch(BASE+'cycle.json').then(r=>r.json()),
-    fetch(BASE+'picks-shovels.json').then(r=>r.json()),
-    fetch(BASE+'electricity.json').then(r=>r.json()),
-    fetch(BASE+'themes.json').then(r=>r.json()),
-    fetch(BASE+'portfolio.json').then(r=>r.json()),
-    fetch(BASE+'sources.json').then(r=>r.json()),
-    fetch(BASE+'companies.json').then(r=>r.json()),
-    fetch(BASE+'excluded.json').then(r=>r.json()),
-    fetch(BASE+'glossary.json').then(r=>r.json()),
-    fetch(BASE+'walkthroughs.json').then(r=>r.json()),
+    fetch(BASE+'matrix.json'+Q).then(r=>r.json()),
+    fetchJ('explorer.json'),
+    fetchJ('explainers.json'),
+    fetchJ('geopolitical.json'),
+    fetchJ('cycle.json'),
+    fetchJ('picks-shovels.json'),
+    fetchJ('electricity.json'),
+    fetchJ('themes.json'),
+    fetchJ('portfolio.json'),
+    fetchJ('sources.json'),
+    fetchJ('companies.json'),
+    fetchJ('excluded.json'),
+    fetchJ('glossary.json'),
+    fetchJ('walkthroughs.json'),
   ]);
 
   /* Widget 1 data */
