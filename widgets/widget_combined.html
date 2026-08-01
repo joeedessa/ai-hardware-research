@@ -524,7 +524,8 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
-let CO_STATE={q:'',v:null,conv:null,theme:null,sort:'conv'};
+let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
+const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
 
 /* ── Build state (all lazy except matrix) ── */
@@ -549,7 +550,7 @@ function jumpToCompanies(tk){
   if(coTab) coTab.classList.add('on');
   document.getElementById('view-co').classList.add('on');
   if(!built.co){ buildCompanies(); built.co=true; }
-  CO_STATE.q=tk; CO_STATE.v=null; CO_STATE.conv=null; CO_STATE.theme=null;
+  CO_STATE.q=tk; CO_STATE.v=null; CO_STATE.conv=null; CO_STATE.theme=null; CO_STATE.froth=null;
   const si=document.getElementById('co-search'); if(si) si.value=tk;
   renderCoPills(); renderCo();
 }
@@ -1099,6 +1100,7 @@ function buildCompanies(){
     <div class="pills" id="co-v-pills" style="margin-bottom:4px"></div>
     <div class="pills" id="co-conv-pills" style="margin-bottom:4px"></div>
     <div class="pills" id="co-theme-pills" style="margin-bottom:4px"></div>
+    <div class="pills" id="co-froth-pills" style="margin-bottom:4px"></div>
     <div id="co-results-meta" style="font-size:10.5px;color:var(--color-text-tertiary);margin:6px 0 6px"></div>
     <div id="co-list"></div>`;
   document.getElementById('co-search').addEventListener('input',e=>{CO_STATE.q=e.target.value;renderCo();});
@@ -1131,6 +1133,13 @@ function renderCoPills(){
       const b=(t.blurb||'').replace(/"/g,'&quot;');
       return `<span class="pill${on?' on':''}" title="${b}" onclick="CO_STATE.theme=CO_STATE.theme==='${t.id}'?null:'${t.id}';renderCoPills();renderCo();">${t.label}</span>`;
     }).join('');
+  const fP=document.getElementById('co-froth-pills');
+  if(fP) fP.innerHTML=`<span style="font-size:10px;color:var(--color-text-tertiary);margin-right:4px;align-self:center">Froth lens:</span>`+
+    [1,2,3].map(f=>{
+      const m=FROTH_META[f], on=CO_STATE.froth===f;
+      const sty=on?`background:${m.c}1A;color:${m.c};border-color:${m.c}66`:'';
+      return `<span class="pill${on?' on':''}" style="${sty}" title="Qualitative valuation-froth tag (see Cycle tab Froth Monitor)" onclick="CO_STATE.froth=CO_STATE.froth===${f}?null:${f};renderCoPills();renderCo();">${m.l}</span>`;
+    }).join('');
 }
 
 function renderCo(){
@@ -1147,10 +1156,11 @@ function renderCo(){
   if(CO_STATE.v) arr=arr.filter(c=>c.vertical===CO_STATE.v);
   if(CO_STATE.conv) arr=arr.filter(c=>c.conviction===CO_STATE.conv);
   if(CO_STATE.theme) arr=arr.filter(c=>(c.themes||[]).includes(CO_STATE.theme));
+  if(CO_STATE.froth) arr=arr.filter(c=>c.froth===CO_STATE.froth);
   if(CO_STATE.sort==='conv') arr.sort((a,b)=>b.conviction-a.conviction || (a.name||'').localeCompare(b.name||''));
   else if(CO_STATE.sort==='name') arr.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
   else if(CO_STATE.sort==='vert') arr.sort((a,b)=>(a.vertical+a.name).localeCompare(b.vertical+b.name));
-  meta.innerHTML=`<b>${arr.length}</b> of <b>${COMPANIES.length}</b> names${(q||CO_STATE.v||CO_STATE.conv||CO_STATE.theme)?` <span style="margin-left:8px;cursor:pointer;color:var(--color-text-info)" onclick="CO_STATE={q:'',v:null,conv:null,theme:null,sort:CO_STATE.sort};document.getElementById('co-search').value='';renderCoPills();renderCo();">clear all filters ✕</span>`:''}`;
+  meta.innerHTML=`<b>${arr.length}</b> of <b>${COMPANIES.length}</b> names${(q||CO_STATE.v||CO_STATE.conv||CO_STATE.theme||CO_STATE.froth)?` <span style="margin-left:8px;cursor:pointer;color:var(--color-text-info)" onclick="CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:CO_STATE.sort};document.getElementById('co-search').value='';renderCoPills();renderCo();">clear all filters ✕</span>`:''}`;
   list.innerHTML=arr.map(renderCoCard).join('') || `<div style="padding:16px;text-align:center;color:var(--color-text-tertiary);font-size:11px">No matches.</div>`;
 }
 
@@ -1173,6 +1183,7 @@ function renderCoCard(c){
       <span style="font-size:12.5px;color:var(--color-text-primary);font-weight:500">${c.name}</span>
       <span style="display:inline-block;background:${vc.c}22;color:${vc.c};padding:1px 6px;border-radius:2px;font-size:9.5px;font-weight:600;letter-spacing:.2px">${(vc.sn||c.vertical).toUpperCase()}</span>
       <span title="${convLabel}" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--color-text-tertiary)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${convColor}"></span>${c.conviction}</span>
+      ${c.froth?`<span title="${(c.froth_note||'').replace(/"/g,'&quot;')}" style="font-size:9px;font-weight:600;letter-spacing:.03em;padding:1px 6px;border-radius:20px;background:${FROTH_META[c.froth].c}14;color:${FROTH_META[c.froth].c};border:.5px solid ${FROTH_META[c.froth].c}44">${FROTH_META[c.froth].l.toUpperCase()}</span>`:''}
       <span style="font-size:10px;color:var(--color-text-tertiary)">${c.geo}</span>
       ${c.last_touched?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto" title="Thesis last touched">↻ ${c.last_touched}</span>`:''}
     </div>
@@ -1469,10 +1480,12 @@ function openCompanyDrawer(tk,push=true){
        <span class="dw-badge" style="background:${convColor}1A;color:${convColor}"><span class="dw-dot" style="background:${convColor};width:6px;height:6px"></span>${convLabel}</span>
        <span class="dw-badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">${c.geo||''}</span>
        <span class="dw-badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">${c.structure||''}</span>
+       ${c.froth?`<span class="dw-badge" style="background:${FROTH_META[c.froth].c}14;color:${FROTH_META[c.froth].c}">${FROTH_META[c.froth].l.toUpperCase()}</span>`:''}
        ${c.last_touched?`<span class="dw-badge" style="background:var(--color-background-secondary);color:var(--color-text-tertiary)" title="thesis last touched">↻ ${c.last_touched}</span>`:''}
      </div>
      <div class="dw-sect">Chain layer</div><div class="dw-layer">${c.chain_layer||'—'}</div>
      <div class="dw-sect">Thesis</div><div class="dw-thesis">${linkifyTickers(c.thesis_note||'')}</div>
+     ${c.froth_note?`<div class="dw-sect">Froth lens</div><div class="dw-thesis" style="border-left:3px solid ${FROTH_META[c.froth].c};padding-left:9px">${c.froth_note}</div>`:''}
      ${themes?`<div class="dw-sect">Themes</div><div>${themes}</div>`:''}
      ${srcs?`<div class="dw-sect">Sources</div>${srcs}`:''}
      ${peers?`<div class="dw-sect">Same vertical — ${v.n}</div>${peers}`:''}
