@@ -158,26 +158,6 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 .id{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .cysum{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5;margin-top:4px;padding-top:4px;border-top:.5px solid var(--color-border-tertiary);display:none}
 .cyc.ex .cysum{display:block}
-/* ── Froth Monitor ── */
-.fm{border:.5px solid var(--color-border-secondary);border-radius:10px;padding:12px 14px;margin-bottom:12px;background:linear-gradient(135deg,rgba(226,75,74,.05),rgba(239,159,39,.04) 55%,transparent)}
-.fm-head{display:flex;align-items:center;gap:7px;margin-bottom:6px}
-.fm-pulse{width:7px;height:7px;border-radius:50%;background:#E24B4A;box-shadow:0 0 0 0 rgba(226,75,74,.5);animation:fmp 2.2s infinite}
-@keyframes fmp{0%{box-shadow:0 0 0 0 rgba(226,75,74,.45)}70%{box-shadow:0 0 0 7px rgba(226,75,74,0)}100%{box-shadow:0 0 0 0 rgba(226,75,74,0)}}
-.fm-title{font-size:12.5px;font-weight:600;letter-spacing:.02em}
-.fm-asof{font-size:10px;color:var(--color-text-tertiary);margin-left:auto;font-variant-numeric:tabular-nums}
-.fm-headline{font-size:11.5px;line-height:1.55;color:var(--color-text-primary);margin-bottom:6px}
-.fm-stance{font-size:10.5px;line-height:1.5;color:var(--color-text-secondary);padding:6px 9px;border-radius:7px;background:var(--color-background-secondary);margin-bottom:8px}
-.fm-sigs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px}
-.fm-sig{border:.5px solid var(--color-border-tertiary);border-left-width:3px;border-radius:7px;padding:6px 9px;cursor:pointer;transition:background .15s}
-.fm-sig:hover{background:var(--color-background-secondary)}
-.fm-sig-h{display:flex;align-items:center;gap:6px;min-width:0}
-.fm-tag{font-size:8.5px;font-weight:600;letter-spacing:.06em;padding:1.5px 5px;border-radius:4px;flex-shrink:0}
-.fm-sig-t{font-size:11px;font-weight:500;flex:1;min-width:0}
-.fm-sig-v{font-size:9.5px;color:var(--color-text-tertiary);flex-shrink:0}
-.fm-chev{font-size:8px;color:var(--color-text-tertiary);transition:transform .15s;flex-shrink:0}
-.fm-sig.ex .fm-chev{transform:rotate(180deg)}
-.fm-sig-d{font-size:10.5px;color:var(--color-text-secondary);line-height:1.55;margin-top:5px;display:none}
-.fm-sig.ex .fm-sig-d{display:block}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);text-align:left;padding:4px 6px;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap}
@@ -383,7 +363,6 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 </div>
 
 <div class="view" id="view-cy">
-  <div id="froth-mon"></div>
   <div class="pills" id="cy-pills">
     <button class="pill on" onclick="setCyV('rank',this)">Ranked overview</button>
     <button class="pill" onclick="setCyV('cards',this)">All cycle cards</button>
@@ -448,13 +427,10 @@ body{margin:0;padding:12px;background:#fff;font-family:var(--font-sans)}
 </div><!-- end #app -->
 
 <script>
-/* Data source: local ../data/ when served from localhost (dev loop), GitHub raw when deployed. */
-const BASE=(location.hostname==='localhost'||location.hostname==='127.0.0.1')
-  ? '../data/'
-  : 'https://raw.githubusercontent.com/joeedessa/ai-hardware-research/main/data/';
+const BASE='https://raw.githubusercontent.com/joeedessa/ai-hardware-research/main/data/';
 
 /* ── Global data ── */
-let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS,FROTH;
+let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
@@ -676,26 +652,7 @@ function setGV(id,btn){
   document.getElementById('g-am').style.display=id==='am'?'':'none';
 }
 
-/* Froth Monitor banner — renders atop the Cycle tab from cycle.json's froth_monitor block. */
-function buildFroth(){
-  const el=document.getElementById('froth-mon');
-  if(!el)return;
-  if(!FROTH){el.style.display='none';return;}
-  const TAGS={froth:{c:'#E24B4A',l:'FROTH'},support:{c:'#16A34A',l:'INTACT'},opportunity:{c:'#EF9F27',l:'OPPORTUNITY'}};
-  const sigs=FROTH.signals.map(s=>{
-    const t=TAGS[s.tag]||TAGS.froth;
-    return `<div class="fm-sig" style="border-left-color:${t.c}" onclick="this.classList.toggle('ex')">
-      <div class="fm-sig-h"><span class="fm-tag" style="background:${t.c}18;color:${t.c};border:.5px solid ${t.c}44">${t.l}</span><span class="fm-sig-t">${s.t}</span><span class="fm-sig-v">${s.v}</span><span class="fm-chev">▼</span></div>
-      <div class="fm-sig-d">${linkifyTickers(s.d)}</div></div>`;
-  }).join('');
-  el.innerHTML=`<div class="fm">
-    <div class="fm-head"><span class="fm-pulse"></span><span class="fm-title">Froth Monitor</span><span class="fm-asof">as of ${FROTH.as_of}</span></div>
-    <div class="fm-headline">${linkifyTickers(FROTH.headline)}</div>
-    <div class="fm-stance"><b>Stance:</b> ${linkifyTickers(FROTH.stance)}</div>
-    <div class="fm-sigs">${sigs}</div></div>`;
-}
 function buildCycle(){
-  buildFroth();
   const sorted=[...CYD].sort((a,b)=>a.inn-b.inn);
   const t=document.getElementById('rt');
   t.innerHTML=`<thead><tr><th>#</th><th>Vertical</th><th>Innings</th><th>Structural demand</th><th>Capex gap</th><th>Cycle risk</th><th>Verdict</th></tr></thead><tbody id="rtb"></tbody>`;
@@ -1293,7 +1250,6 @@ async function loadData(){
   GEO      = geo.heatmap;
   ACTORS   = geo.actor_map;
   CYD      = cycle.cycles;
-  FROTH    = cycle.froth_monitor||null;
   VC       = explorer.verticals;
   EXPLS    = explainers.explainers;
 
