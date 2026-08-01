@@ -237,6 +237,25 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .dw-hint{font-size:9.5px;color:var(--color-text-tertiary);text-align:center;padding:8px;border-top:.5px solid var(--color-border-tertiary);flex-shrink:0}
 .co-card{cursor:pointer;transition:border-color .14s,box-shadow .14s}
 .co-card:hover{border-color:var(--color-border-secondary)!important;box-shadow:var(--shadow-2)}
+/* ── Entry Windows digest ── */
+.ew{margin-bottom:14px}
+.ew-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--color-text-primary);display:flex;align-items:baseline;gap:8px}
+.ew-asof{font-family:var(--font-sans);font-size:10px;font-weight:400;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums}
+.ew-intro{font-size:11px;color:var(--color-text-tertiary);line-height:1.5;margin:3px 0 9px;max-width:72ch}
+.ew-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:8px}
+.ew-card{display:flex;gap:10px;border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:10px 12px;background:var(--color-background-primary);cursor:pointer;box-shadow:var(--shadow-1);transition:border-color .14s,box-shadow .14s}
+.ew-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2)}
+.ew-rank{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--color-border-secondary);line-height:1;flex-shrink:0;padding-top:2px}
+.ew-main{min-width:0}
+.ew-head{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:3px}
+.ew-tick{font-family:var(--font-mono);font-size:12.5px;font-weight:600;color:var(--color-text-primary)}
+.ew-nm{font-size:11.5px;font-weight:500;color:var(--color-text-secondary)}
+.ew-v{font-size:8.5px;font-weight:600;letter-spacing:.04em;padding:1.5px 6px;border-radius:20px;text-transform:uppercase}
+.ew-setup{font-size:11px;line-height:1.55;color:var(--color-text-secondary);margin-bottom:5px}
+.ew-row{font-size:10px;line-height:1.5;color:var(--color-text-tertiary);display:flex;gap:6px;margin-top:2px}
+.ew-lbl{font-size:8.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;flex-shrink:0;padding-top:1px}
+.ew-avoid{margin-top:9px;font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);background:#E24B4A0A;border:.5px solid #E24B4A2E;border-left:3px solid #E24B4A;border-radius:7px;padding:8px 11px}
+.ew-avoid b{color:#B32B2A}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);text-align:left;padding:4px 6px;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap}
@@ -933,6 +952,27 @@ function loadTheme(id){
 
 function buildPortfolio(){
   const cont=document.getElementById('pf-cont');
+  const ew=PORTFOLIO.entry_windows;
+  if(ew){
+    const box=mk('div','ew');
+    const cards=ew.windows.map(w=>{
+      const c=(COMPANIES||[]).find(x=>x.ticker===w.ticker)||{};
+      const v=vinfo(c.vertical);
+      return `<div class="ew-card" onclick="openCompanyDrawer('${w.ticker}')">
+        <div class="ew-rank">${w.rank}</div>
+        <div class="ew-main">
+          <div class="ew-head"><span class="ew-tick">${w.ticker}</span><span class="ew-nm">${c.name||''}</span><span class="ew-v" style="background:${v.c}1A;color:${v.c}">${v.n}</span></div>
+          <div class="ew-setup">${w.setup}</div>
+          <div class="ew-row"><span class="ew-lbl" style="color:#16A34A">watch</span>${w.watch}</div>
+          <div class="ew-row"><span class="ew-lbl" style="color:#E24B4A">risk</span>${w.risk}</div>
+        </div></div>`;
+    }).join('');
+    box.innerHTML=`<div class="ew-title">Entry windows <span class="ew-asof">as of ${ew.as_of}</span></div>
+      <div class="ew-intro">${ew.intro}</div>
+      <div class="ew-grid">${cards}</div>
+      <div class="ew-avoid"><b>${ew.avoid.title}.</b> ${linkifyTickers(ew.avoid.body)}</div>`;
+    cont.appendChild(box);
+  }
   const banner=mk('div','banner');
   banner.innerHTML=`<div class="banner-title">${PORTFOLIO.defining_insight.title}</div><div class="banner-body">${PORTFOLIO.defining_insight.body}</div>`;
   cont.appendChild(banner);

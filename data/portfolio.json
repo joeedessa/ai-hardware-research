@@ -1,33 +1,225 @@
 {
   "_meta": {
     "description": "Portfolio summary — the synthesizing view: the defining insight, thematic clusters, a four-question framework for any position, and a catalyst calendar by vertical.",
-    "as_of": "2026-05-28"
+    "as_of": "2026-08-01"
   },
   "defining_insight": {
     "title": "Own the chokepoints; the bottleneck owners win regardless of which brand wins",
     "body": "Across this entire universe, value concentrates at the stages no one can easily replicate: ASML (EUV), TSMC (leading-edge + CoWoS), SK Hynix (HBM), Nvidia/Broadcom (platform + ASIC), plus the quiet upstream Japanese chokepoints (wafers, resist, reducers). The end-products — GPUs vs ASICs, this robot vs that, one glasses brand vs another — are contested and crowded, but they all flow through the same narrow gates. The most durable exposure is upstream at the bottleneck, not downstream at the brand. The dominant structural risk overlaying all of it is the geographic concentration in Taiwan + Korea."
   },
   "clusters": [
-    {"cls":"c-core","color":"#2563EB","title":"Own the bottlenecks","items":["ASML — EUV monopoly","TSMC — leading-edge + CoWoS","SK Hynix — HBM leader","BE Semiconductor — hybrid bonding","Harmonic Drive / Nabtesco — reducers","Shin-Etsu / SUMCO — wafers"]},
-    {"cls":"c-plat","color":"#16A34A","title":"Platform compounders","items":["Nvidia — GPU + CUDA + ecosystem","Broadcom — custom ASIC + networking + CPO","Synopsys / Cadence — EDA duopoly","Arm — CPU IP royalty model","KLA — process-control near-monopoly"]},
-    {"cls":"c-pick","color":"#0EA5E9","title":"Picks & shovels","items":["Advantest — AI test demand","Vertiv — power + liquid cooling","Astera Labs — AI connectivity","Coherent / Lumentum — EML lasers","ASE / Amkor — advanced packaging"]},
-    {"cls":"c-asia","color":"#DC2626","title":"Asia proxies","items":["Foxconn / Quanta / Wiwynn — AI server ODM","Delta Electronics — DC power","Alchip / GUC — ASIC design services","Inovance / Sanhua — China robotics","Goertek — AR/VR assembly"]},
-    {"cls":"c-opt","color":"#9333EA","title":"Speculative optionality","items":["Humanoid components (reducers, screws)","Micro-displays (JBD private, Himax)","AR waveguides (Lumus private, Vuzix)","SiC waveguides (emerging)","China self-sufficiency names"]}
+    {
+      "cls": "c-core",
+      "color": "#2563EB",
+      "title": "Own the bottlenecks",
+      "items": [
+        "ASML — EUV monopoly",
+        "TSMC — leading-edge + CoWoS",
+        "SK Hynix — HBM leader",
+        "BE Semiconductor — hybrid bonding",
+        "Harmonic Drive / Nabtesco — reducers",
+        "Shin-Etsu / SUMCO — wafers"
+      ]
+    },
+    {
+      "cls": "c-plat",
+      "color": "#16A34A",
+      "title": "Platform compounders",
+      "items": [
+        "Nvidia — GPU + CUDA + ecosystem",
+        "Broadcom — custom ASIC + networking + CPO",
+        "Synopsys / Cadence — EDA duopoly",
+        "Arm — CPU IP royalty model",
+        "KLA — process-control near-monopoly"
+      ]
+    },
+    {
+      "cls": "c-pick",
+      "color": "#0EA5E9",
+      "title": "Picks & shovels",
+      "items": [
+        "Advantest — AI test demand",
+        "Vertiv — power + liquid cooling",
+        "Astera Labs — AI connectivity",
+        "Coherent / Lumentum — EML lasers",
+        "ASE / Amkor — advanced packaging"
+      ]
+    },
+    {
+      "cls": "c-asia",
+      "color": "#DC2626",
+      "title": "Asia proxies",
+      "items": [
+        "Foxconn / Quanta / Wiwynn — AI server ODM",
+        "Delta Electronics — DC power",
+        "Alchip / GUC — ASIC design services",
+        "Inovance / Sanhua — China robotics",
+        "Goertek — AR/VR assembly"
+      ]
+    },
+    {
+      "cls": "c-opt",
+      "color": "#9333EA",
+      "title": "Speculative optionality",
+      "items": [
+        "Humanoid components (reducers, screws)",
+        "Micro-displays (JBD private, Himax)",
+        "AR waveguides (Lumus private, Vuzix)",
+        "SiC waveguides (emerging)",
+        "China self-sufficiency names"
+      ]
+    }
   ],
   "four_questions": [
-    {"q":"Chokepoint or commodity?","a":"Is this a stage only a handful of players can do (ASML, TSMC CoWoS, HBM, reducers) — or a contested, capacity-adds-easily layer (OSAT overflow, transceiver assembly, robot brands)? Pay up for the former; trade the latter on the cycle."},
-    {"q":"Who captures value vs who does volume?","a":"Volume and value often sit in different places: China assembles ~63% of transceivers but US silicon + lasers capture the margin; ASICs may take share but TSMC + HBM win either way. Buy the value-capture layer, not the volume layer."},
-    {"q":"What's the geopolitical exposure?","a":"How concentrated in Taiwan/Korea is it, and is it an export-control target or lever (EDA, WFE, HBM, China stack)? Concentration is both the moat and the tail risk — size accordingly and watch policy on/off switches."},
-    {"q":"Structural or capex-cycle dependent?","a":"Does demand persist through a hyperscaler capex pause (EDA royalties, mature-node) or does it hinge entirely on AI capex ROI continuing (accelerators, networking, power/cooling)? Match position size to where you sit on that spectrum."}
+    {
+      "q": "Chokepoint or commodity?",
+      "a": "Is this a stage only a handful of players can do (ASML, TSMC CoWoS, HBM, reducers) — or a contested, capacity-adds-easily layer (OSAT overflow, transceiver assembly, robot brands)? Pay up for the former; trade the latter on the cycle."
+    },
+    {
+      "q": "Who captures value vs who does volume?",
+      "a": "Volume and value often sit in different places: China assembles ~63% of transceivers but US silicon + lasers capture the margin; ASICs may take share but TSMC + HBM win either way. Buy the value-capture layer, not the volume layer."
+    },
+    {
+      "q": "What's the geopolitical exposure?",
+      "a": "How concentrated in Taiwan/Korea is it, and is it an export-control target or lever (EDA, WFE, HBM, China stack)? Concentration is both the moat and the tail risk — size accordingly and watch policy on/off switches."
+    },
+    {
+      "q": "Structural or capex-cycle dependent?",
+      "a": "Does demand persist through a hyperscaler capex pause (EDA royalties, mature-node) or does it hinge entirely on AI capex ROI continuing (accelerators, networking, power/cooling)? Match position size to where you sit on that spectrum."
+    }
   ],
   "catalyst_table": [
-    {"n":"Foundry & Packaging","c":"#2563EB","cats":["TSMC N2 volume ramp + A16 (now)","CoWoS capacity adds AP6/AP7 (12m)","Arizona fab leading-edge ramp (12m)","FOPLP / panel-level packaging at scale (3yr)"]},
-    {"n":"Memory (HBM)","c":"#7C3AED","cats":["HBM3E sold out; pricing firm (now)","HBM4 ramp + Nvidia qual (12m)","Samsung share recovery vs SK Hynix (12m)","CXMT domestic HBM progress (3yr)"]},
-    {"n":"AI Accelerators","c":"#16A34A","cats":["Blackwell Ultra GB300 shipping (now)","Vera Rubin + AMD MI400 launch (12m)","Custom ASIC share gains (Google/Meta/OpenAI) (12m)","Inference-vs-training mix shift (3yr)"]},
-    {"n":"Optical & CPO","c":"#D97706","cats":["1.6T transceiver ramp (now)","Nvidia/Broadcom CPO on TSMC COUPE (12m)","EML laser capacity easing? (12m)","LPO/CPO reshaping value chain (3yr)"]},
-    {"n":"Power & Cooling","c":"#65A30D","cats":["Liquid cooling attach-rate surge (now)","CDU capacity build-out (12m)","800VDC architecture adoption (12m)","Onsite nuclear/gas PPAs scaling (3yr)"]},
-    {"n":"Humanoid Robotics","c":"#DC2626","cats":["Optimus / Figure pilot production (now)","Reducer + roller-screw order flow (12m)","China actuator cost-down progress (12m)","Mass-market unit economics proven? (3yr)"]},
-    {"n":"AI / Smart Glasses","c":"#9333EA","cats":["Meta Ray-Ban Display sales (now)","Android XR device wave (12m)","Micro-display tech winner emerging (3yr)","True all-day AR glasses (3yr)"]},
-    {"n":"Equipment & EDA","c":"#0EA5E9","cats":["High-NA EUV deployments Intel/Samsung (now)","WFE recovery post China-localization (12m)","EDA export-control policy swings (12m)","China WFE localization ex-litho (3yr)"]}
-  ]
+    {
+      "n": "Foundry & Packaging",
+      "c": "#2563EB",
+      "cats": [
+        "TSMC N2 volume ramp + A16 (now)",
+        "CoWoS capacity adds AP6/AP7 (12m)",
+        "Arizona fab leading-edge ramp (12m)",
+        "FOPLP / panel-level packaging at scale (3yr)"
+      ]
+    },
+    {
+      "n": "Memory (HBM)",
+      "c": "#7C3AED",
+      "cats": [
+        "HBM3E sold out; pricing firm (now)",
+        "HBM4 ramp + Nvidia qual (12m)",
+        "Samsung share recovery vs SK Hynix (12m)",
+        "CXMT domestic HBM progress (3yr)"
+      ]
+    },
+    {
+      "n": "AI Accelerators",
+      "c": "#16A34A",
+      "cats": [
+        "Blackwell Ultra GB300 shipping (now)",
+        "Vera Rubin + AMD MI400 launch (12m)",
+        "Custom ASIC share gains (Google/Meta/OpenAI) (12m)",
+        "Inference-vs-training mix shift (3yr)"
+      ]
+    },
+    {
+      "n": "Optical & CPO",
+      "c": "#D97706",
+      "cats": [
+        "1.6T transceiver ramp (now)",
+        "Nvidia/Broadcom CPO on TSMC COUPE (12m)",
+        "EML laser capacity easing? (12m)",
+        "LPO/CPO reshaping value chain (3yr)"
+      ]
+    },
+    {
+      "n": "Power & Cooling",
+      "c": "#65A30D",
+      "cats": [
+        "Liquid cooling attach-rate surge (now)",
+        "CDU capacity build-out (12m)",
+        "800VDC architecture adoption (12m)",
+        "Onsite nuclear/gas PPAs scaling (3yr)"
+      ]
+    },
+    {
+      "n": "Humanoid Robotics",
+      "c": "#DC2626",
+      "cats": [
+        "Optimus / Figure pilot production (now)",
+        "Reducer + roller-screw order flow (12m)",
+        "China actuator cost-down progress (12m)",
+        "Mass-market unit economics proven? (3yr)"
+      ]
+    },
+    {
+      "n": "AI / Smart Glasses",
+      "c": "#9333EA",
+      "cats": [
+        "Meta Ray-Ban Display sales (now)",
+        "Android XR device wave (12m)",
+        "Micro-display tech winner emerging (3yr)",
+        "True all-day AR glasses (3yr)"
+      ]
+    },
+    {
+      "n": "Equipment & EDA",
+      "c": "#0EA5E9",
+      "cats": [
+        "High-NA EUV deployments Intel/Samsung (now)",
+        "WFE recovery post China-localization (12m)",
+        "EDA export-control policy swings (12m)",
+        "China WFE localization ex-litho (3yr)"
+      ]
+    }
+  ],
+  "entry_windows": {
+    "as_of": "2026-08-01",
+    "intro": "Where the July shakeout created price without breaking thesis — conviction-3 chokepoints, insulated on the froth lens, hit by an indiscriminate repricing. A research screen, not advice.",
+    "windows": [
+      {
+        "rank": 1,
+        "ticker": "TSM",
+        "setup": "Record Q2 (net profit +77% y/y), RAISED 2026 capex to $60–64B — and the stock fell on capex fear. The keystone of the entire universe repriced on sentiment inversion, not fundamentals.",
+        "watch": "Q3 print re-anchoring capex-as-demand; CoWoS ~1M wafers already booked with NVDA ~60% locked.",
+        "risk": "Taiwan concentration; capex-margin fear can run further in a broader drawdown."
+      },
+      {
+        "rank": 2,
+        "ticker": "000660.KS",
+        "setup": "Worst Seoul session on record, then a Q2 'miss' at a 76% operating margin — de-rated on LTA contract structure, not demand. Holds an estimated 60–70% of Vera Rubin HBM4 volume.",
+        "watch": "Full-scale HBM4 revenue recognition in Q3; a concrete shareholder-return plan.",
+        "risk": "LTAs genuinely cap price upside; a conventional-DRAM glut would sour sentiment further."
+      },
+      {
+        "rank": 3,
+        "ticker": "ASML",
+        "setup": "Beat on revenue, guided Q3 above consensus, revealed Intel is using high-NA EUV for 18A production — sold off anyway with the complex.",
+        "watch": "High-NA order momentum now that Intel has validated it in production.",
+        "risk": "China WFE demand rolling over; order lumpiness always whipsaws the stock."
+      },
+      {
+        "rank": 4,
+        "ticker": "SOI.PA",
+        "setup": "SOI substrate monopoly still priced for the mobile drag while photonics/POI content inflects — CPO just went volume-production and froth never arrived here.",
+        "watch": "Photonics-SOI/POI design-win disclosures as COUPE-era optics ramp.",
+        "risk": "Mobile/auto SOI softness persists longer than the photonics line scales."
+      },
+      {
+        "rank": 5,
+        "ticker": "2802.T",
+        "setup": "The ABF film monopoly inside a food conglomerate — the market still prices seasoning while advanced-packaging substrate capacity is effectively sold out.",
+        "watch": "ABF capacity expansion tracking the CoWoS/substrate build-out.",
+        "risk": "The value-unlock discount is perennial; food-business drag on the multiple."
+      },
+      {
+        "rank": 6,
+        "ticker": "FORM",
+        "setup": "HBM probe-card chokepoint geared to every HBM4 qualification — the first triple-qualified HBM generation means more qual cycles, and the stock sits at a modest multiple.",
+        "watch": "HBM4 probe-card attach rates through the Q3 Vera Rubin ramp.",
+        "risk": "A memory-capex digestion phase pauses test spending first."
+      }
+    ],
+    "avoid": {
+      "title": "Where the froth concentrates",
+      "body": "The narrative-priced layer, flagged high-froth on the lens: VST (AI-power torque without contracts — CEG is the contracted way), CRWV and NBIS (GPU renters squeezed between 30–40% inference-price deflation and multi-$B lease obligations), ARM (royalty moat priced for decades of share gains), BE (story ahead of margins), SMCI (share-gain story with DELL and HPE closing in). Not shorts — just where a froth unwind lands first."
+    }
+  }
 }
