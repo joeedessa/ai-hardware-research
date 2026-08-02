@@ -257,6 +257,16 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .ew-lbl{font-size:8.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;flex-shrink:0;padding-top:1px}
 .ew-avoid{margin-top:9px;font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);background:#E24B4A0A;border:.5px solid #E24B4A2E;border-left:3px solid #E24B4A;border-radius:7px;padding:8px 11px}
 .ew-avoid b{color:#B32B2A}
+/* ── Chain explorer intro header + matrix-cell context ── */
+.vhead{border:.5px solid var(--color-border-tertiary);border-left-width:3px;border-radius:6px 9px 9px 6px;background:var(--color-background-primary);padding:10px 13px;margin-bottom:9px;box-shadow:var(--shadow-1)}
+.vhead-name{font-family:var(--font-display);font-size:16.5px;font-weight:600;letter-spacing:-.005em;line-height:1.15}
+.vhead-plain{font-size:12px;color:var(--color-text-primary);line-height:1.5;margin-top:3px;font-weight:500}
+.vhead-stats{font-size:10px;color:var(--color-text-tertiary);margin-top:4px;font-variant-numeric:tabular-nums}
+.vhead .vnote{margin-top:7px;margin-bottom:0}
+.vhint{font-size:9.5px;color:var(--color-text-tertiary);margin-top:6px;font-style:italic}
+.mx-ctx{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);background:var(--color-background-info);border:.5px solid var(--color-border-info);border-left:3px solid var(--accent);border-radius:6px;padding:7px 10px;margin-bottom:8px}
+.mx-ctx b{color:var(--color-text-primary)}
+.sc.srel{border-color:var(--accent)!important;box-shadow:0 0 0 2px #4F46E522}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap;position:sticky;top:33px;background:var(--color-background-primary);z-index:5}
@@ -622,7 +632,15 @@ function buildMatrix(){
       const cell=mk('div',`mc${hasDetail?' hi':''}`);
       cell.innerHTML=tags.map(([t,c])=>`<span class="ct ${c}">${t}</span>`).join(' ');
       if(hasDetail){cell.addEventListener('click',()=>showMxDet(key));}
-      else{cell.addEventListener('click',()=>{ST('vx',document.querySelectorAll('.tab')[1]);loadV(v.id);});}
+      else{
+        const cellText=tags.map(([t])=>t).join('; ');
+        cell.title=`Open the ${v.n} chain at this layer`;
+        cell.addEventListener('click',()=>{
+          const vxTab=[...document.querySelectorAll('.tab')].find(t=>(t.getAttribute('onclick')||'').includes("'vx'"));
+          ST('vx',vxTab);
+          loadV(v.id,{row:row.n,cellText});
+        });
+      }
       g.appendChild(cell);
     });
   });
@@ -672,9 +690,11 @@ function buildCBand(){
 function buildVList(){
   const el=document.getElementById('vlist');
   VORDER.forEach(grp=>{
-    const gl=mk('div','vgrp');gl.textContent=grp.g;el.appendChild(gl);
+    /* Single-vertical groups: skip the group label — it duplicated the button text. */
+    if(grp.ids.length>1){const gl=mk('div','vgrp');gl.textContent=grp.g;el.appendChild(gl);}
     grp.ids.forEach(id=>{
       const v=VC[id];
+      if(!v)return;
       const btn=mk('button','vbtn');
       btn.dataset.v=id;btn.textContent=v.n;
       btn.onclick=()=>loadV(id);
@@ -683,12 +703,34 @@ function buildVList(){
   });
 }
 
-function loadV(id){
+function loadV(id,ctx){
   document.querySelectorAll('.vbtn').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.color='';});
   const btn=document.querySelector(`.vbtn[data-v="${id}"]`);
   const v=VC[id];if(!v)return;
   if(btn){btn.classList.add('on');btn.style.background=v.c;btn.style.color='#fff';}
-  let h=`<div class="vnote"><b>${v.n}</b> — ${v.note}</div>`;
+  /* Rich intro header: plain-English what-is-this + live stats + how to read. */
+  const recs=(COMPANIES||[]).filter(c=>c.vertical===id);
+  const c3=recs.filter(c=>c.conviction===3).length;
+  const cy=(CYD||[]).find(x=>x.id===id);
+  const stats=[`${recs.length} names`,c3?`${c3} conviction-3`:null,cy?`inning ${cy.inn}/9 — ${cy.verdict}`:null,`${v.chain.length} chain stages`].filter(Boolean).join(' · ');
+  let h=`<div class="vhead" style="border-left-color:${v.c}">
+    <div class="vhead-name" style="color:${v.c}">${v.n}</div>
+    ${v.plain?`<div class="vhead-plain">${v.plain}</div>`:''}
+    <div class="vhead-stats">${stats}</div>
+    <div class="vnote">${v.note}</div>
+    <div class="vhint">The chain below runs upstream → downstream. Click any stage to expand the companies at that layer; tickers open the detail panel.</div>
+  </div>`;
+  /* Matrix-cell context: banner + highlight the stages the cell relates to. */
+  let relIdx=[];
+  if(ctx&&ctx.cellText){
+    const stop=new Set(['china','with','from','that','this','into','standard']);
+    const toks=(ctx.cellText.toLowerCase().match(/[a-z]{4,}/g)||[]).filter(t=>!stop.has(t));
+    v.chain.forEach((s,i)=>{
+      const hay=(s.l+' '+s.r+' '+s.d).toLowerCase();
+      if(toks.some(t=>hay.includes(t))) relIdx.push(i);
+    });
+    h+=`<div class="mx-ctx"><b>From the Universe matrix</b> — you clicked <b>${v.n}</b> × <b>${ctx.row}</b> (“${ctx.cellText}”). ${relIdx.length?`The highlighted stage${relIdx.length>1?'s':''} below cover${relIdx.length>1?'':'s'} that intersection.`:`This vertical's full chain is below; that cell describes where the <b>${ctx.row}</b> layer touches it.`}</div>`;
+  }
   v.chain.forEach((s,i)=>{
     const flags=(s.f||[]).map(f=>{
       if(f==='choke')return `<span class="sfl fc">⚠ choke</span>`;
@@ -698,10 +740,12 @@ function loadV(id){
       if(f==='new')return `<span class="sfl fn">★ new layer</span>`;
       return '';
     }).join('');
-    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc" onclick="if(event.target.classList.contains('ticklink'))return;this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd">${linkifyTickers(s.d)}</div></div></div>`;
+    const rel=relIdx.includes(i);
+    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc${rel?' srel':''}${rel&&i===relIdx[0]?' ex':''}" onclick="if(event.target.classList.contains('ticklink'))return;this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd">${linkifyTickers(s.d)}</div></div></div>`;
   });
   const det=document.getElementById('vdetail');
   det.innerHTML=h;det.scrollTop=0;
+  if(relIdx.length) setTimeout(()=>{const el=det.querySelector('.srel');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},120);
 }
 
 function buildExpls(){
