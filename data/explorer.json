@@ -31,7 +31,8 @@
             "choke",
             "geo"
           ],
-          "d": "Synopsys (SNPS), Cadence (CDNS) — US duopoly ~70%+ of design software. Siemens EDA / Mentor (Siemens, SIE.DE) is #3. Export-control flashpoint: US ordered a halt on EDA sales to China May 2025, reversed early July 2025 after US-China trade talks. China domestic: Empyrean (301269.SZ), Primarius (688206.SH) — cannot match full-flow leading-edge coverage."
+          "d": "Synopsys (SNPS), Cadence (CDNS) — US duopoly ~70%+ of design software. Siemens EDA / Mentor (Siemens, SIE.DE) is #3. Export-control flashpoint: US ordered a halt on EDA sales to China May 2025, reversed early July 2025 after US-China trade talks. China domestic: Empyrean (301269.SZ), Primarius (688206.SH) — cannot match full-flow leading-edge coverage.",
+          "p": "The programs engineers use to draw and check a chip's design — like CAD software, but for billions of transistors."
         },
         {
           "l": "Semiconductor IP cores",
@@ -40,19 +41,22 @@
             "choke",
             "geo"
           ],
-          "d": "Arm Holdings (ARM) — dominant CPU instruction-set IP (all mobile + growing datacenter via Grace/Graviton); licenses into China via the Arm China JV (a control wrinkle). RISC-V open ISA rising as a license-risk hedge (SiFive private; Alibaba T-Head — China-favored). Interface IP: Synopsys, Cadence, Alphawave (AWE.L)."
+          "d": "Arm Holdings (ARM) — dominant CPU instruction-set IP (all mobile + growing datacenter via Grace/Graviton); licenses into China via the Arm China JV (a control wrinkle). RISC-V open ISA rising as a license-risk hedge (SiFive private; Alibaba T-Head — China-favored). Interface IP: Synopsys, Cadence, Alphawave (AWE.L).",
+          "p": "Pre-designed chip building blocks (like a ready-made CPU core) that designers license instead of inventing from scratch."
         },
         {
           "l": "Verification & emulation",
           "r": "Hardware-assisted verification / prototyping",
           "f": [],
-          "d": "Cadence Palladium, Synopsys ZeBu — hardware emulation boxes; high-margin recurring revenue. Essential to tape out billion-transistor AI accelerators; demand scales with design complexity."
+          "d": "Cadence Palladium, Synopsys ZeBu — hardware emulation boxes; high-margin recurring revenue. Essential to tape out billion-transistor AI accelerators; demand scales with design complexity.",
+          "p": "Giant machines that test a chip design in simulation before anyone pays to manufacture it — mistakes after this point cost millions."
         },
         {
           "l": "Chip architecture & design",
           "r": "Defining the SoC/accelerator architecture",
           "f": [],
-          "d": "Done in-house by fabless leaders (Nvidia, AMD, Apple, Qualcomm) and hyperscalers. The high-value front-end where performance is won or lost; increasingly co-optimized with the target foundry process and packaging."
+          "d": "Done in-house by fabless leaders (Nvidia, AMD, Apple, Qualcomm) and hyperscalers. The high-value front-end where performance is won or lost; increasingly co-optimized with the target foundry process and packaging.",
+          "p": "The teams deciding what a chip should actually do and how its parts fit together — the architect's job before construction."
         },
         {
           "l": "Physical design & tape-out (ASIC services)",
@@ -60,7 +64,8 @@
           "f": [
             "cross"
           ],
-          "d": "ASIC design-service houses: Broadcom (AVGO), Marvell (MRVL), plus Taiwan turnkey backends Alchip (3661.TW) and GUC / Global Unichip (3443.TW, TSMC-affiliated); Socionext (Japan). Cross-link to Foundry — physical design is co-optimized with the process node."
+          "d": "ASIC design-service houses: Broadcom (AVGO), Marvell (MRVL), plus Taiwan turnkey backends Alchip (3661.TW) and GUC / Global Unichip (3443.TW, TSMC-affiliated); Socionext (Japan). Cross-link to Foundry — physical design is co-optimized with the process node.",
+          "p": "Contractors who take a finished design and prepare it for the factory — the last step before manufacturing starts."
         },
         {
           "l": "Interface IP — SerDes, HBM PHY, UCIe",
@@ -69,7 +74,8 @@
             "choke",
             "new"
           ],
-          "d": "Synopsys, Cadence, Alphawave Semi (AWE.L), Credo (CRDO). HBM PHY + UCIe chiplet-interconnect IP is the new bottleneck for accelerator design as compute disaggregates into chiplets. Astera Labs (ALAB) connectivity silicon adjacent."
+          "d": "Synopsys, Cadence, Alphawave Semi (AWE.L), Credo (CRDO). HBM PHY + UCIe chiplet-interconnect IP is the new bottleneck for accelerator design as compute disaggregates into chiplets. Astera Labs (ALAB) connectivity silicon adjacent.",
+          "p": "The specialized connection circuitry that lets AI chips talk to memory and each other at extreme speed."
         },
         {
           "l": "Photomask / reticle",
@@ -78,7 +84,8 @@
             "choke",
             "geo"
           ],
-          "d": "Photronics (PLAB, US), Toppan (7911.T), DNP — Japan strong. EUV mask blanks: Hoya (7741.T) + AGC near-monopoly (Japan) — a hidden Japanese chokepoint upstream of every leading-edge fab."
+          "d": "Photronics (PLAB, US), Toppan (7911.T), DNP — Japan strong. EUV mask blanks: Hoya (7741.T) + AGC near-monopoly (Japan) — a hidden Japanese chokepoint upstream of every leading-edge fab.",
+          "p": "The physical stencil plates used to print a chip's pattern onto silicon — every design becomes a set of these."
         },
         {
           "l": "End-use — every chip",
@@ -86,7 +93,8 @@
           "f": [
             "cross"
           ],
-          "d": "EDA + IP sit at the head of Foundry, Memory, Accelerators, Optical and AR-SoC chains. License/royalty model = the most defensible and highest-margin layer of the entire universe; revenue compounds with design starts."
+          "d": "EDA + IP sit at the head of Foundry, Memory, Accelerators, Optical and AR-SoC chains. License/royalty model = the most defensible and highest-margin layer of the entire universe; revenue compounds with design starts.",
+          "p": "Why it matters: every chip in the world, from any company, has to pass through the tools above first."
         }
       ],
       "plain": "The design software and licensed chip blueprints every semiconductor starts from — nothing gets built without these tools."
@@ -104,7 +112,8 @@
             "choke",
             "geo"
           ],
-          "d": "ASML (ASML, Netherlands) — monopoly on EUV. High-NA EUV (EXE:5200, ~$380M): Intel lead-deployed first unit Dec 2025 for 14A; Samsung receiving for SF2/1.4nm; TSMC holding back (0.33-NA + multipatterning for A14/A16). DUV: ASML, Canon (7751.T), Nikon (7731.T). China SMEE far behind — immersion DUV under trial, sub-10nm scanners unlikely before ~2030."
+          "d": "ASML (ASML, Netherlands) — monopoly on EUV. High-NA EUV (EXE:5200, ~$380M): Intel lead-deployed first unit Dec 2025 for 14A; Samsung receiving for SF2/1.4nm; TSMC holding back (0.33-NA + multipatterning for A14/A16). DUV: ASML, Canon (7751.T), Nikon (7731.T). China SMEE far behind — immersion DUV under trial, sub-10nm scanners unlikely before ~2030.",
+          "p": "The machines that print chip patterns onto silicon using light — the most complex machines humans build, and only one company makes the best kind."
         },
         {
           "l": "Deposition / etch / CMP / metrology",
@@ -113,7 +122,8 @@
             "choke",
             "geo"
           ],
-          "d": "Applied Materials (AMAT, ~18% WFE, broadest portfolio), Lam Research (LRCX — etch/deposition), KLA (KLAC — process control/metrology leader). Japan: Tokyo Electron (8035.T — coat/develop, etch), Screen (7735.T — cleaning), Hitachi High-Tech, Advantest (6857.T — test). Big-5 ~70% of WFE. ALD (atomic-layer deposition) is the gating step for the FinFET→GAAFET (nanosheet) transition — ASM International (ASM.AS) leads, Kokusai Electric (6525.T) on the memory side; Onto Innovation (ONTO) in metrology/packaging inspection."
+          "d": "Applied Materials (AMAT, ~18% WFE, broadest portfolio), Lam Research (LRCX — etch/deposition), KLA (KLAC — process control/metrology leader). Japan: Tokyo Electron (8035.T — coat/develop, etch), Screen (7735.T — cleaning), Hitachi High-Tech, Advantest (6857.T — test). Big-5 ~70% of WFE. ALD (atomic-layer deposition) is the gating step for the FinFET→GAAFET (nanosheet) transition — ASM International (ASM.AS) leads, Kokusai Electric (6525.T) on the memory side; Onto Innovation (ONTO) in metrology/packaging inspection.",
+          "p": "All the other factory machines: ones that add material layer by layer, carve it away, polish it flat, and inspect the result."
         },
         {
           "l": "Precision optics & light sources",
@@ -122,7 +132,8 @@
             "choke",
             "geo"
           ],
-          "d": "Carl Zeiss SMT (Germany, ASML-exclusive EUV optics — arguably the hardest-to-replicate component on earth). Light source: Cymer (ASML-owned, US — CO2-laser-pumped tin plasma) + Trumpf (Germany) lasers. No Zeiss + Cymer means no EUV. Pure single-source dependency."
+          "d": "Carl Zeiss SMT (Germany, ASML-exclusive EUV optics — arguably the hardest-to-replicate component on earth). Light source: Cymer (ASML-owned, US — CO2-laser-pumped tin plasma) + Trumpf (Germany) lasers. No Zeiss + Cymer means no EUV. Pure single-source dependency.",
+          "p": "The mirrors and lasers inside the printing machines — made by only one or two companies each, so they're hidden bottlenecks."
         },
         {
           "l": "Subsystems — vacuum, RF, motion, flow",
@@ -130,7 +141,8 @@
           "f": [
             "choke"
           ],
-          "d": "VAT Group (VACN.SW — vacuum valves near-monopoly); MKS Instruments (MKSI); Advanced Energy (AEIS — RF power); Ichor (ICHR), Ultra Clean (UCTT) — subsystems/integration; Horiba (Japan — mass-flow controllers). Many single-source niches inside every tool."
+          "d": "VAT Group (VACN.SW — vacuum valves near-monopoly); MKS Instruments (MKSI); Advanced Energy (AEIS — RF power); Ichor (ICHR), Ultra Clean (UCTT) — subsystems/integration; Horiba (Japan — mass-flow controllers). Many single-source niches inside every tool.",
+          "p": "The smaller parts inside the machines — vacuum valves, radio-frequency units, precision stages — often from a single supplier."
         },
         {
           "l": "Process chemicals & gases",
@@ -140,19 +152,22 @@
             "geo",
             "cross"
           ],
-          "d": "Photoresist chokepoint: JSR, Tokyo Ohka (4186.T), Shin-Etsu, Fujifilm — Japan controls ~80-90% of advanced resist (a deliberate strategic lever). CMP slurry: Fujimi, CMC Materials. Cross-link to industrial gases / specialty materials in the Hard Assets map."
+          "d": "Photoresist chokepoint: JSR, Tokyo Ohka (4186.T), Shin-Etsu, Fujifilm — Japan controls ~80-90% of advanced resist (a deliberate strategic lever). CMP slurry: Fujimi, CMC Materials. Cross-link to industrial gases / specialty materials in the Hard Assets map.",
+          "p": "The light-sensitive coatings, polishing fluids and special gases fabs consume every day — Japan dominates these quietly."
         },
         {
           "l": "Tool assembly & build",
           "r": "Final integration of the fab tools",
           "f": [],
-          "d": "ASML (Veldhoven NL), AMAT/LRCX (US), TEL/Screen (Japan). Thousands-deep supplier BOM; a single High-NA EUV system ships in dozens of crates and takes months to install — limiting how fast leading-edge capacity can scale."
+          "d": "ASML (Veldhoven NL), AMAT/LRCX (US), TEL/Screen (Japan). Thousands-deep supplier BOM; a single High-NA EUV system ships in dozens of crates and takes months to install — limiting how fast leading-edge capacity can scale.",
+          "p": "Where the finished machines are physically put together before shipping to a fab."
         },
         {
           "l": "Install, ramp & field service",
           "r": "On-site install, calibration, uptime service",
           "f": [],
-          "d": "High-margin recurring services + spares (AMAT CSBG, ASML installed-base management) ~30%+ of incumbent revenue — smooths the WFE capex cycle and deepens customer lock-in."
+          "d": "High-margin recurring services + spares (AMAT CSBG, ASML installed-base management) ~30%+ of incumbent revenue — smooths the WFE capex cycle and deepens customer lock-in.",
+          "p": "Engineers who install the machines in the fab, tune them, and keep them running — a steady service business."
         },
         {
           "l": "China WFE localization & secondary tools",
@@ -161,7 +176,8 @@
             "geo",
             "gap"
           ],
-          "d": "China stockpiled DUV ahead of curbs, driving mature-node overcapacity. Localization: NAURA (002371.SZ, ~#8 globally), AMEC (688012.SH — etch), Piotech (deposition) — but supplied <15% of internal demand. Lithography remains the unbridgeable gap."
+          "d": "China stockpiled DUV ahead of curbs, driving mature-node overcapacity. Localization: NAURA (002371.SZ, ~#8 globally), AMEC (688012.SH — etch), Piotech (deposition) — but supplied <15% of internal demand. Lithography remains the unbridgeable gap.",
+          "p": "China's effort to build its own versions of these machines after being cut off from buying the best ones."
         },
         {
           "l": "End-use — fabs",
@@ -169,7 +185,8 @@
           "f": [
             "cross"
           ],
-          "d": "WFE demand = the foundry/memory capex cycle. Buyers: TSMC, Samsung, Intel, Micron, SK Hynix, SMIC. ~$110B+/yr market; China was ~30-40% of spend during the localization rush. Cross-link to Foundry and Memory."
+          "d": "WFE demand = the foundry/memory capex cycle. Buyers: TSMC, Samsung, Intel, Micron, SK Hynix, SMIC. ~$110B+/yr market; China was ~30-40% of spend during the localization rush. Cross-link to Foundry and Memory.",
+          "p": "Why it matters: the customers are the chip factories — every new fab means billions in orders for these machine makers."
         }
       ],
       "plain": "The machines fabs buy to manufacture chips — lithography, etch, deposition, metrology."
@@ -187,7 +204,8 @@
             "choke",
             "geo"
           ],
-          "d": "TSMC (2330.TW / TSM) leads: N3 ramping, N2 (nanosheet GAA) volume Q4 2025, A16 (backside power rail) H2 2026; record ~$50-56B 2026 capex. Samsung Foundry (005930.KS) SF2 GAA trailing on yield. Intel (INTC) 18A in production, 14A is its High-NA lead node. A 3-horse leading-edge race; TSMC has ~90%+ of <5nm."
+          "d": "TSMC (2330.TW / TSM) leads: N3 ramping, N2 (nanosheet GAA) volume Q4 2025, A16 (backside power rail) H2 2026; record ~$50-56B 2026 capex. Samsung Foundry (005930.KS) SF2 GAA trailing on yield. Intel (INTC) 18A in production, 14A is its High-NA lead node. A 3-horse leading-edge race; TSMC has ~90%+ of <5nm.",
+          "p": "Inventing the next generation of smaller, faster transistors — years of R&D before any product ships."
         },
         {
           "l": "Silicon wafers & substrates",
@@ -197,7 +215,8 @@
             "geo",
             "cross"
           ],
-          "d": "Shin-Etsu (4063.T) + SUMCO (3436.T) Japan ~50%+ of 300mm wafers; GlobalWafers (6488.TWO Taiwan, ~17% global), Siltronic (WAF.DE Germany), National Silicon Industry Group / NSIG (688126.SH — China-domestic). Japan/Taiwan chokepoint. Cross-link to silicon / specialty materials in the Hard Assets map."
+          "d": "Shin-Etsu (4063.T) + SUMCO (3436.T) Japan ~50%+ of 300mm wafers; GlobalWafers (6488.TWO Taiwan, ~17% global), Siltronic (WAF.DE Germany), National Silicon Industry Group / NSIG (688126.SH — China-domestic). Japan/Taiwan chokepoint. Cross-link to silicon / specialty materials in the Hard Assets map.",
+          "p": "The polished silicon discs everything is built on — a handful of Japanese and Taiwanese firms make nearly all of them."
         },
         {
           "l": "Leading-edge logic fabrication",
@@ -206,7 +225,8 @@
             "choke",
             "geo"
           ],
-          "d": "TSMC Fab 18 (Tainan) ~90% of leading-edge; Arizona fabs (N4/N3) ramping for geographic diversification. Samsung (Korea / Taylor TX). Intel (Oregon / Arizona). Taiwan concentration is the single largest tail risk in the AI supply chain."
+          "d": "TSMC Fab 18 (Tainan) ~90% of leading-edge; Arizona fabs (N4/N3) ramping for geographic diversification. Samsung (Korea / Taylor TX). Intel (Oregon / Arizona). Taiwan concentration is the single largest tail risk in the AI supply chain.",
+          "p": "The most advanced chip factories on earth, making AI processors — essentially TSMC, with Samsung and Intel trying to catch up."
         },
         {
           "l": "Mature / specialty nodes",
@@ -215,7 +235,8 @@
             "geo",
             "gap"
           ],
-          "d": "UMC (2303.TW), GlobalFoundries (GFS), Tower (Israel), Vanguard (5347.TWO). China: SMIC (0981.HK), Hua Hong (1347.HK) — aggressive mature-node build-out raising Western overcapacity/dumping concerns. Display driver ICs and power discretes flow from here into devices and autos."
+          "d": "UMC (2303.TW), GlobalFoundries (GFS), Tower (Israel), Vanguard (5347.TWO). China: SMIC (0981.HK), Hua Hong (1347.HK) — aggressive mature-node build-out raising Western overcapacity/dumping concerns. Display driver ICs and power discretes flow from here into devices and autos.",
+          "p": "Factories making older, simpler chips that still go into everything — cars, appliances, power electronics."
         },
         {
           "l": "China leading-edge (sanctioned)",
@@ -225,7 +246,8 @@
             "geo",
             "new"
           ],
-          "d": "SMIC (0981.HK / 688981.SH) reached 7nm (N+2) without EUV via DUV multipatterning (low yield, high cost) — powers Huawei Ascend/Kirin. Reportedly piloting 5nm (press-sourced, treat as directional) at ~50% higher cost and ~1/3 TSMC yield. US controls cap China at ~7nm with no EUV access."
+          "d": "SMIC (0981.HK / 688981.SH) reached 7nm (N+2) without EUV via DUV multipatterning (low yield, high cost) — powers Huawei Ascend/Kirin. Reportedly piloting 5nm (press-sourced, treat as directional) at ~50% higher cost and ~1/3 TSMC yield. US controls cap China at ~7nm with no EUV access.",
+          "p": "China's best fab making advanced chips with older tools despite sanctions — impressive, expensive, and limited."
         },
         {
           "l": "Fabless logic designers",
@@ -233,13 +255,15 @@
           "f": [
             "cross"
           ],
-          "d": "Nvidia (NVDA), AMD (AMD), Apple, Qualcomm (QCOM), MediaTek (2454.TW), Broadcom (AVGO) — all depend on TSMC. Fabless + TSMC is the dominant model; IDM (Intel, Samsung) is the alternative. Cross-link to Accelerators."
+          "d": "Nvidia (NVDA), AMD (AMD), Apple, Qualcomm (QCOM), MediaTek (2454.TW), Broadcom (AVGO) — all depend on TSMC. Fabless + TSMC is the dominant model; IDM (Intel, Samsung) is the alternative. Cross-link to Accelerators.",
+          "p": "Companies that design chips but own no factories (Nvidia, AMD, Qualcomm) — they all queue for the same factory space."
         },
         {
           "l": "Front-end test & yield",
           "r": "Wafer sort, parametric test, probe",
           "f": [],
-          "d": "Advantest (6857.T) + Teradyne (TER) duopoly in automated test equipment — demand surged with HBM/AI complexity. Probe cards: FormFactor (FORM), MJC (Japan). Yield ramp is the gating economic variable on every new node."
+          "d": "Advantest (6857.T) + Teradyne (TER) duopoly in automated test equipment — demand surged with HBM/AI complexity. Probe cards: FormFactor (FORM), MJC (Japan). Yield ramp is the gating economic variable on every new node.",
+          "p": "Testing each chip on the wafer to see which ones actually work — the yield report card."
         },
         {
           "l": "Foundry → packaging handoff",
@@ -248,7 +272,8 @@
             "choke",
             "cross"
           ],
-          "d": "Leading-edge wafers flow to advanced packaging — increasingly done by TSMC itself (CoWoS/SoIC), blurring the foundry/OSAT line. CoWoS capacity is the gating bottleneck on AI GPU output. Cross-link to Advanced Packaging."
+          "d": "Leading-edge wafers flow to advanced packaging — increasingly done by TSMC itself (CoWoS/SoIC), blurring the foundry/OSAT line. CoWoS capacity is the gating bottleneck on AI GPU output. Cross-link to Advanced Packaging.",
+          "p": "Finished wafers moving on to be cut up and packaged — the handoff to the next vertical."
         }
       ],
       "plain": "The factories that physically manufacture chips for the companies that design them."
@@ -265,7 +290,8 @@
           "f": [
             "choke"
           ],
-          "d": "DRAM oligopoly: Samsung (005930.KS), SK Hynix (000660.KS), Micron (MU) ~95% of DRAM. NAND adds Kioxia (Japan, ex-Toshiba), SanDisk (SNDK, WD spinoff), YMTC (China). DRAM scaling is slowing — HBM and 3D-DRAM are the frontier."
+          "d": "DRAM oligopoly: Samsung (005930.KS), SK Hynix (000660.KS), Micron (MU) ~95% of DRAM. NAND adds Kioxia (Japan, ex-Toshiba), SanDisk (SNDK, WD spinoff), YMTC (China). DRAM scaling is slowing — HBM and 3D-DRAM are the frontier.",
+          "p": "Inventing ways to squeeze more data storage into the same space — the memory equivalent of transistor scaling."
         },
         {
           "l": "HBM — High Bandwidth Memory",
@@ -275,7 +301,8 @@
             "gap",
             "new"
           ],
-          "d": "SK Hynix (000660.KS) leads HBM3E (~62% share) and is Nvidia's lead supplier; Micron (MU) ~21% (overtook Samsung); Samsung ~17%, clearing Nvidia HBM4 qual. Each Blackwell GPU carries ~8 HBM stacks. HBM gates GPU output; all suppliers sold out for 2026. HBM4 (2026) integrates a logic base die fabbed at TSMC."
+          "d": "SK Hynix (000660.KS) leads HBM3E (~62% share) and is Nvidia's lead supplier; Micron (MU) ~21% (overtook Samsung); Samsung ~17%, clearing Nvidia HBM4 qual. Each Blackwell GPU carries ~8 HBM stacks. HBM gates GPU output; all suppliers sold out for 2026. HBM4 (2026) integrates a logic base die fabbed at TSMC.",
+          "p": "Memory chips stacked in towers and placed right next to AI processors — the single most supply-constrained part of the AI boom."
         },
         {
           "l": "DRAM fabrication",
@@ -283,7 +310,8 @@
           "f": [
             "geo"
           ],
-          "d": "Korea (Samsung, SK Hynix) ~70% of DRAM; Micron (US/Taiwan/Japan/Singapore). China's CXMT (ChangXin, private) ramping DDR5-8000 / LPDDR5X — the fastest-growing threat, drawing US Entity-List scrutiny. Server DDR5 demand strong from AI hosts."
+          "d": "Korea (Samsung, SK Hynix) ~70% of DRAM; Micron (US/Taiwan/Japan/Singapore). China's CXMT (ChangXin, private) ramping DDR5-8000 / LPDDR5X — the fastest-growing threat, drawing US Entity-List scrutiny. Server DDR5 demand strong from AI hosts.",
+          "p": "The factories making standard computer memory — the kind in every server and phone."
         },
         {
           "l": "NAND flash fabrication",
@@ -291,7 +319,8 @@
           "f": [
             "geo"
           ],
-          "d": "Samsung, SK Hynix (+Solidigm), Kioxia (Japan), SanDisk (SNDK), Micron, YMTC (China, 200+ layer, Entity-Listed). AI storage tier + enterprise SSD demand. More commoditized and cyclical than DRAM."
+          "d": "Samsung, SK Hynix (+Solidigm), Kioxia (Japan), SanDisk (SNDK), Micron, YMTC (China, 200+ layer, Entity-Listed). AI storage tier + enterprise SSD demand. More commoditized and cyclical than DRAM.",
+          "p": "The factories making storage chips — where your files actually live in an SSD."
         },
         {
           "l": "Controllers & memory interface",
@@ -300,7 +329,8 @@
             "new",
             "geo"
           ],
-          "d": "Phison (8299.TW), Silicon Motion (SIMO), Marvell, Microchip — controllers. CXL memory pooling emerging for AI servers. Montage (688008.SH China) DDR5 RCD/register clock drivers — a quiet China-exposed niche."
+          "d": "Phison (8299.TW), Silicon Motion (SIMO), Marvell, Microchip — controllers. CXL memory pooling emerging for AI servers. Montage (688008.SH China) DDR5 RCD/register clock drivers — a quiet China-exposed niche.",
+          "p": "The small chips that manage traffic between memory and processors."
         },
         {
           "l": "HBM stacking & packaging",
@@ -309,13 +339,15 @@
             "choke",
             "cross"
           ],
-          "d": "SK Hynix MR-MUF process advantage; TC-NCF (Samsung/Micron). TSV stacking + hybrid bonding for HBM4. Bonders: BESI (BESI.AS), ASMPT (0522.HK). Cross-link to Advanced Packaging — HBM4 base die fabbed at TSMC pulls foundry into memory."
+          "d": "SK Hynix MR-MUF process advantage; TC-NCF (Samsung/Micron). TSV stacking + hybrid bonding for HBM4. Bonders: BESI (BESI.AS), ASMPT (0522.HK). Cross-link to Advanced Packaging — HBM4 base die fabbed at TSMC pulls foundry into memory.",
+          "p": "The delicate art of stacking memory chips into towers and gluing them together — where HBM is actually hard to make."
         },
         {
           "l": "Module assembly",
           "r": "DIMMs, server modules",
           "f": [],
-          "d": "DRAM makers + module houses: Kingston (private), ADATA (3260.TW), Smart Modular. Server RDIMM / MRDIMM for AI hosts; MRDIMM is the new high-bandwidth server-memory format."
+          "d": "DRAM makers + module houses: Kingston (private), ADATA (3260.TW), Smart Modular. Server RDIMM / MRDIMM for AI hosts; MRDIMM is the new high-bandwidth server-memory format.",
+          "p": "Assembling memory chips onto the sticks and modules that plug into servers."
         },
         {
           "l": "End-use — AI servers & devices",
@@ -323,7 +355,8 @@
           "f": [
             "cross"
           ],
-          "d": "HBM into accelerators; DDR5 into datacenter; LPDDR into edge-AI devices; NAND into storage. Memory is ~30%+ of an AI-server BOM and the swing factor in datacenter capex. Cross-link to Accelerators and DC Infrastructure."
+          "d": "HBM into accelerators; DDR5 into datacenter; LPDDR into edge-AI devices; NAND into storage. Memory is ~30%+ of an AI-server BOM and the swing factor in datacenter capex. Cross-link to Accelerators and DC Infrastructure.",
+          "p": "Why it matters: every AI chip ships with a wall of memory around it — memory demand scales with every GPU sold."
         }
       ],
       "plain": "The memory chips that feed data to AI processors — HBM is the AI-critical, supply-constrained kind."
@@ -341,7 +374,8 @@
             "choke",
             "new"
           ],
-          "d": "TSMC CoWoS (2.5D on silicon interposer) + SoIC (3D) + InFO; Intel Foveros/EMIB; Samsung I-Cube/X-Cube. Chiplet standard: UCIe. Advanced packaging is now ~20%+ of leading-edge device cost and rising."
+          "d": "TSMC CoWoS (2.5D on silicon interposer) + SoIC (3D) + InFO; Intel Foveros/EMIB; Samsung I-Cube/X-Cube. Chiplet standard: UCIe. Advanced packaging is now ~20%+ of leading-edge device cost and rising.",
+          "p": "Inventing how to combine multiple chips into one package — the new frontier now that shrinking transistors is getting harder."
         },
         {
           "l": "CoWoS / interposer capacity",
@@ -350,7 +384,8 @@
             "choke",
             "gap"
           ],
-          "d": "TSMC CoWoS is the gating constraint on AI GPU output; TSMC bringing on AP6/AP7 (Chiayi) and outsourcing overflow to ASE, Amkor, SPIL. Rubin Ultra reportedly re-architected over CoWoS-L yield. Panel-level packaging (FOPLP) is the next-gen escape from round-wafer interposer limits."
+          "d": "TSMC CoWoS is the gating constraint on AI GPU output; TSMC bringing on AP6/AP7 (Chiayi) and outsourcing overflow to ASE, Amkor, SPIL. Rubin Ultra reportedly re-architected over CoWoS-L yield. Panel-level packaging (FOPLP) is the next-gen escape from round-wafer interposer limits.",
+          "p": "The specific assembly step where an AI processor and its memory get mounted on one base — the #1 bottleneck for AI chip supply today."
         },
         {
           "l": "OSAT — outsourced assembly & test",
@@ -359,7 +394,8 @@
             "choke",
             "geo"
           ],
-          "d": "ASE Technology (3711.TW / ASX — world #1, ~45% of top-10), Amkor (AMKR — Korea-rooted, $7B Arizona fab w/ Apple/TSMC), JCET (600584.SH China #3), Powertech (6239.TW), KYEC (2449.TW — test), Tongfu/TFME (China). Taiwan + China dominate OSAT."
+          "d": "ASE Technology (3711.TW / ASX — world #1, ~45% of top-10), Amkor (AMKR — Korea-rooted, $7B Arizona fab w/ Apple/TSMC), JCET (600584.SH China #3), Powertech (6239.TW), KYEC (2449.TW — test), Tongfu/TFME (China). Taiwan + China dominate OSAT.",
+          "p": "Factories you hire to do the final assembly and testing of chips — the outsourcing layer, dominated by Taiwan and China."
         },
         {
           "l": "IC substrates",
@@ -368,7 +404,8 @@
             "choke",
             "geo"
           ],
-          "d": "ABF substrate chokepoint (top-5 ~74%): Unimicron (3037.TW, leader ~22%), Ibiden (4062.T), Shinko (6967.T Japan), Nan Ya PCB (8046.TW), AT&S (ATS.VI Austria). Ajinomoto (2802.T) makes the ABF film itself — a hidden near-monopoly. High-layer-count ABF for big AI dies is supply-constrained."
+          "d": "ABF substrate chokepoint (top-5 ~74%): Unimicron (3037.TW, leader ~22%), Ibiden (4062.T), Shinko (6967.T Japan), Nan Ya PCB (8046.TW), AT&S (ATS.VI Austria). Ajinomoto (2802.T) makes the ABF film itself — a hidden near-monopoly. High-layer-count ABF for big AI dies is supply-constrained.",
+          "p": "The fiberglass-like boards a chip sits on inside its package — an unglamorous part that's been in shortage for years."
         },
         {
           "l": "Bonding & assembly equipment",
@@ -376,7 +413,8 @@
           "f": [
             "choke"
           ],
-          "d": "BE Semiconductor / BESI (BESI.AS) + Applied Materials lead hybrid bonding; ASMPT (0522.HK) bonders; Kulicke & Soffa (KLIC) wire/advanced. Hybrid bonding enables sub-10µm 3D stacking — the equipment chokepoint of advanced packaging."
+          "d": "BE Semiconductor / BESI (BESI.AS) + Applied Materials lead hybrid bonding; ASMPT (0522.HK) bonders; Kulicke & Soffa (KLIC) wire/advanced. Hybrid bonding enables sub-10µm 3D stacking — the equipment chokepoint of advanced packaging.",
+          "p": "The precision machines that place and bond chips together — a small club of Dutch, Austrian and Singaporean firms."
         },
         {
           "l": "Final & system-level test",
@@ -384,7 +422,8 @@
           "f": [
             "choke"
           ],
-          "d": "Advantest (6857.T), Teradyne (TER) ATE; OSATs run test floors (KYEC, ASE). HBM/AI complexity lengthens test time and demands known-good-die screening at every stack layer — the hardest test in the industry. MEMS probe cards contacting thousands of 40µm-pitch HBM microbumps are a near-duopoly: FormFactor (FORM) + Micronics Japan. Test handlers + HBM inspection: Cohu (COHU, Neon tool). Burn-in: Aehr Test (AEHR). Nvidia is tightening HBM test standards, adding screening pressure."
+          "d": "Advantest (6857.T), Teradyne (TER) ATE; OSATs run test floors (KYEC, ASE). HBM/AI complexity lengthens test time and demands known-good-die screening at every stack layer — the hardest test in the industry. MEMS probe cards contacting thousands of 40µm-pitch HBM microbumps are a near-duopoly: FormFactor (FORM) + Micronics Japan. Test handlers + HBM inspection: Cohu (COHU, Neon tool). Burn-in: Aehr Test (AEHR). Nvidia is tightening HBM test standards, adding screening pressure.",
+          "p": "The final exam: running every finished chip through tests, sometimes for hours, before it ships."
         },
         {
           "l": "Materials & consumables",
@@ -392,7 +431,8 @@
           "f": [
             "cross"
           ],
-          "d": "Resonac (ex-Showa Denko), Henkel, Namics — underfill; Sumitomo Bakelite — molding; leadframes ASMPT, Haesung. Bonding wire links to the precious-metals chain (Hard Assets map). Cross-link to specialty materials."
+          "d": "Resonac (ex-Showa Denko), Henkel, Namics — underfill; Sumitomo Bakelite — molding; leadframes ASMPT, Haesung. Bonding wire links to the precious-metals chain (Hard Assets map). Cross-link to specialty materials.",
+          "p": "The glues, molds and wires used in assembly — cheap materials, but a few are single-sourced from Japan."
         },
         {
           "l": "End-use — finished packages",
@@ -400,7 +440,8 @@
           "f": [
             "cross"
           ],
-          "d": "Output = finished accelerators/CPUs to system integrators. Back-end is where the AI compute supply chain is most physically constrained today. Cross-link to Accelerators and DC Infrastructure."
+          "d": "Output = finished accelerators/CPUs to system integrators. Back-end is where the AI compute supply chain is most physically constrained today. Cross-link to Accelerators and DC Infrastructure.",
+          "p": "Why it matters: a finished AI 'chip' is really a package of many chips — this vertical decides how many can ship."
         }
       ],
       "plain": "How finished chips get stacked, wired together and tested — the step where AI silicon is bottlenecked today (CoWoS)."
@@ -417,7 +458,8 @@
           "f": [
             "choke"
           ],
-          "d": "Nvidia (NVDA) — Hopper→Blackwell (GB200/GB300)→Vera Rubin (HBM4, 2026) cadence; CUDA software moat. AMD (AMD) MI355X shipping, MI400 series (2nm, HBM4) + Helios rack unveiled CES 2026. Intel Gaudi. All fabbed at TSMC; Nvidia ~80-90% of merchant AI training silicon."
+          "d": "Nvidia (NVDA) — Hopper→Blackwell (GB200/GB300)→Vera Rubin (HBM4, 2026) cadence; CUDA software moat. AMD (AMD) MI355X shipping, MI400 series (2nm, HBM4) + Helios rack unveiled CES 2026. Intel Gaudi. All fabbed at TSMC; Nvidia ~80-90% of merchant AI training silicon.",
+          "p": "The companies designing the AI processors themselves — Nvidia's GPUs and their few real challengers."
         },
         {
           "l": "Custom ASIC / hyperscaler silicon",
@@ -426,7 +468,8 @@
             "new",
             "cross"
           ],
-          "d": "Google TPU (Broadcom-designed; TPU v7 'Trillium' also co-designed with MediaTek 2454.TW), AWS Trainium/Inferentia (Marvell + Alchip 3661.TW), Microsoft Maia (Marvell), Meta MTIA (Broadcom, through 2029), OpenAI (Broadcom, ~2027). GUC (3443.TW) is the backend partner for Google's Axion ARM CPU. Merchant ASIC duo Broadcom (AVGO) + Marvell (MRVL) ~95% of custom co-design; custom shipments projected +44.6% in 2026 (~28% of AI servers). Google is shifting from captive use to selling/renting TPUs (Anthropic, Meta, Fluidstack/neoclouds) — the clearest sign yet the counter-trend is real."
+          "d": "Google TPU (Broadcom-designed; TPU v7 'Trillium' also co-designed with MediaTek 2454.TW), AWS Trainium/Inferentia (Marvell + Alchip 3661.TW), Microsoft Maia (Marvell), Meta MTIA (Broadcom, through 2029), OpenAI (Broadcom, ~2027). GUC (3443.TW) is the backend partner for Google's Axion ARM CPU. Merchant ASIC duo Broadcom (AVGO) + Marvell (MRVL) ~95% of custom co-design; custom shipments projected +44.6% in 2026 (~28% of AI servers). Google is shifting from captive use to selling/renting TPUs (Anthropic, Meta, Fluidstack/neoclouds) — the clearest sign yet the counter-trend is real.",
+          "p": "Tech giants designing their own AI chips (Google's TPU, Amazon's, OpenAI's) to cut their dependence on Nvidia."
         },
         {
           "l": "China AI silicon (sanctioned)",
@@ -435,7 +478,8 @@
             "choke",
             "geo"
           ],
-          "d": "Huawei Ascend 910C (SMIC ~7nm, 96GB HBM2e; ~1/3 B200 BF16) — ~600K-unit 2026 target but realistically <300K given HBM scarcity (TSMC die-bank via Sophgo now exhausted). Cambricon (688256.SH), Biren, Moore Threads. China compute self-sufficiency is a national priority."
+          "d": "Huawei Ascend 910C (SMIC ~7nm, 96GB HBM2e; ~1/3 B200 BF16) — ~600K-unit 2026 target but realistically <300K given HBM scarcity (TSMC die-bank via Sophgo now exhausted). Cambricon (688256.SH), Biren, Moore Threads. China compute self-sufficiency is a national priority.",
+          "p": "China's homegrown AI chips, built under sanctions — behind on performance but improving and heavily funded."
         },
         {
           "l": "Foundry & HBM dependency",
@@ -444,13 +488,15 @@
             "choke",
             "cross"
           ],
-          "d": "Every leading accelerator = TSMC leading-edge logic + CoWoS packaging + HBM. Designers are fabless; the true gates are upstream — TSMC CoWoS and SK Hynix HBM. Cross-link to Foundry, Packaging and Memory."
+          "d": "Every leading accelerator = TSMC leading-edge logic + CoWoS packaging + HBM. Designers are fabless; the true gates are upstream — TSMC CoWoS and SK Hynix HBM. Cross-link to Foundry, Packaging and Memory.",
+          "p": "The catch: everyone above still needs TSMC to build the chip and Korea to supply the memory — design is not supply."
         },
         {
           "l": "Board & module integration",
           "r": "GPU board, SXM module, OAM baseboard",
           "f": [],
-          "d": "Nvidia SXM modules + GB200 superchip; HGX/MGX baseboards built by Taiwan ODMs (Foxconn 2317.TW, Quanta 2382.TW, Wistron). Astera Labs (ALAB) retimers on board. OAM is the open accelerator module standard for non-Nvidia silicon."
+          "d": "Nvidia SXM modules + GB200 superchip; HGX/MGX baseboards built by Taiwan ODMs (Foxconn 2317.TW, Quanta 2382.TW, Wistron). Astera Labs (ALAB) retimers on board. OAM is the open accelerator module standard for non-Nvidia silicon.",
+          "p": "Mounting the AI chip onto the boards and modules that slot into servers."
         },
         {
           "l": "System — GPU server / rack",
@@ -458,7 +504,8 @@
           "f": [
             "cross"
           ],
-          "d": "Nvidia DGX; NVL72 rack-scale (72 liquid-cooled GPUs) is the new unit of AI compute. Built by Super Micro (SMCI), Dell (DELL), HPE and Taiwan ODMs. Cross-link to DC Infrastructure and Networking."
+          "d": "Nvidia DGX; NVL72 rack-scale (72 liquid-cooled GPUs) is the new unit of AI compute. Built by Super Micro (SMCI), Dell (DELL), HPE and Taiwan ODMs. Cross-link to DC Infrastructure and Networking.",
+          "p": "The full AI server or rack — dozens of GPUs wired together into one machine that costs millions."
         },
         {
           "l": "Software & ecosystem",
@@ -466,7 +513,8 @@
           "f": [
             "choke"
           ],
-          "d": "CUDA is Nvidia's deepest moat — 15+ years of libraries. AMD ROCm, OpenAI Triton and hyperscaler stacks chip at it. Inference-optimization software (vLLM, TensorRT-LLM) is the fastest-growing layer as workloads shift training→inference."
+          "d": "CUDA is Nvidia's deepest moat — 15+ years of libraries. AMD ROCm, OpenAI Triton and hyperscaler stacks chip at it. Inference-optimization software (vLLM, TensorRT-LLM) is the fastest-growing layer as workloads shift training→inference.",
+          "p": "The software layer (Nvidia's CUDA above all) that keeps customers locked in even when rival chips are cheaper."
         },
         {
           "l": "End-use — training & inference",
@@ -474,7 +522,8 @@
           "f": [
             "cross"
           ],
-          "d": "Buyers: Microsoft, Google, Amazon, Meta, xAI, OpenAI, Oracle, plus neoclouds (CoreWeave, Nebius) and sovereign-AI clouds. ~$300-400B/yr datacenter capex is the demand engine for the whole stack. Cross-link to DC Infrastructure."
+          "d": "Buyers: Microsoft, Google, Amazon, Meta, xAI, OpenAI, Oracle, plus neoclouds (CoreWeave, Nebius) and sovereign-AI clouds. ~$300-400B/yr datacenter capex is the demand engine for the whole stack. Cross-link to DC Infrastructure.",
+          "p": "Why it matters: this is where the AI money lands first — everyone else in the map supplies or serves this layer."
         }
       ],
       "plain": "The AI processors themselves — GPUs and custom ASICs — plus the software ecosystems locked around them."
@@ -491,7 +540,8 @@
           "f": [
             "choke"
           ],
-          "d": "Broadcom (AVGO) Tomahawk 6 'Davisson' (102.4 Tb/s) + Jericho routing — dominant merchant switch silicon, ~$10B AI switch backlog; Nvidia Spectrum-X; Marvell (MRVL); Cisco Silicon One. Broadcom is the kingmaker of AI networking."
+          "d": "Broadcom (AVGO) Tomahawk 6 'Davisson' (102.4 Tb/s) + Jericho routing — dominant merchant switch silicon, ~$10B AI switch backlog; Nvidia Spectrum-X; Marvell (MRVL); Cisco Silicon One. Broadcom is the kingmaker of AI networking.",
+          "p": "The chips inside datacenter switches that direct traffic — a quiet Broadcom stronghold."
         },
         {
           "l": "Scale-up interconnect",
@@ -500,7 +550,8 @@
             "choke",
             "new"
           ],
-          "d": "Nvidia NVLink/NVSwitch — proprietary, high-margin, locks in the GPU fabric. UALink (AMD, Broadcom et al.) is the open challenger. Scale-up bandwidth is the new competitive battleground; Nvidia took a ~$2B stake in Marvell around NVLink Fusion."
+          "d": "Nvidia NVLink/NVSwitch — proprietary, high-margin, locks in the GPU fabric. UALink (AMD, Broadcom et al.) is the open challenger. Scale-up bandwidth is the new competitive battleground; Nvidia took a ~$2B stake in Marvell around NVLink Fusion.",
+          "p": "The ultra-fast wiring that lets GPUs inside one rack act as a single giant chip — Nvidia's NVLink moat."
         },
         {
           "l": "Scale-out fabric",
@@ -508,7 +559,8 @@
           "f": [
             "new"
           ],
-          "d": "Nvidia Quantum InfiniBand vs Ethernet (Ultra Ethernet Consortium). Ethernet gaining for the largest clusters; Arista (ANET) the Ethernet leader for AI back-end networks; Nvidia pushing Spectrum-X. InfiniBand retains a training-cluster niche."
+          "d": "Nvidia Quantum InfiniBand vs Ethernet (Ultra Ethernet Consortium). Ethernet gaining for the largest clusters; Arista (ANET) the Ethernet leader for AI back-end networks; Nvidia pushing Spectrum-X. InfiniBand retains a training-cluster niche.",
+          "p": "The network connecting racks to racks across the building — where an open standard (Ethernet) fights Nvidia's proprietary one."
         },
         {
           "l": "Connectivity silicon — retimers, AECs, DSP",
@@ -517,7 +569,8 @@
             "new",
             "gap"
           ],
-          "d": "Astera Labs (ALAB) — Aries PCIe/CXL retimers, Scorpio fabric switches, Taurus AECs; the AI-connectivity pure-play, targeting UALink in 2026. Credo (CRDO) — ZeroFlap active electrical cables dominant top-of-rack. Marvell/Broadcom optical DSPs. Signal integrity is a growing chokepoint."
+          "d": "Astera Labs (ALAB) — Aries PCIe/CXL retimers, Scorpio fabric switches, Taurus AECs; the AI-connectivity pure-play, targeting UALink in 2026. Credo (CRDO) — ZeroFlap active electrical cables dominant top-of-rack. Marvell/Broadcom optical DSPs. Signal integrity is a growing chokepoint.",
+          "p": "Small chips that keep signals clean over copper cables at extreme speeds — niche parts with big margins."
         },
         {
           "l": "Switch systems & routers",
@@ -525,7 +578,8 @@
           "f": [
             "geo"
           ],
-          "d": "Arista (ANET), Cisco (CSCO), Nvidia, Juniper (now HPE). White-box for hyperscalers built by Taiwan ODMs: Accton (2345.TW), Quanta, Foxconn; Celestica (CLS) ODM networking. White-box is the cost-down path for hyperscale fabrics."
+          "d": "Arista (ANET), Cisco (CSCO), Nvidia, Juniper (now HPE). White-box for hyperscalers built by Taiwan ODMs: Accton (2345.TW), Quanta, Foxconn; Celestica (CLS) ODM networking. White-box is the cost-down path for hyperscale fabrics.",
+          "p": "The finished network boxes — Arista, Cisco and the white-box makers."
         },
         {
           "l": "Smart NICs / DPUs",
@@ -533,7 +587,8 @@
           "f": [
             "new"
           ],
-          "d": "Nvidia BlueField DPU + ConnectX NIC; AMD Pensando; Intel IPU. Networking is moving into the server to feed GPUs directly and offload host CPUs — a fast-growing silicon socket."
+          "d": "Nvidia BlueField DPU + ConnectX NIC; AMD Pensando; Intel IPU. Networking is moving into the server to feed GPUs directly and offload host CPUs — a fast-growing silicon socket.",
+          "p": "Special network cards that move data straight into GPUs without bothering the main processor."
         },
         {
           "l": "Optical interconnect handoff",
@@ -542,7 +597,8 @@
             "choke",
             "cross"
           ],
-          "d": "Pluggable optical transceivers today; co-packaged optics (CPO) emerging. Optics is increasingly the power/bandwidth bottleneck of AI networking. Cross-link to Optical & Photonics."
+          "d": "Pluggable optical transceivers today; co-packaged optics (CPO) emerging. Optics is increasingly the power/bandwidth bottleneck of AI networking. Cross-link to Optical & Photonics.",
+          "p": "The point where electrical networking runs out of steam and light takes over — the bridge to the Optical vertical."
         },
         {
           "l": "End-use — AI cluster fabric",
@@ -550,7 +606,8 @@
           "f": [
             "cross"
           ],
-          "d": "Buyers: hyperscalers + neoclouds. Networking is ~10-15% of AI datacenter capex and rising as cluster sizes grow. Network topology and bandwidth directly cap effective compute. Agentic AI is a fresh demand driver — it generates ~25x the traffic of a chatbot (Cisco), ~80% of it 'east-west' (server-to-server); machine-to-machine traffic is forecast to grow from ~10 to ~537 EB/month by 2034 (Nokia), lifting intra-DC + DCI bandwidth beyond lumpy hyperscaler training orders. Cross-link to Accelerators and DC Infrastructure."
+          "d": "Buyers: hyperscalers + neoclouds. Networking is ~10-15% of AI datacenter capex and rising as cluster sizes grow. Network topology and bandwidth directly cap effective compute. Agentic AI is a fresh demand driver — it generates ~25x the traffic of a chatbot (Cisco), ~80% of it 'east-west' (server-to-server); machine-to-machine traffic is forecast to grow from ~10 to ~537 EB/month by 2034 (Nokia), lifting intra-DC + DCI bandwidth beyond lumpy hyperscaler training orders. Cross-link to Accelerators and DC Infrastructure.",
+          "p": "Why it matters: at 100,000-GPU scale, the network decides whether all those chips actually get used."
         }
       ],
       "plain": "The switches, optics and interconnects that fuse thousands of AI chips into one giant computer."
@@ -569,7 +626,8 @@
             "geo",
             "cross"
           ],
-          "d": "Taiwan dominates: Foxconn/Hon Hai (2317.TW), Quanta (2382.TW), Wiwynn (6669.TW — ~50% of hyperscale AI-server procurement), Wistron (3231.TW), Inventec (2356.TW), Gigabyte (2376.TW). US: Super Micro (SMCI), Dell (DELL), HPE. Cross-link to Accelerators (rack-scale integration)."
+          "d": "Taiwan dominates: Foxconn/Hon Hai (2317.TW), Quanta (2382.TW), Wiwynn (6669.TW — ~50% of hyperscale AI-server procurement), Wistron (3231.TW), Inventec (2356.TW), Gigabyte (2376.TW). US: Super Micro (SMCI), Dell (DELL), HPE. Cross-link to Accelerators (rack-scale integration).",
+          "p": "The Taiwanese firms that physically build the world's AI servers under contract — enormous revenue, thin margins."
         },
         {
           "l": "Power delivery — board to chip",
@@ -578,7 +636,8 @@
             "choke",
             "gap"
           ],
-          "d": "Delta Electronics (2308.TW — world-leading power supplies), Lite-On (2301.TW), Monolithic Power (MPWR — Nvidia's reference-design VRM incumbent), Vicor (VICR — factorized/vertical power), Renesas (GaN VRMs via Transphorm), Infineon. The 'thousand-amp problem': a Rubin Ultra GPU (~2,500W at ~0.7V) pulls ~3,500A, forcing dozens of multi-phase VRM channels — phase count quadrupled H100→Rubin Ultra. VRM content per GPU is among the fastest-growing semi sockets; PSU lead times stretched."
+          "d": "Delta Electronics (2308.TW — world-leading power supplies), Lite-On (2301.TW), Monolithic Power (MPWR — Nvidia's reference-design VRM incumbent), Vicor (VICR — factorized/vertical power), Renesas (GaN VRMs via Transphorm), Infineon. The 'thousand-amp problem': a Rubin Ultra GPU (~2,500W at ~0.7V) pulls ~3,500A, forcing dozens of multi-phase VRM channels — phase count quadrupled H100→Rubin Ultra. VRM content per GPU is among the fastest-growing semi sockets; PSU lead times stretched.",
+          "p": "Getting electricity from the wall down to the chip — power supplies and converters, upgraded for power-hungry AI racks."
         },
         {
           "l": "Power semiconductors — SiC/GaN (800V HVDC)",
@@ -588,7 +647,8 @@
             "new",
             "cross"
           ],
-          "d": "The 54V→800V HVDC rack transition (the only path to 600kW+ racks) takes wide-bandgap from ~0% to ~64% of rack power BOM: SiC for the front-end medium-voltage down-conversion, GaN for the high-frequency step-down. AI is 'inheriting' the EV/solar-validated SiC/GaN supply chain just as that demand softens. Pure-plays: Wolfspeed (WOLF — only 200mm + first 300mm SiC), Navitas (NVTS, GaN); broad-line: onsemi (ON), STMicro (STM), Infineon, ROHM, Renesas. Solid-state transformers (SST) — SiC-based, replacing century-old iron-core transformers (18-30mo lead times) — are the upstream inflection: Eaton, ABB, Hitachi Energy, GE Vernova racing for 2027 (private: Heron Power, DG Matrix). Cross-link to the grid/energy chain in the Hard Assets map."
+          "d": "The 54V→800V HVDC rack transition (the only path to 600kW+ racks) takes wide-bandgap from ~0% to ~64% of rack power BOM: SiC for the front-end medium-voltage down-conversion, GaN for the high-frequency step-down. AI is 'inheriting' the EV/solar-validated SiC/GaN supply chain just as that demand softens. Pure-plays: Wolfspeed (WOLF — only 200mm + first 300mm SiC), Navitas (NVTS, GaN); broad-line: onsemi (ON), STMicro (STM), Infineon, ROHM, Renesas. Solid-state transformers (SST) — SiC-based, replacing century-old iron-core transformers (18-30mo lead times) — are the upstream inflection: Eaton, ABB, Hitachi Energy, GE Vernova racing for 2027 (private: Heron Power, DG Matrix). Cross-link to the grid/energy chain in the Hard Assets map.",
+          "p": "A new class of power chips (silicon carbide, gallium nitride) needed as racks shift to 800-volt designs — inherited from the EV industry."
         },
         {
           "l": "Thermal — liquid cooling",
@@ -597,7 +657,8 @@
             "gap",
             "new"
           ],
-          "d": "Liquid-cooling inflection (~15% 2024 → ~76% of mix by 2026): Vertiv (VRT), Boyd, Asetek (ASTK.OL); Taiwan: Auras (3324.TWO), AVC / Asia Vital Components (3017.TW), Cooler Master. CDU (coolant distribution unit) capacity is the key bottleneck — market ~$1B→$7.7B. GB200 mandates liquid cooling."
+          "d": "Liquid-cooling inflection (~15% 2024 → ~76% of mix by 2026): Vertiv (VRT), Boyd, Asetek (ASTK.OL); Taiwan: Auras (3324.TWO), AVC / Asia Vital Components (3017.TW), Cooler Master. CDU (coolant distribution unit) capacity is the key bottleneck — market ~$1B→$7.7B. GB200 mandates liquid cooling.",
+          "p": "Water-cooling for chips too hot for fans — cold plates and coolant plumbing, growing at triple digits."
         },
         {
           "l": "Rack power & distribution",
@@ -606,7 +667,8 @@
             "gap",
             "cross"
           ],
-          "d": "Vertiv (VRT), Eaton (ETN), Schneider, ABB, Legrand. Rack densities hitting 100-130kW+ reshape distribution. Transformer + switchgear lead times are multi-year. Cross-link to the grid/electrical chain in the Hard Assets map."
+          "d": "Vertiv (VRT), Eaton (ETN), Schneider, ABB, Legrand. Rack densities hitting 100-130kW+ reshape distribution. Transformer + switchgear lead times are multi-year. Cross-link to the grid/electrical chain in the Hard Assets map.",
+          "p": "The building-level electrical gear: power strips, circuit breakers, backup batteries — boring, essential, sold out."
         },
         {
           "l": "Facility — datacenter build",
@@ -614,7 +676,8 @@
           "f": [
             "cross"
           ],
-          "d": "Hyperscaler self-build + colo: Digital Realty (DLR), Equinix (EQIX); developers Vantage, QTS; neoclouds CoreWeave (CRWV). The convexity is interconnect — Equinix Fabric + Digital Realty ServiceFabric (on-demand virtual interconnect); China colo VNET. Prefab modular DC. The constraint is increasingly power-grid access and permitting, not capital."
+          "d": "Hyperscaler self-build + colo: Digital Realty (DLR), Equinix (EQIX); developers Vantage, QTS; neoclouds CoreWeave (CRWV). The convexity is interconnect — Equinix Fabric + Digital Realty ServiceFabric (on-demand virtual interconnect); China colo VNET. Prefab modular DC. The constraint is increasingly power-grid access and permitting, not capital.",
+          "p": "The construction and real-estate layer: who builds and owns the datacenter shells."
         },
         {
           "l": "Onsite power & energy",
@@ -624,13 +687,15 @@
             "cross",
             "gap"
           ],
-          "d": "Power availability is the #1 constraint on the AI buildout (DCs ~4% of US electricity in 2026). Gas turbines (GE Vernova GEV), behind-the-meter gas, nuclear SMR/PPAs; generators Cummins (CMI), Caterpillar (CAT). The deepest cross-link into the energy supply chain (Hard Assets map)."
+          "d": "Power availability is the #1 constraint on the AI buildout (DCs ~4% of US electricity in 2026). Gas turbines (GE Vernova GEV), behind-the-meter gas, nuclear SMR/PPAs; generators Cummins (CMI), Caterpillar (CAT). The deepest cross-link into the energy supply chain (Hard Assets map).",
+          "p": "Where the electricity comes from: on-site gas turbines, nuclear power deals, backup generators."
         },
         {
           "l": "Management & orchestration SW",
           "r": "DCIM, workload orchestration, efficiency",
           "f": [],
-          "d": "DCIM, PUE optimization, GPU scheduling. Nvidia + hyperscaler software stacks. Less directly investable but central to utilization economics and effective cost per token."
+          "d": "DCIM, PUE optimization, GPU scheduling. Nvidia + hyperscaler software stacks. Less directly investable but central to utilization economics and effective cost per token.",
+          "p": "Software that runs the facility itself — monitoring power, cooling and workloads."
         },
         {
           "l": "End-use — cloud capacity",
@@ -638,7 +703,8 @@
           "f": [
             "cross"
           ],
-          "d": "Hyperscaler capex (MSFT/GOOGL/AMZN/META) + neoclouds (CoreWeave, Nebius, Crusoe) + sovereign AI. ~$300-400B/yr is the demand engine for the entire AI hardware stack. Cross-link to Accelerators and Networking."
+          "d": "Hyperscaler capex (MSFT/GOOGL/AMZN/META) + neoclouds (CoreWeave, Nebius, Crusoe) + sovereign AI. ~$300-400B/yr is the demand engine for the entire AI hardware stack. Cross-link to Accelerators and Networking.",
+          "p": "Why it matters: electricity and cooling, not chips, are becoming the binding constraint on AI's growth."
         }
       ],
       "plain": "Everything an AI datacenter needs around the silicon: power, cooling, servers, grid connections and electricity."
@@ -655,7 +721,8 @@
           "f": [
             "choke"
           ],
-          "d": "Indium-phosphide and silicon-photonics design. Coherent (COHR), Lumentum (LITE), Marvell (Inphi), Broadcom. Vertically integrated laser/chip makers hold the edge as line rates climb to 1.6T and beyond."
+          "d": "Indium-phosphide and silicon-photonics design. Coherent (COHR), Lumentum (LITE), Marvell (Inphi), Broadcom. Vertically integrated laser/chip makers hold the edge as line rates climb to 1.6T and beyond.",
+          "p": "The research layer for sending data as light — lasers, light detectors, and light-guiding chips."
         },
         {
           "l": "Lasers & optical chips (EML)",
@@ -664,7 +731,8 @@
             "choke",
             "geo"
           ],
-          "d": "Fewer than five firms make EMLs at scale: Lumentum (LITE), Coherent (COHR), Mitsubishi Electric (6503.T), Sumitomo (Japan), Broadcom. Nvidia committed ~$4B (~$2B each to Lumentum + Coherent) in 2026 to lock laser supply; EML lead times stretch past 2027 for others. The deepest optical chokepoint."
+          "d": "Fewer than five firms make EMLs at scale: Lumentum (LITE), Coherent (COHR), Mitsubishi Electric (6503.T), Sumitomo (Japan), Broadcom. Nvidia committed ~$4B (~$2B each to Lumentum + Coherent) in 2026 to lock laser supply; EML lead times stretch past 2027 for others. The deepest optical chokepoint.",
+          "p": "The tiny lasers at the heart of every optical cable — genuinely hard to make well, and demand is exploding."
         },
         {
           "l": "Optical DSP / driver",
@@ -673,7 +741,8 @@
             "choke",
             "new"
           ],
-          "d": "Marvell (MRVL) + Broadcom (AVGO) dominate PAM4 optical DSPs — the brains of a transceiver — moving to 200G/lane. Linear-drive optics (LPO) and CPO threaten to disrupt the DSP socket. This is where US silicon captures value inside China-assembled modules."
+          "d": "Marvell (MRVL) + Broadcom (AVGO) dominate PAM4 optical DSPs — the brains of a transceiver — moving to 200G/lane. Linear-drive optics (LPO) and CPO threaten to disrupt the DSP socket. This is where US silicon captures value inside China-assembled modules.",
+          "p": "The chip that converts electrical signals to optical ones and back — a duopoly-ish specialty."
         },
         {
           "l": "Transceiver module assembly",
@@ -682,7 +751,8 @@
             "choke",
             "geo"
           ],
-          "d": "China dominates assembly (~63% global): InnoLight (300308.SZ — world #1), Eoptolink (300502.SZ) — together ~60% of Nvidia 800G; Accelink (002281.SZ). Contract manufacturer Fabrinet (FN, Thailand) builds for Nvidia/Cisco/Coherent (first $1B quarter). Module assembly is a quiet China geopolitical exposure."
+          "d": "China dominates assembly (~63% global): InnoLight (300308.SZ — world #1), Eoptolink (300502.SZ) — together ~60% of Nvidia 800G; Accelink (002281.SZ). Contract manufacturer Fabrinet (FN, Thailand) builds for Nvidia/Cisco/Coherent (first $1B quarter). Module assembly is a quiet China geopolitical exposure.",
+          "p": "Assembling lasers and chips into the plug-in optical modules datacenters buy by the millions."
         },
         {
           "l": "Co-packaged optics (CPO)",
@@ -692,7 +762,8 @@
             "new",
             "cross"
           ],
-          "d": "The 2026 inflection: Nvidia ships commercial CPO in 2026 — Quantum-X (InfiniBand, 1H) + Spectrum-X (Ethernet, 2H, 102.4 Tb/s) on TSMC COUPE silicon-photonics packaging; Broadcom Tomahawk 6 'Davisson' CPO (already shipped 3 generations to Meta). Cuts per-port power ~30W→~9W. TSMC is the silicon-photonics packaging chokepoint. Cross-link to Packaging and Foundry."
+          "d": "The 2026 inflection: Nvidia ships commercial CPO in 2026 — Quantum-X (InfiniBand, 1H) + Spectrum-X (Ethernet, 2H, 102.4 Tb/s) on TSMC COUPE silicon-photonics packaging; Broadcom Tomahawk 6 'Davisson' CPO (already shipped 3 generations to Meta). Cuts per-port power ~30W→~9W. TSMC is the silicon-photonics packaging chokepoint. Cross-link to Packaging and Foundry.",
+          "p": "The next leap: building the optics directly into the switch or GPU package instead of plugging them in — now entering volume production."
         },
         {
           "l": "PIC enablers — substrates & equipment",
@@ -702,7 +773,8 @@
             "new",
             "cross"
           ],
-          "d": "Pluggables and CPO consume the same upstream, so own the enablers: SOI wafers — Soitec (SOI.PA, ~80%; TSMC COUPE runs on SOI; Shin-Etsu licenses its Smart Cut); III-V epi via MOCVD — AIXTRON (AIXA.DE, 70-90% + >85% GaN) and Veeco (VECO); wafer bonding / photomask cleaning + laser-to-wafer heterogeneous integration — SUSS MicroTec (SMHN.DE, ~90% mask-clean at TSMC); InP fabs/substrates — Nokia (NOK — only vertically-integrated InP fab in the West, ex-Infinera), Sumitomo, Furukawa. The fiber-array unit (FAU) for COUPE: Himax (HIMX, nanoimprint optics blocks) + FOCI (3363.TWO). Pluggable-optics TAM ~$15B (2025) → ~$34B by 2030 (+~$9B CPO). Cross-link to Foundry/Packaging."
+          "d": "Pluggables and CPO consume the same upstream, so own the enablers: SOI wafers — Soitec (SOI.PA, ~80%; TSMC COUPE runs on SOI; Shin-Etsu licenses its Smart Cut); III-V epi via MOCVD — AIXTRON (AIXA.DE, 70-90% + >85% GaN) and Veeco (VECO); wafer bonding / photomask cleaning + laser-to-wafer heterogeneous integration — SUSS MicroTec (SMHN.DE, ~90% mask-clean at TSMC); InP fabs/substrates — Nokia (NOK — only vertically-integrated InP fab in the West, ex-Infinera), Sumitomo, Furukawa. The fiber-array unit (FAU) for COUPE: Himax (HIMX, nanoimprint optics blocks) + FOCI (3363.TWO). Pluggable-optics TAM ~$15B (2025) → ~$34B by 2030 (+~$9B CPO). Cross-link to Foundry/Packaging.",
+          "p": "The hidden picks-and-shovels: the special wafers and one-of-a-kind machines needed to make photonic chips at all."
         },
         {
           "l": "Optical connectivity & fiber",
@@ -710,7 +782,8 @@
           "f": [
             "cross"
           ],
-          "d": "Corning (GLW) fiber + connectivity; US Conec, Senko — connectors; Japan fiber/connector majors Furukawa (5801.T) and Sumitomo Electric (5802.T) — MT/MPO ferrules, rollable-ribbon cable, DFB laser chips and CPO external-light-source (ELS) modules; Taiwan/China cabling. AI clusters need massive intra-DC fiber. Cross-link to fiber-optic glass (materials) in the Hard Assets map."
+          "d": "Corning (GLW) fiber + connectivity; US Conec, Senko — connectors; Japan fiber/connector majors Furukawa (5801.T) and Sumitomo Electric (5802.T) — MT/MPO ferrules, rollable-ribbon cable, DFB laser chips and CPO external-light-source (ELS) modules; Taiwan/China cabling. AI clusters need massive intra-DC fiber. Cross-link to fiber-optic glass (materials) in the Hard Assets map.",
+          "p": "The physical fiber, connectors and cabling that carry the light — more of it per GPU every generation."
         },
         {
           "l": "Optical switching (OCS)",
@@ -719,7 +792,8 @@
             "new",
             "cross"
           ],
-          "d": "Google's MEMS-based OCS in TPU pods cuts network cost/power at scale — Lumentum (LITE) is the OCS system supplier (R300/R64, Project Apollo); the MEMS mirror chips are fabbed by Silex Microsystems (Sai MicroElectronics 300456.SZ), with Huber+Suhner (HUBN.SW) another key player. Google is driving an OCP standard for OCS. A structural alternative to all-electrical fabrics that grows with cluster size."
+          "d": "Google's MEMS-based OCS in TPU pods cuts network cost/power at scale — Lumentum (LITE) is the OCS system supplier (R300/R64, Project Apollo); the MEMS mirror chips are fabbed by Silex Microsystems (Sai MicroElectronics 300456.SZ), with Huber+Suhner (HUBN.SW) another key player. Google is driving an OCP standard for OCS. A structural alternative to all-electrical fabrics that grows with cluster size.",
+          "p": "Switches that redirect beams of light directly, without converting back to electricity — Google's quiet advantage."
         },
         {
           "l": "End-use — AI network optics",
@@ -727,7 +801,8 @@
           "f": [
             "cross"
           ],
-          "d": "Optics content per GPU is rising sharply (multiple 800G/1.6T ports per accelerator); 800G+ shipments ~24M (2025) → ~63M (2026), AI optical market ~$16.5B→$26B. Google's TPU build-out is a fresh driver — its internal TPU forecast was revised ~2M→~4M units, helping push optical-module demand from ~3M (2025) toward ~20M (2026), with Google alone ~6-10M via TPU v7; the 800G→1.6T transition is being pulled forward. Component beneficiaries: MACOM (MTSI — 200G photodiodes) and SiTime (SITM — MEMS timing, ~$2/module at 1.6T). Buyers: hyperscalers via switch/server vendors. Cross-link to Networking."
+          "d": "Optics content per GPU is rising sharply (multiple 800G/1.6T ports per accelerator); 800G+ shipments ~24M (2025) → ~63M (2026), AI optical market ~$16.5B→$26B. Google's TPU build-out is a fresh driver — its internal TPU forecast was revised ~2M→~4M units, helping push optical-module demand from ~3M (2025) toward ~20M (2026), with Google alone ~6-10M via TPU v7; the 800G→1.6T transition is being pulled forward. Component beneficiaries: MACOM (MTSI — 200G photodiodes) and SiTime (SITM — MEMS timing, ~$2/module at 1.6T). Buyers: hyperscalers via switch/server vendors. Cross-link to Networking.",
+          "p": "Why it matters: every jump in AI cluster size means disproportionately more optics — content per GPU keeps rising."
         }
       ],
       "plain": "Moving data with light instead of copper — transceivers, lasers, and the co-packaged-optics shift now in volume."
@@ -745,7 +820,8 @@
             "new",
             "cross"
           ],
-          "d": "Humanoid programs drive the new BOM (~28-40 actuators/robot): Tesla Optimus, Figure AI, Agility, Apptronik, Boston Dynamics (Hyundai 005380.KS), plus China — Unitree (IPO expected 2026; G1 ~$16K), UBTech (9880.HK), AgiBot, Fourier. Sanhua Intelligent (002050.SZ) and Tuopu Group (601689.SH) are Tier-1 actuator suppliers in Tesla's Optimus 'T-Chain' ($685M Sanhua order Oct 2025). Cross-link to Sensing and Accelerators (the robot brain)."
+          "d": "Humanoid programs drive the new BOM (~28-40 actuators/robot): Tesla Optimus, Figure AI, Agility, Apptronik, Boston Dynamics (Hyundai 005380.KS), plus China — Unitree (IPO expected 2026; G1 ~$16K), UBTech (9880.HK), AgiBot, Fourier. Sanhua Intelligent (002050.SZ) and Tuopu Group (601689.SH) are Tier-1 actuator suppliers in Tesla's Optimus 'T-Chain' ($685M Sanhua order Oct 2025). Cross-link to Sensing and Accelerators (the robot brain).",
+          "p": "The engineered 'muscle units' of a robot — motor, gearbox and sensors packaged into each joint."
         },
         {
           "l": "Harmonic / strain-wave reducers",
@@ -754,7 +830,8 @@
             "choke",
             "geo"
           ],
-          "d": "Harmonic Drive Systems (6324.T) — Japan's historic near-monopoly in strain-wave reducers, designed into Western humanoids. China localizing fast: Leaderdrive a.k.a. Green Harmonic (绿的谐波 — 688017.SH, Suzhou, STAR-listed; ~25%+ China share, targeting Optimus supply via a 500K-unit/yr plant), Han's (002008.SZ). The reducer is the costliest part of a robot joint."
+          "d": "Harmonic Drive Systems (6324.T) — Japan's historic near-monopoly in strain-wave reducers, designed into Western humanoids. China localizing fast: Leaderdrive a.k.a. Green Harmonic (绿的谐波 — 688017.SH, Suzhou, STAR-listed; ~25%+ China share, targeting Optimus supply via a 500K-unit/yr plant), Han's (002008.SZ). The reducer is the costliest part of a robot joint.",
+          "p": "The precision gears in most robot joints — a near-monopoly of two Japanese firms, and the classic robotics chokepoint."
         },
         {
           "l": "Cycloidal / RV reducers",
@@ -763,7 +840,8 @@
             "choke",
             "geo"
           ],
-          "d": "Nabtesco (6268.T) ~60% of precision RV reducers for mid-large industrial joints; Sumitomo Heavy (6302.T) Fine Cyclo; Spinea (Timken TKR). China: Shuanghuan Driveline (002472.SZ), Zhongda Leader, Qinchuan. Planetary gearboxes (the cheaper rotary workhorse): Apex Dynamics (4583.TW), Hota (1536.TW), ZD Leader (603667.SH). Japanese dominance here mirrors its strongholds in WFE chemicals and precision optics."
+          "d": "Nabtesco (6268.T) ~60% of precision RV reducers for mid-large industrial joints; Sumitomo Heavy (6302.T) Fine Cyclo; Spinea (Timken TKR). China: Shuanghuan Driveline (002472.SZ), Zhongda Leader, Qinchuan. Planetary gearboxes (the cheaper rotary workhorse): Apex Dynamics (4583.TW), Hota (1536.TW), ZD Leader (603667.SH). Japanese dominance here mirrors its strongholds in WFE chemicals and precision optics.",
+          "p": "The heavy-duty version of those gears for big, strong joints."
         },
         {
           "l": "Ball / planetary roller screws",
@@ -773,7 +851,8 @@
             "gap",
             "new"
           ],
-          "d": "Planetary roller screws are an Optimus-driven bottleneck: GSA (Germany, primary Optimus supplier), NSK (6471.T), THK (6481.T), Rollvis (Swiss), Ewellix (Schaeffler SHA.DE). China second-sourcing: Ningbo Shuanglin (300100.SZ — scaling to ~300K/yr for Optimus), Shanghai Beite (603009.SH — ¥1.85bn roller-screw plant), Hengli Hydraulics (601100.SH), Hangzhou Xinjian, Wuzhou Xinchun (Thailand plant ~2026); SKF (SKFB.SS). Few makers can produce at humanoid volume/cost."
+          "d": "Planetary roller screws are an Optimus-driven bottleneck: GSA (Germany, primary Optimus supplier), NSK (6471.T), THK (6481.T), Rollvis (Swiss), Ewellix (Schaeffler SHA.DE). China second-sourcing: Ningbo Shuanglin (300100.SZ — scaling to ~300K/yr for Optimus), Shanghai Beite (603009.SH — ¥1.85bn roller-screw plant), Hengli Hydraulics (601100.SH), Hangzhou Xinjian, Wuzhou Xinchun (Thailand plant ~2026); SKF (SKFB.SS). Few makers can produce at humanoid volume/cost.",
+          "p": "The screw mechanisms that turn spinning into pushing — the hardest-to-make part in a humanoid, and its cost bottleneck."
         },
         {
           "l": "Motors — frameless / servo / BLDC",
@@ -781,7 +860,8 @@
           "f": [
             "geo"
           ],
-          "d": "Frameless torque motors: Kollmorgen / Allied Motion (now Regal Rexnord RRX), Allient (ALNT), Nidec (6594.T), Moog; Wolong Electric (600580.SH) high-power motors (China). Schaeffler (SHA.DE) sells a full joint module (gear+bearing+motor), courting Figure/Agility. China motion-control: Inovance (300124.SZ — vertically integrating motors, drives, screws for humanoids), Estun (002747.SZ), Leadshine. Inovance is China's motion-control champion scaling into humanoids."
+          "d": "Frameless torque motors: Kollmorgen / Allied Motion (now Regal Rexnord RRX), Allient (ALNT), Nidec (6594.T), Moog; Wolong Electric (600580.SH) high-power motors (China). Schaeffler (SHA.DE) sells a full joint module (gear+bearing+motor), courting Figure/Agility. China motion-control: Inovance (300124.SZ — vertically integrating motors, drives, screws for humanoids), Estun (002747.SZ), Leadshine. Inovance is China's motion-control champion scaling into humanoids.",
+          "p": "The electric motors doing the actual work in each joint."
         },
         {
           "l": "Drives, encoders & motion control",
@@ -789,7 +869,8 @@
           "f": [
             "choke"
           ],
-          "d": "Encoders: Renishaw (RSW.L), Heidenhain (Germany), Nidec-Tosok. Servo drives: Yaskawa (6506.T), Inovance, Estun. Precision encoders and joint torque sensing are an under-appreciated robotics chokepoint enabling compliant control."
+          "d": "Encoders: Renishaw (RSW.L), Heidenhain (Germany), Nidec-Tosok. Servo drives: Yaskawa (6506.T), Inovance, Estun. Precision encoders and joint torque sensing are an under-appreciated robotics chokepoint enabling compliant control.",
+          "p": "The electronics telling each motor exactly where it is and how hard it's pushing."
         },
         {
           "l": "Industrial robot arms (incumbent base)",
@@ -797,7 +878,8 @@
           "f": [
             "geo"
           ],
-          "d": "The 'Big Four': Fanuc (6954.T), Yaskawa (6506.T) — Japan; ABB (ABBN.SW); KUKA (Midea 000333.SZ — China-owned). Other Japan arm makers: Kawasaki Heavy (7012.T), Seiko Epson (6724.T — #1 SCARA), Denso, Nachi-Fujikoshi. Cobots/AMRs: Universal Robots + MiR (Teradyne TER), Doosan Robotics (454910.KS, Korea). China's Estun (002747.SZ), Inovance, JAKA, Efort rising fast in cobots/industrial — domestic share climbing."
+          "d": "The 'Big Four': Fanuc (6954.T), Yaskawa (6506.T) — Japan; ABB (ABBN.SW); KUKA (Midea 000333.SZ — China-owned). Other Japan arm makers: Kawasaki Heavy (7012.T), Seiko Epson (6724.T — #1 SCARA), Denso, Nachi-Fujikoshi. Cobots/AMRs: Universal Robots + MiR (Teradyne TER), Doosan Robotics (454910.KS, Korea). China's Estun (002747.SZ), Inovance, JAKA, Efort rising fast in cobots/industrial — domestic share climbing.",
+          "p": "The existing industrial-robot giants (arms in car factories) — the incumbent base humanoids build on."
         },
         {
           "l": "Humanoid system integration",
@@ -806,7 +888,8 @@
             "new",
             "cross"
           ],
-          "d": "Listed: Tesla Optimus (TSLA), Hyundai/Boston Dynamics (005380.KS — Atlas), UBTech (9880.HK), XPeng IRON (XPEV), Xiaomi CyberOne (1810.HK), Rainbow Robotics (277810.KQ — Samsung-backed HUBO). Private leaders: Figure, Agility, Apptronik, Unitree (cost leader; IPO expected 2026), AgiBot, Physical Intelligence, Fourier, 1X. China's vertically integrated, low-cost actuator supply chain is the key competitive variable — Optimus Gen-3 reportedly ~70% China-sourced. Cross-link to Sensing/Vision and the AI compute 'brain'."
+          "d": "Listed: Tesla Optimus (TSLA), Hyundai/Boston Dynamics (005380.KS — Atlas), UBTech (9880.HK), XPeng IRON (XPEV), Xiaomi CyberOne (1810.HK), Rainbow Robotics (277810.KQ — Samsung-backed HUBO). Private leaders: Figure, Agility, Apptronik, Unitree (cost leader; IPO expected 2026), AgiBot, Physical Intelligence, Fourier, 1X. China's vertically integrated, low-cost actuator supply chain is the key competitive variable — Optimus Gen-3 reportedly ~70% China-sourced. Cross-link to Sensing/Vision and the AI compute 'brain'.",
+          "p": "The companies assembling complete humanoid robots — Tesla's Optimus and its Chinese challengers."
         }
       ],
       "plain": "The motors, reducers and screws that make robots move — the 'muscles' of the humanoid build-out."
@@ -825,7 +908,8 @@
             "new",
             "cross"
           ],
-          "d": "Nvidia Jetson Thor (Blackwell, ~2,070 FP4 TFLOPS, GA 2025 — adopted by Unitree, UBTech, AgiBot); Qualcomm robotics; hyperscaler edge. Embodied-AI foundation models: Nvidia GR00T, Physical Intelligence, Skild. The brain links robotics to AI Accelerators."
+          "d": "Nvidia Jetson Thor (Blackwell, ~2,070 FP4 TFLOPS, GA 2025 — adopted by Unitree, UBTech, AgiBot); Qualcomm robotics; hyperscaler edge. Embodied-AI foundation models: Nvidia GR00T, Physical Intelligence, Skild. The brain links robotics to AI Accelerators.",
+          "p": "The onboard computer running a robot's AI — Nvidia again, plus a few edge-chip specialists."
         },
         {
           "l": "Machine vision cameras",
@@ -834,7 +918,8 @@
             "choke",
             "geo"
           ],
-          "d": "Image sensors: Sony (6758.T — dominant CMOS), Omnivision (Will Semi 603501.SH), onsemi (ON). Industrial cameras: Cognex (CGNX), Basler, Keyence (6861.T — Japan sensor powerhouse). Sony's sensor lead is a Japanese chokepoint."
+          "d": "Image sensors: Sony (6758.T — dominant CMOS), Omnivision (Will Semi 603501.SH), onsemi (ON). Industrial cameras: Cognex (CGNX), Basler, Keyence (6861.T — Japan sensor powerhouse). Sony's sensor lead is a Japanese chokepoint.",
+          "p": "The industrial eyes: cameras built for machines rather than people — Sony rules the image sensors underneath."
         },
         {
           "l": "Lidar & depth sensing",
@@ -843,7 +928,8 @@
             "geo",
             "new"
           ],
-          "d": "China cost leaders: Hesai (HSAI — >1.6M units 2025, Nvidia robotics partner), RoboSense (2498.HK); US: Ouster (OUST), Luminar (LAZR — auto-focused, stressed). Structured-light/ToF depth: Orbbec (688322.SH). Lidar receivers/photodetectors: Hamamatsu (6965.T). China dominates low-cost lidar — a fast-commoditizing layer."
+          "d": "China cost leaders: Hesai (HSAI — >1.6M units 2025, Nvidia robotics partner), RoboSense (2498.HK); US: Ouster (OUST), Luminar (LAZR — auto-focused, stressed). Structured-light/ToF depth: Orbbec (688322.SH). Lidar receivers/photodetectors: Hamamatsu (6965.T). China dominates low-cost lidar — a fast-commoditizing layer.",
+          "p": "Laser-based 3D vision so robots know how far away everything is."
         },
         {
           "l": "Force / torque & tactile sensing",
@@ -853,13 +939,15 @@
             "gap",
             "new"
           ],
-          "d": "6-axis F/T sensors: ATI (Novanta NOVT), Bota Systems, Sunrise Instruments (China), Keli Sensing (603662.SH — China's largest sensor maker moving into multi-axis torque). Amazon's Vulcan (Universal Robots arm + Teradyne) is the first pick/stow robot with a real sense of touch — proof tactile sensing is arriving. Tactile / e-skin is still an emerging gap (mostly startups). A genuine humanoid bottleneck."
+          "d": "6-axis F/T sensors: ATI (Novanta NOVT), Bota Systems, Sunrise Instruments (China), Keli Sensing (603662.SH — China's largest sensor maker moving into multi-axis torque). Amazon's Vulcan (Universal Robots arm + Teradyne) is the first pick/stow robot with a real sense of touch — proof tactile sensing is arriving. Tactile / e-skin is still an emerging gap (mostly startups). A genuine humanoid bottleneck.",
+          "p": "The sense of touch: measuring force and pressure so a robot can grip an egg without crushing it — still an unsolved, wide-open market."
         },
         {
           "l": "IMUs & motion sensors",
           "r": "Inertial measurement for balance",
           "f": [],
-          "d": "Bosch (private), TDK InvenSense (6762.T — ICM-42688 widely used in humanoids), STMicro (STM), Analog Devices (ADI). MEMS IMUs ride consumer-electronics scale; balance/locomotion quality depends on them."
+          "d": "Bosch (private), TDK InvenSense (6762.T — ICM-42688 widely used in humanoids), STMicro (STM), Analog Devices (ADI). MEMS IMUs ride consumer-electronics scale; balance/locomotion quality depends on them.",
+          "p": "The inner ear: motion sensors that keep a walking robot balanced."
         },
         {
           "l": "Encoders & joint sensing",
@@ -867,7 +955,8 @@
           "f": [
             "cross"
           ],
-          "d": "Overlaps Actuators — magnetic/optical encoders (Renishaw, AMS, Heidenhain, Melexis MELE.BR). Joint torque sensing is key to safe, compliant control and is co-designed with the actuator."
+          "d": "Overlaps Actuators — magnetic/optical encoders (Renishaw, AMS, Heidenhain, Melexis MELE.BR). Joint torque sensing is key to safe, compliant control and is co-designed with the actuator.",
+          "p": "Tiny sensors in each joint reporting its exact position thousands of times a second."
         },
         {
           "l": "Sensor fusion & perception SW",
@@ -875,7 +964,8 @@
           "f": [
             "new"
           ],
-          "d": "VSLAM, perception stacks, sim-to-real training (Nvidia Isaac / Omniverse). The software that makes sensing useful — increasingly bundled with the compute platform and the foundation model."
+          "d": "VSLAM, perception stacks, sim-to-real training (Nvidia Isaac / Omniverse). The software that makes sensing useful — increasingly bundled with the compute platform and the foundation model.",
+          "p": "The software layer that fuses all the sensors into one picture of the world."
         },
         {
           "l": "End-use — autonomy & manipulation",
@@ -883,7 +973,8 @@
           "f": [
             "cross"
           ],
-          "d": "Humanoids, AMRs (warehouse), surgical/medical robotics (Intuitive ISRG). Sensing quality gates real-world deployment. Cross-link to Actuators and the AI compute brain."
+          "d": "Humanoids, AMRs (warehouse), surgical/medical robotics (Intuitive ISRG). Sensing quality gates real-world deployment. Cross-link to Actuators and the AI compute brain.",
+          "p": "Why it matters: robots only become useful when they can perceive — sensing is the gate on the whole robotics story."
         }
       ],
       "plain": "The cameras, force and touch sensors that let robots and machines perceive the physical world."
@@ -901,7 +992,8 @@
             "choke",
             "new"
           ],
-          "d": "The hardest AR bottleneck — tiny, bright, high-PPI displays. Competing tech: microLED (brightest, hardest to make), OLED-on-silicon (OLEDoS), LCoS, laser beam scanning. No clear winner yet; the make-or-break component alongside the waveguide."
+          "d": "The hardest AR bottleneck — tiny, bright, high-PPI displays. Competing tech: microLED (brightest, hardest to make), OLED-on-silicon (OLEDoS), LCoS, laser beam scanning. No clear winner yet; the make-or-break component alongside the waveguide.",
+          "p": "The race to build screens small and bright enough to sit an inch from your eye — no winner yet."
         },
         {
           "l": "microLED micro-displays",
@@ -911,7 +1003,8 @@
             "gap",
             "geo"
           ],
-          "d": "JBD / Jade Bird Display (China — dominant AR microLED, 0.3in monochrome, full-color sampling), Porotech (UK), AUO (2409.TW), Playnitride (Taiwan), ams OSRAM (AMS.SW), Raysolve (China). Mass-transfer/efficiency yield is unsolved — brightest option for daylight AR but lowest yield. Taiwan + China + UK lead."
+          "d": "JBD / Jade Bird Display (China — dominant AR microLED, 0.3in monochrome, full-color sampling), Porotech (UK), AUO (2409.TW), Playnitride (Taiwan), ams OSRAM (AMS.SW), Raysolve (China). Mass-transfer/efficiency yield is unsolved — brightest option for daylight AR but lowest yield. Taiwan + China + UK lead.",
+          "p": "Microscopic LED screens — the brightest, most promising tech, but fiendishly hard to manufacture."
         },
         {
           "l": "OLEDoS micro-displays",
@@ -919,7 +1012,8 @@
           "f": [
             "geo"
           ],
-          "d": "Sony (6758.T — Apple Vision Pro supplier; 1.3in 4K, 0.44in FHD panels), BOE (000725.SZ China — ~400K-nit microLED in 2025 portfolio), SeeYa (China), eMagin (Samsung Display). Korea/Japan/China display muscle; powers premium MR headsets."
+          "d": "Sony (6758.T — Apple Vision Pro supplier; 1.3in 4K, 0.44in FHD panels), BOE (000725.SZ China — ~400K-nit microLED in 2025 portfolio), SeeYa (China), eMagin (Samsung Display). Korea/Japan/China display muscle; powers premium MR headsets.",
+          "p": "OLED screens shrunk onto silicon chips — today's premium headset displays (Apple Vision Pro uses these)."
         },
         {
           "l": "LCoS & laser scanning",
@@ -927,7 +1021,8 @@
           "f": [
             "geo"
           ],
-          "d": "Himax (HIMX — high-contrast LCoS), Omnivision (Will Semi 603501.SH — LCoS panel inside Meta Ray-Ban Display), Compound Photonics, MicroVision (MVIS — laser beam scanning). LCoS is mature and lower-cost for waveguide AR; Himax is a Taiwan-listed pure-play exposure."
+          "d": "Himax (HIMX — high-contrast LCoS), Omnivision (Will Semi 603501.SH — LCoS panel inside Meta Ray-Ban Display), Compound Photonics, MicroVision (MVIS — laser beam scanning). LCoS is mature and lower-cost for waveguide AR; Himax is a Taiwan-listed pure-play exposure.",
+          "p": "Older projector technologies still competing where cost matters."
         },
         {
           "l": "Light engine & projector module",
@@ -937,7 +1032,8 @@
             "new",
             "geo"
           ],
-          "d": "The integrated module that injects light into the waveguide. Goertek (002241.SZ) built the Ray-Ban Display projection engine — a key China assembly chokepoint. Miniaturization + efficiency is the system-level challenge."
+          "d": "The integrated module that injects light into the waveguide. Goertek (002241.SZ) built the Ray-Ban Display projection engine — a key China assembly chokepoint. Miniaturization + efficiency is the system-level challenge.",
+          "p": "The complete tiny projector: display plus lenses plus lighting, packaged to fit in a glasses arm."
         },
         {
           "l": "Display driver IC",
@@ -945,7 +1041,8 @@
           "f": [
             "cross"
           ],
-          "d": "Himax (HIMX), Novatek (3034.TW), Raydium (3592.TWO) — Taiwan dominates display driver ICs. Cross-link to Foundry (driver ICs fabbed at UMC/TSMC mature nodes)."
+          "d": "Himax (HIMX), Novatek (3034.TW), Raydium (3592.TWO) — Taiwan dominates display driver ICs. Cross-link to Foundry (driver ICs fabbed at UMC/TSMC mature nodes).",
+          "p": "The driver chips that control these tiny displays."
         },
         {
           "l": "Backplane (silicon) fabrication",
@@ -953,7 +1050,8 @@
           "f": [
             "cross"
           ],
-          "d": "microLED/OLEDoS sit on a CMOS backplane fabbed at foundries (TSMC, UMC, X-Fab). Links the display chain back into the semiconductor stack. Cross-link to Foundry."
+          "d": "microLED/OLEDoS sit on a CMOS backplane fabbed at foundries (TSMC, UMC, X-Fab). Links the display chain back into the semiconductor stack. Cross-link to Foundry.",
+          "p": "The silicon wafers these micro-displays are built on — made in regular chip fabs."
         },
         {
           "l": "End-use — AR/VR/MR headsets",
@@ -961,7 +1059,8 @@
           "f": [
             "cross"
           ],
-          "d": "Apple Vision Pro, Meta Quest, Meta Orion (microLED), smart glasses. Display is the gating cost/quality component. Cross-link to AR Optics & Systems — the waveguide the display feeds."
+          "d": "Apple Vision Pro, Meta Quest, Meta Orion (microLED), smart glasses. Display is the gating cost/quality component. Cross-link to AR Optics & Systems — the waveguide the display feeds.",
+          "p": "Why it matters: the display is the make-or-break component deciding whether AR glasses ever go mainstream."
         }
       ],
       "plain": "The tiny projectors and micro-displays that would put a screen inside AR glasses — still an open technology race."
@@ -979,7 +1078,8 @@
             "choke",
             "new"
           ],
-          "d": "How to deliver the image in a glasses form factor: diffractive/reflective waveguides (AR), pancake optics (VR/MR), birdbath (cheaper AR). Waveguide efficiency + manufacturability is the core unsolved AR problem alongside displays."
+          "d": "How to deliver the image in a glasses form factor: diffractive/reflective waveguides (AR), pancake optics (VR/MR), birdbath (cheaper AR). Waveguide efficiency + manufacturability is the core unsolved AR problem alongside displays.",
+          "p": "Deciding how to float a digital image over the real world — several competing optical designs, none perfect yet."
         },
         {
           "l": "Waveguide combiners",
@@ -988,7 +1088,8 @@
             "choke",
             "gap"
           ],
-          "d": "Reflective/geometric: Lumus (Israel — inside the $799 Meta Ray-Ban Display, launched Sept 2025). Diffractive: Dispelix (Finland, polymer waveguides w/ Mitsui Chemicals), DigiLens, WaveOptics (Snap-owned), Vuzix (VUZI — OEM maker, acquired ex-Google waveguide lab 2025). Low efficiency, rainbow artifacts and yield make this a deep chokepoint."
+          "d": "Reflective/geometric: Lumus (Israel — inside the $799 Meta Ray-Ban Display, launched Sept 2025). Diffractive: Dispelix (Finland, polymer waveguides w/ Mitsui Chemicals), DigiLens, WaveOptics (Snap-owned), Vuzix (VUZI — OEM maker, acquired ex-Google waveguide lab 2025). Low efficiency, rainbow artifacts and yield make this a deep chokepoint.",
+          "p": "The see-through lens that bends projected light into your eye — the defining component of true AR glasses."
         },
         {
           "l": "High-index substrates",
@@ -998,7 +1099,8 @@
             "geo",
             "cross"
           ],
-          "d": "High-refractive-index glass: Corning (GLW), Schott (Germany — Ray-Ban Display waveguide glass), Ohara (5218.T), Hoya (7741.T). Emerging SiC waveguides (index ~2.7, wide FOV) used in Meta Orion — suppliers Coherent (COHR), SICC / Tianyue (688234.SH); no mature commercial SiC supply chain yet. Cross-link to specialty glass (materials)."
+          "d": "High-refractive-index glass: Corning (GLW), Schott (Germany — Ray-Ban Display waveguide glass), Ohara (5218.T), Hoya (7741.T). Emerging SiC waveguides (index ~2.7, wide FOV) used in Meta Orion — suppliers Coherent (COHR), SICC / Tianyue (688234.SH); no mature commercial SiC supply chain yet. Cross-link to specialty glass (materials).",
+          "p": "The exotic high-quality glass those lenses must be made from — very few suppliers on earth."
         },
         {
           "l": "Nanoimprint & waveguide fabrication",
@@ -1007,7 +1109,8 @@
             "choke",
             "new"
           ],
-          "d": "Nanoimprint lithography for surface-relief gratings: EV Group, Canon (nanoimprint), SUSS MicroTec. Wafer-scale waveguide manufacturing yield is the cost gate; overlaps WFE tooling."
+          "d": "Nanoimprint lithography for surface-relief gratings: EV Group, Canon (nanoimprint), SUSS MicroTec. Wafer-scale waveguide manufacturing yield is the cost gate; overlaps WFE tooling.",
+          "p": "The nano-scale printing process that etches invisible patterns into the lenses."
         },
         {
           "l": "AR/XR SoC & compute",
@@ -1016,7 +1119,8 @@
             "choke",
             "cross"
           ],
-          "d": "Qualcomm Snapdragon AR/XR (dominant), Apple silicon, MediaTek. Low-power on-device AI for glasses is the constraint. Qualcomm is the de-facto AR SoC chokepoint. Cross-link to Accelerators / edge AI."
+          "d": "Qualcomm Snapdragon AR/XR (dominant), Apple silicon, MediaTek. Low-power on-device AI for glasses is the constraint. Qualcomm is the de-facto AR SoC chokepoint. Cross-link to Accelerators / edge AI.",
+          "p": "The chip that runs the glasses — Qualcomm's stronghold today."
         },
         {
           "l": "Sensors & cameras (glasses)",
@@ -1024,7 +1128,8 @@
           "f": [
             "cross"
           ],
-          "d": "Eye-tracking (Tobii), SLAM cameras (Sony sensors), depth, microphones, hand-tracking. The sensor suite drives the context-aware value of smart glasses. Cross-link to Sensing & Vision."
+          "d": "Eye-tracking (Tobii), SLAM cameras (Sony sensors), depth, microphones, hand-tracking. The sensor suite drives the context-aware value of smart glasses. Cross-link to Sensing & Vision.",
+          "p": "The cameras and microphones that let glasses understand where they are and what you're looking at."
         },
         {
           "l": "System assembly & OEM",
@@ -1033,7 +1138,8 @@
             "new",
             "geo"
           ],
-          "d": "Meta (Ray-Ban + Orion), Apple (Vision Pro), Google/Samsung (Android XR), Snap Spectacles. China brands: Xreal (~28% video-glasses share), Rokid, INMO, RayNeo (TCL). Assembly: Goertek (002241.SZ), Luxshare (002475.SZ), Pegatron — China dominates device assembly. VR pancake optics: Goertek, Young Optics."
+          "d": "Meta (Ray-Ban + Orion), Apple (Vision Pro), Google/Samsung (Android XR), Snap Spectacles. China brands: Xreal (~28% video-glasses share), Rokid, INMO, RayNeo (TCL). Assembly: Goertek (002241.SZ), Luxshare (002475.SZ), Pegatron — China dominates device assembly. VR pancake optics: Goertek, Young Optics.",
+          "p": "The firms assembling finished smart glasses — Meta's Ray-Bans being the breakout."
         },
         {
           "l": "End-use — consumer & enterprise AR",
@@ -1041,7 +1147,8 @@
           "f": [
             "cross"
           ],
-          "d": "Meta Ray-Ban breakout (audio/camera AI glasses) is the consumer on-ramp toward full AR; enterprise AR (Vuzix, RealWear). Display + waveguide + SoC are the gating chokepoints. Cross-link to Micro-displays."
+          "d": "Meta Ray-Ban breakout (audio/camera AI glasses) is the consumer on-ramp toward full AR; enterprise AR (Vuzix, RealWear). Display + waveguide + SoC are the gating chokepoints. Cross-link to Micro-displays.",
+          "p": "Why it matters: glasses are the bet on what replaces the smartphone — early, speculative, and winner-unclear."
         }
       ],
       "plain": "The waveguides, lenses and device layer of smart glasses — the earliest, most speculative theme in the universe."
@@ -1059,13 +1166,15 @@
           "f": [
             "choke"
           ],
-          "d": "Cloudflare (NET — Workers runtime, zero-trust, pay-per-crawl + x402 agent-payments experiments; the closest thing to an agentic-era gatekeeper), Akamai (AKAM — CDN pivoting to AI compute delivery), Fastly (FSLY — edge compute + semantic caching for repeated agent queries)."
+          "d": "Cloudflare (NET — Workers runtime, zero-trust, pay-per-crawl + x402 agent-payments experiments; the closest thing to an agentic-era gatekeeper), Akamai (AKAM — CDN pivoting to AI compute delivery), Fastly (FSLY — edge compute + semantic caching for repeated agent queries).",
+          "p": "The delivery networks where AI-agent traffic first hits the internet — they see, cache and charge for that traffic."
         },
         {
           "l": "Machine-to-human communications rails",
           "r": "Voice, SMS and telephony agents use to reach people",
           "f": [],
-          "d": "Twilio (TWLO — CPaaS + Conversation Memory + voice AI), Bandwidth (BAND — owns last-mile PSTN interconnect, the physical phone plumbing), Sinch (SINCH.ST — European CPaaS in agentic catch-up)."
+          "d": "Twilio (TWLO — CPaaS + Conversation Memory + voice AI), Bandwidth (BAND — owns last-mile PSTN interconnect, the physical phone plumbing), Sinch (SINCH.ST — European CPaaS in agentic catch-up).",
+          "p": "The phone and messaging rails agents use when they need to reach an actual human."
         },
         {
           "l": "Identity, trust & security for agents",
@@ -1073,13 +1182,15 @@
           "f": [
             "gap"
           ],
-          "d": "SailPoint (SAIL — identity governance extending from employees to AI agents; the unsolved problem of the agentic era), Palo Alto Networks (PANW — security platformization across agent surfaces). The 'agent identity' layer is a genuine supply gap — nobody owns it yet."
+          "d": "SailPoint (SAIL — identity governance extending from employees to AI agents; the unsolved problem of the agentic era), Palo Alto Networks (PANW — security platformization across agent surfaces). The 'agent identity' layer is a genuine supply gap — nobody owns it yet.",
+          "p": "The unsolved question of the agent era: proving which AI is acting and what it's allowed to do — nobody owns this yet."
         },
         {
           "l": "Observability & the software supply chain",
           "r": "Watching what autonomous agents actually do in production",
           "f": [],
-          "d": "Datadog (DDOG — observability for agentic workloads), Dynatrace (DT — AI-native monitoring), JFrog (FROG — artifact + model registry: the 'parts inventory' of shipped AI software)."
+          "d": "Datadog (DDOG — observability for agentic workloads), Dynatrace (DT — AI-native monitoring), JFrog (FROG — artifact + model registry: the 'parts inventory' of shipped AI software).",
+          "p": "The monitoring tools watching what autonomous agents actually do once deployed — the flight recorder for AI software."
         },
         {
           "l": "Naming, routing & the internet's plumbing",
@@ -1087,7 +1198,8 @@
           "f": [
             "choke"
           ],
-          "d": "VeriSign (VRSN — the .com/.net registry monopoly; every agent lookup touches it), A10 Networks (ATEN — carrier-grade NAT + IPv6 transition gear as M2M traffic compounds toward ~537 EB/mo by 2034, per Nokia)."
+          "d": "VeriSign (VRSN — the .com/.net registry monopoly; every agent lookup touches it), A10 Networks (ATEN — carrier-grade NAT + IPv6 transition gear as M2M traffic compounds toward ~537 EB/mo by 2034, per Nokia).",
+          "p": "The internet's address book and plumbing — obscure, monopoly-like assets that every single agent lookup touches."
         }
       ]
     }

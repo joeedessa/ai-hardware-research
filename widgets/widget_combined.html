@@ -267,6 +267,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .mx-ctx{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);background:var(--color-background-info);border:.5px solid var(--color-border-info);border-left:3px solid var(--accent);border-radius:6px;padding:7px 10px;margin-bottom:8px}
 .mx-ctx b{color:var(--color-text-primary)}
 .sc.srel{border-color:var(--accent)!important;box-shadow:0 0 0 2px #4F46E522}
+.scd-role{font-size:10.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px;padding-bottom:4px;border-bottom:.5px dashed var(--color-border-tertiary)}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap;position:sticky;top:33px;background:var(--color-background-primary);z-index:5}
@@ -741,7 +742,7 @@ function loadV(id,ctx){
       return '';
     }).join('');
     const rel=relIdx.includes(i);
-    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc${rel?' srel':''}${rel&&i===relIdx[0]?' ex':''}" onclick="if(event.target.classList.contains('ticklink'))return;this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd">${linkifyTickers(s.d)}</div></div></div>`;
+    h+=`<div class="srow"><div style="display:flex;flex-direction:column;align-items:center;padding-top:2px"><div class="snd" style="background:${v.c}">${i+1}</div>${i<v.chain.length-1?`<div class="sln" style="background:${v.c};min-height:8px"></div>`:''}</div><div class="sc${rel?' srel':''}${rel&&i===relIdx[0]?' ex':''}" onclick="if(event.target.classList.contains('ticklink'))return;this.classList.toggle('ex')"><div class="sct"><span style="pointer-events:none">${s.l}</span><span class="sch">▼</span></div><div class="scr" style="pointer-events:none">${s.p||s.r}</div><div style="margin-top:2px">${flags}</div><div class="scd">${s.p?`<div class="scd-role">${s.r}</div>`:''}${linkifyTickers(s.d)}</div></div></div>`;
   });
   const det=document.getElementById('vdetail');
   det.innerHTML=h;det.scrollTop=0;
@@ -1425,8 +1426,8 @@ function buildSources(){
    DATA LOADING
 ════════════════════════════ */
 async function loadData(){
-  /* Local dev: bust HTTP cache so edits show on every reload. Deployed: cache fine. */
-  const Q=BASE.startsWith('..')?('?t='+Date.now()):'';
+  /* Always cache-bust: GitHub raw's CDN caches ~5min, which made fresh pushes invisible. */
+  const Q='?t='+Date.now();
   const fetchJ=n=>fetch(BASE+n+Q).then(r=>r.json());
   const [matrix,explorer,explainers,geo,cycle,ps,elec,themes,portfolio,sources,companies,excluded,glossary,walkthroughs]=await Promise.all([
     fetch(BASE+'matrix.json'+Q).then(r=>r.json()),
