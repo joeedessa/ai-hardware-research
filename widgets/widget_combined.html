@@ -344,6 +344,15 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .hm-cell.sel{box-shadow:0 0 0 2px var(--accent)}
 .hm-geo:hover{background:var(--color-background-secondary)}
 .hm-vlab:hover{filter:brightness(.96)}
+.hmc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:8px}
+.hmc-card{border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:10px 12px;background:var(--color-background-primary);box-shadow:var(--shadow-1)}
+.hmc-head{display:flex;align-items:center;gap:7px}
+.hmc-name{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--color-text-primary)}
+.hmc-risk{font-size:8.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:.5px solid;margin-left:auto;white-space:nowrap}
+.hmc-stats{font-size:10.5px;color:var(--color-text-secondary);margin-top:3px;font-variant-numeric:tabular-nums}
+.hmc-stats b{font-size:12px;color:var(--color-text-primary)}
+.hmc-blurb{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);margin-top:5px}
+.hmc-lbl{font-size:8.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin:7px 0 2px}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap}
@@ -552,7 +561,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 </div>
 
 <div class="view" id="view-hm">
-  <div class="note"><b>Where the chokepoints sit.</b> Rows are the verticals, columns are countries. In each cell the <b>big number counts conviction-3 chokepoint owners</b> based there; the small grey number is all tracked names. Greener cell = more chokepoints. <b>Everything is clickable</b> — a cell lists its companies right below the grid (each opens the detail panel), a country name explains that geography, a vertical name explains that vertical. The one-glance takeaway: the green mass sits in Taiwan · Korea · Japan — the dashboard's central risk and thesis.</div>
+  <div class="note"><b>The question this tab answers: if a country were suddenly cut off — blockade, export ban, disaster — how much irreplaceable AI capability would the world lose, and which of our names ARE that capability?</b> Each card below is one country: how many of our 25 "chokepoint owners" (conviction-3 — near-monopoly, hardest to replace) sit there, what is uniquely made there, and the tickers themselves. Cards are ranked by concentration — the top of the list IS the map's takeaway. The grid underneath shows the same data broken out by vertical, for detail work.</div>
   <div id="hm-cont"></div>
 </div>
 
@@ -1274,9 +1283,30 @@ function buildChokeMap(){
     if(cell.c2>=2) return `background:#3B82F614;color:var(--color-text-secondary);`;
     return `background:#FFFFFF;color:var(--color-text-secondary);`;
   }
+  // ── Story-first geography risk cards ──
+  const cardGeos=[...BUCKETS].map(b=>{
+    const ct=colTotal[b.id];
+    const c3s=COMPANIES.filter(c=>bucket(c.geo)===b.id&&c.conviction===3)
+      .sort((a,b2)=>(a.vertical||'').localeCompare(b2.vertical||''));
+    return {b,ct,c3s};
+  }).filter(x=>x.ct.t>0).sort((a,b2)=>b2.ct.c3-a.ct.c3||b2.ct.t-a.ct.t);
+  const cards=cardGeos.map(({b,ct,c3s})=>{
+    const chips=c3s.map(c=>{
+      const v=vinfo(c.vertical);
+      return `<span class="ticklink" data-tk="${c.ticker}" title="${(c.name+' — '+(c.chain_layer||'')).replace(/"/g,'&quot;')}" style="display:inline-block;margin:2px 3px 0 0;font-size:10px;font-weight:600;padding:1.5px 7px;background:${v.c}10;border:.5px solid ${v.c}55;border-radius:20px;color:${v.c};text-decoration:none">${c.ticker}</span>`;
+    }).join('');
+    const risk=ct.c3>=5?['#E24B4A','critical concentration']:ct.c3>=2?['#EF9F27','high concentration']:ct.c3===1?['#EF9F27','single chokepoint']:['#888780','no chokepoint-3 here'];
+    return `<div class="hmc-card">
+      <div class="hmc-head"><span style="font-size:15px">${b.flag}</span><span class="hmc-name">${b.label}</span><span class="hmc-risk" style="color:${risk[0]};border-color:${risk[0]}44;background:${risk[0]}10">${risk[1]}</span></div>
+      <div class="hmc-stats"><b>${ct.c3}</b> chokepoint owner${ct.c3===1?'':'s'} · ${ct.t} names tracked</div>
+      <div class="hmc-blurb">${(typeof GEO_B!=='undefined'&&GEO_B&&GEO_B[b.id])||''}</div>
+      ${c3s.length?`<div class="hmc-lbl">The irreplaceable ones — click any:</div><div>${chips}</div>`:''}
+    </div>`;
+  }).join('');
+  let html=`<div class="hmc-grid">${cards}</div>
+    <div class="dw-sect" style="margin:14px 0 5px">The full grid — data behind the cards</div>`;
   // Build header row
-  const colCount=BUCKETS.length+2; // 1 vert-label col + N geo cols + 1 total col
-  let html=`<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:130px repeat(${BUCKETS.length},minmax(58px,1fr)) 60px;gap:2px;min-width:780px;font-family:var(--font-sans)">`;
+  html+=`<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:130px repeat(${BUCKETS.length},minmax(58px,1fr)) 60px;gap:2px;min-width:780px;font-family:var(--font-sans)">`;
   // Top-left blank
   html+=`<div></div>`;
   // Geo header row
