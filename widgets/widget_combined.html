@@ -268,6 +268,23 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .mx-ctx b{color:var(--color-text-primary)}
 .sc.srel{border-color:var(--accent)!important;box-shadow:0 0 0 2px #4F46E522}
 .scd-role{font-size:10.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px;padding-bottom:4px;border-bottom:.5px dashed var(--color-border-tertiary)}
+/* ── Market-data layer ── */
+.mast-mkt{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mkt-chip{display:inline-flex;align-items:baseline;gap:5px;font-size:10px;padding:3px 9px;border-radius:20px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);box-shadow:var(--shadow-1)}
+.mkt-l{color:var(--color-text-tertiary);font-weight:600;letter-spacing:.03em;font-size:9px}
+.mkt-v{font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums}
+.mkt-c{font-weight:600;font-size:9.5px;font-variant-numeric:tabular-nums}
+.dw-mkt{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:5px}
+.dw-tile{border:.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px 8px;background:var(--color-background-primary)}
+.dw-tile-l{font-size:8.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.dw-tile-v{font-size:12px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;margin-top:1px}
+.dw-ddnote{font-size:9.5px;color:#15803D;background:#16A34A0D;border-radius:6px;padding:5px 8px;margin-top:5px;line-height:1.45}
+.dw-newsrow{padding:4px 0;border-bottom:.5px dashed var(--color-border-tertiary)}
+.dw-newsrow:last-of-type{border-bottom:none}
+.dw-newsrow a{font-size:11px;color:var(--color-text-primary);text-decoration:none;font-weight:500;line-height:1.4;display:block}
+.dw-newsrow a:hover{color:var(--accent)}
+.dw-newsrow span{font-size:9px;color:var(--color-text-tertiary)}
+.ew-dd{font-size:8.5px;font-weight:600;padding:1.5px 7px;border-radius:20px;font-variant-numeric:tabular-nums;margin-left:auto}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap;position:sticky;top:33px;background:var(--color-background-primary);z-index:5}
@@ -383,6 +400,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
     <div class="mast-title">AI Hardware <em>Research</em></div>
     <div class="mast-sub" id="updated-stamp"></div>
   </div>
+  <div class="mast-mkt" id="mast-mkt" style="display:none"></div>
   <span class="mast-froth" id="mast-froth" style="display:none"><span class="fm-pulse"></span><span>Froth Monitor</span></span>
 </header>
 
@@ -555,6 +573,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
+let QUOTES,QUOTES_META,IDX,NEWS;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -1007,7 +1026,7 @@ function buildPortfolio(){
       return `<div class="ew-card" onclick="openCompanyDrawer('${w.ticker}')">
         <div class="ew-rank">${w.rank}</div>
         <div class="ew-main">
-          <div class="ew-head"><span class="ew-tick">${w.ticker}</span><span class="ew-nm">${c.name||''}</span><span class="ew-v" style="background:${v.c}1A;color:${v.c}">${v.n}</span></div>
+          <div class="ew-head"><span class="ew-tick">${w.ticker}</span><span class="ew-nm">${c.name||''}</span><span class="ew-v" style="background:${v.c}1A;color:${v.c}">${v.n}</span>${(QUOTES&&QUOTES[w.ticker])?(q=>{const open=q.dd<=-15;return `<span class="ew-dd" style="background:${open?'#16A34A14':'var(--color-background-secondary)'};color:${open?'#16A34A':'var(--color-text-tertiary)'};border:.5px solid ${open?'#16A34A44':'var(--color-border-tertiary)'}">${q.dd}% off high${open?' · open':''}</span>`;})(QUOTES[w.ticker]):''}</div>
           <div class="ew-setup">${w.setup}</div>
           <div class="ew-row"><span class="ew-lbl" style="color:#16A34A">watch</span>${w.watch}</div>
           <div class="ew-row"><span class="ew-lbl" style="color:#E24B4A">risk</span>${w.risk}</div>
@@ -1271,6 +1290,7 @@ function renderCoCard(c){
       <span title="${convLabel}" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--color-text-tertiary)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${convColor}"></span>${c.conviction}</span>
       ${c.froth?`<span title="${(c.froth_note||'').replace(/"/g,'&quot;')}" style="font-size:9px;font-weight:600;letter-spacing:.03em;padding:1px 6px;border-radius:20px;background:${FROTH_META[c.froth].c}14;color:${FROTH_META[c.froth].c};border:.5px solid ${FROTH_META[c.froth].c}44">${FROTH_META[c.froth].l.toUpperCase()}</span>`:''}
       <span style="font-size:10px;color:var(--color-text-tertiary)">${c.geo}</span>
+      ${(QUOTES&&QUOTES[c.ticker])?(q=>`<span style="font-size:9.5px;font-variant-numeric:tabular-nums;font-weight:600;color:${q.d1>=0?'#16A34A':'#E24B4A'}">${q.d1>=0?'+':''}${q.d1}%</span><span title="vs 52-week high" style="font-size:9.5px;font-variant-numeric:tabular-nums;color:${q.dd<=-15?'#16A34A':'var(--color-text-tertiary)'}">${q.dd}% vs 52w${q.dd<=-15?' ◈':''}</span>`)(QUOTES[c.ticker]):''}
       ${c.last_touched?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto" title="Thesis last touched">↻ ${c.last_touched}</span>`:''}
     </div>
     <div style="font-size:10.5px;color:var(--color-text-secondary);margin-bottom:3px;font-weight:500">${c.chain_layer||''}</div>
@@ -1446,6 +1466,15 @@ async function loadData(){
     fetchJ('walkthroughs.json'),
   ]);
 
+  /* Market-data layer (written nightly by GitHub Actions) — optional, tolerate absence. */
+  const [quotesJ,indicesJ,newsJ]=await Promise.all([
+    fetchJ('quotes.json').catch(()=>null),
+    fetchJ('indices.json').catch(()=>null),
+    fetchJ('news.json').catch(()=>null),
+  ]);
+  QUOTES=(quotesJ&&quotesJ.quotes)||null; QUOTES_META=(quotesJ&&quotesJ._meta)||null;
+  IDX=(indicesJ&&indicesJ.symbols)||null; NEWS=(newsJ&&newsJ.items)||null;
+
   /* Widget 1 data */
   VC_COLS  = matrix.verticals;
   ROWS     = matrix.chain_stages;
@@ -1495,6 +1524,20 @@ async function loadData(){
     const card=e.target.closest('.co-card');
     if(card && !e.target.closest('span[onclick],a')) openCompanyDrawer(card.dataset.tk);
   });
+
+  /* Masthead market strip (from indices.json, nightly) */
+  if(IDX){
+    const chip=(l,v,chg)=>{const cc=chg==null?'var(--color-text-tertiary)':chg>=0?'#16A34A':'#E24B4A';
+      return `<span class="mkt-chip"><span class="mkt-l">${l}</span><span class="mkt-v">${v}</span>${chg!=null?`<span class="mkt-c" style="color:${cc}">${chg>=0?'+':''}${chg}%</span>`:''}</span>`;};
+    const sox=IDX['^SOX'],smh=IDX['SMH'],spy=IDX['SPY'],tnx=IDX['^TNX'],krw=IDX['KRW=X'];
+    let h='';
+    if(sox)h+=chip('SOX',Math.round(sox.p).toLocaleString(),sox.d1);
+    if(smh&&spy)h+=chip('SMH/SPY',(smh.p/spy.p).toFixed(3),(smh.m1!=null&&spy.m1!=null)?+(smh.m1-spy.m1).toFixed(1):null);
+    if(tnx)h+=chip('US 10Y',(tnx.p>20?tnx.p/10:tnx.p).toFixed(2)+'%',tnx.d1);
+    if(krw)h+=chip('USD/KRW',Math.round(krw.p).toLocaleString(),krw.d1);
+    if(h){const el=document.getElementById('mast-mkt');el.innerHTML=h;el.style.display='flex';
+      el.title='SMH/SPY chip = 1-month relative move of semis vs S&P — the froth thermometer. As of '+((quotesJ&&quotesJ._meta&&quotesJ._meta.as_of)||'').slice(0,10);}
+  }
 
   /* Masthead froth pill → Cycle tab */
   if(FROTH){
@@ -1572,6 +1615,8 @@ function openCompanyDrawer(tk,push=true){
      <div class="dw-sect">Chain layer</div><div class="dw-layer">${c.chain_layer||'—'}</div>
      <div class="dw-sect">Thesis</div><div class="dw-thesis">${linkifyTickers(c.thesis_note||'')}</div>
      ${c.froth_note?`<div class="dw-sect">Froth lens</div><div class="dw-thesis" style="border-left:3px solid ${FROTH_META[c.froth].c};padding-left:9px">${c.froth_note}</div>`:''}
+     ${drawerMarket(c.ticker)}
+     ${drawerNews(c.ticker)}
      ${themes?`<div class="dw-sect">Themes</div><div>${themes}</div>`:''}
      ${srcs?`<div class="dw-sect">Sources</div>${srcs}`:''}
      ${peers?`<div class="dw-sect">Same vertical — ${v.n}</div>${peers}`:''}
@@ -1597,6 +1642,30 @@ function openThemeDrawer(id,push=true){
     `<div class="dw-thesis" style="margin-bottom:4px">${tm.blurb||''}</div>
      <div class="dw-sect">${members.length} name${members.length===1?'':'s'} tagged</div>${groups||'<div class="dw-thesis">No tagged records yet.</div>'}
      <div class="dw-act"><span class="dw-btn" onclick="closeDrawer();jumpToCompanies('');CO_STATE.theme='${id}';renderCoPills();renderCo();">Filter Companies tab</span></div>`);
+}
+function drawerMarket(tk){
+  const q=QUOTES&&QUOTES[tk]; if(!q)return '';
+  const pc=v=>v==null?null:(v>=0?'#16A34A':'#E24B4A');
+  const tile=(l,v,c)=>v==null?'':`<div class="dw-tile"><div class="dw-tile-l">${l}</div><div class="dw-tile-v" style="${c?`color:${c}`:''}">${v}</div></div>`;
+  const mc=q.mc?(q.mc>=1e12?(q.mc/1e12).toFixed(1)+'T':q.mc>=1e9?(q.mc/1e9).toFixed(0)+'B':(q.mc/1e6).toFixed(0)+'M'):null;
+  const v200=q.a200?+((q.p/q.a200-1)*100).toFixed(1):null;
+  const asof=QUOTES_META?` <span style="font-weight:400;text-transform:none;letter-spacing:0">· ${(QUOTES_META.as_of||'').slice(0,10)}, local currency</span>`:'';
+  return `<div class="dw-sect">Market${asof}</div><div class="dw-mkt">`
+    +tile('Price',q.p.toLocaleString())
+    +tile('1 day',(q.d1>=0?'+':'')+q.d1+'%',pc(q.d1))
+    +tile('1 month',q.m1==null?null:(q.m1>=0?'+':'')+q.m1+'%',pc(q.m1))
+    +tile('Off 52w high',q.dd+'%'+(q.dd<=-15?' ◈':''),q.dd<=-15?'#16A34A':null)
+    +tile('vs 200DMA',v200==null?null:(v200>=0?'+':'')+v200+'%',pc(v200))
+    +tile('Fwd P/E',q.fpe||null)
+    +tile('Mkt cap',mc)
+    +`</div>${q.dd<=-15?`<div class="dw-ddnote">◈ >15% below its 52-week high — the staggered-entry threshold from the Froth Monitor stance (for insulated names, not high-froth ones).</div>`:''}`;
+}
+function drawerNews(tk){
+  if(!NEWS)return '';
+  const items=NEWS.filter(n=>(n.tk||[]).includes(tk)).slice(0,4);
+  if(!items.length)return '';
+  return `<div class="dw-sect">Latest headlines</div>`+items.map(n=>
+    `<div class="dw-newsrow"><a href="${n.u}" target="_blank" rel="noopener">${n.t}</a><span>${n.s?n.s+' · ':''}${n.d||''}</span></div>`).join('');
 }
 function renderDrawer(accent,head,body){
   document.getElementById('dw-accent').style.background=accent;
