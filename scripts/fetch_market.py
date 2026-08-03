@@ -31,6 +31,21 @@ NEWS_QUERIES = [
     ('AI datacenter power', ['VRT', 'CEG', 'VST']), ('Vertiv liquid cooling', ['VRT']),
     ('semiconductor equipment orders', ['AMAT', 'KLAC', 'ASML']),
     ('Samsung foundry', ['005930.KS']), ('CoreWeave neocloud GPU', ['CRWV', 'NBIS']),
+    ('chip export controls China', []), ('rare earth export controls', []),
+    ('AI bubble valuation', []), ('humanoid robot supply chain', []),
+]
+
+# Long-form RSS from the leading independent semis/AI-trade voices (the free
+# proxy for X: most of the accounts worth following publish here with open RSS).
+VOICES = [
+    ('SemiAnalysis', 'https://semianalysis.com/feed/'),
+    ('Fabricated Knowledge', 'https://www.fabricatedknowledge.com/feed'),
+    ('Citrini Research', 'https://www.citriniresearch.com/feed'),
+    ('Irrational Analysis', 'https://irrationalanalysis.substack.com/feed'),
+    ('Chips and Cheese', 'https://chipsandcheese.com/feed'),
+    ('More Than Moore', 'https://morethanmoore.substack.com/feed'),
+    ('The Chip Letter', 'https://thechipletter.substack.com/feed'),
+    ('Asianometry', 'https://www.asianometry.com/feed'),
 ]
 
 
@@ -159,15 +174,30 @@ def main():
                     dt = ''
                     if getattr(e, 'published_parsed', None):
                         dt = time.strftime('%Y-%m-%d', e.published_parsed)
-                    items.append({'t': title, 'u': e.link, 's': src, 'd': dt, 'tk': tks, 'q': q})
+                    items.append({'t': title, 'u': e.link, 's': src, 'd': dt, 'tk': tks, 'q': q, 'k': 'news'})
                 time.sleep(0.2)
             except Exception as ex:
                 print('feed fail:', q, ex)
+        voices = []
+        for name, url in VOICES:
+            try:
+                feed = feedparser.parse(url)
+                for e in feed.entries[:4]:
+                    dt = ''
+                    if getattr(e, 'published_parsed', None):
+                        dt = time.strftime('%Y-%m-%d', e.published_parsed)
+                    summ = re.sub(r'<[^>]+>', '', getattr(e, 'summary', ''))[:220].strip()
+                    voices.append({'t': e.title.strip(), 'u': e.link, 's': name, 'd': dt,
+                                   'tk': [], 'k': 'voice', 'sum': summ})
+                time.sleep(0.2)
+            except Exception as ex:
+                print('voice feed fail:', name, ex)
+        voices.sort(key=lambda x: x['d'], reverse=True)
         items.sort(key=lambda x: x['d'], reverse=True)
         with open(os.path.join(ROOT, 'news.json'), 'w') as f:
-            json.dump({'_meta': {'as_of': now, 'source': 'Google News RSS'},
-                       'items': items[:150]}, f, separators=(',', ':'))
-        print(f'news.json: {len(items[:150])} headlines')
+            json.dump({'_meta': {'as_of': now, 'source': 'Google News RSS + curated long-form RSS (voices)'},
+                       'items': items[:150], 'voices': voices[:40]}, f, separators=(',', ':'))
+        print(f'news.json: {len(items[:150])} headlines + {len(voices[:40])} voice posts')
     except Exception as ex:
         print('news skipped:', ex)
 

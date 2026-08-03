@@ -353,6 +353,22 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .hmc-stats b{font-size:12px;color:var(--color-text-primary)}
 .hmc-blurb{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);margin-top:5px}
 .hmc-lbl{font-size:8.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin:7px 0 2px}
+/* ── News tab ── */
+.nw-row{display:flex;gap:10px;padding:6px 2px;border-bottom:.5px solid var(--color-border-tertiary);align-items:baseline}
+.nw-row:hover{background:var(--color-background-secondary)}
+.nw-d{font-size:9.5px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:72px}
+.nw-main{min-width:0}
+.nw-main a{font-size:12px;font-weight:500;color:var(--color-text-primary);text-decoration:none;line-height:1.45}
+.nw-main a:hover{color:var(--accent)}
+.nw-meta{font-size:9.5px;color:var(--color-text-tertiary);margin-top:1px}
+.nw-voice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:7px}
+.nw-voice{border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:9px 11px;background:var(--color-background-primary);box-shadow:var(--shadow-1)}
+.nw-voice-h{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
+.nw-voice-s{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.nw-voice-h .nw-d{margin-left:auto;min-width:0}
+.nw-voice-t{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--color-text-primary);text-decoration:none;line-height:1.3;display:block}
+.nw-voice-t:hover{color:var(--accent)}
+.nw-voice-sum{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5;margin-top:3px}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap}
@@ -476,6 +492,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
   <!-- Widget 1 tabs -->
   <div class="tab on" onclick="ST('mx',this)">Universe matrix</div>
   <div class="tab" onclick="ST('co',this)">Companies</div>
+  <div class="tab" onclick="ST('nw',this)">News</div>
   <div class="tab" onclick="ST('vx',this)">Chain explorer</div>
   <div class="tab" onclick="ST('ex',this)">How it works</div>
   <div class="tab" onclick="ST('wt',this)">Walk-throughs</div>
@@ -565,6 +582,10 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
   <div id="hm-cont"></div>
 </div>
 
+<div class="view" id="view-nw">
+  <div id="nw-cont"></div>
+</div>
+
 <div class="view" id="view-cy">
   <div id="froth-mon"></div>
   <div class="pills" id="cy-pills">
@@ -642,7 +663,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS,POLICY,GEO_B;
+let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -695,8 +716,40 @@ function ST(id,el){
     else if(id==='gl')buildGlossary();
     else if(id==='sr')buildSources();
     else if(id==='xc')buildExcluded();
+    else if(id==='nw')buildNews();
     built[id]=true;
   }
+}
+
+/* ── News tab — nightly headlines + leading long-form voices ── */
+let NW_STATE={f:'all'};
+function buildNews(){
+  const cont=document.getElementById('nw-cont');
+  if(!NEWS&&!NEWS_V){cont.innerHTML='<div class="note">No news data yet — the nightly refresh (weekdays ~21:30 UTC) has not run since this feature shipped, or the fetch failed. Data appears automatically once <b>data/news.json</b> is committed by the GitHub Action.</div>';return;}
+  const asof=(QUOTES_META&&QUOTES_META.as_of)||'';
+  const verts=[...new Set((NEWS||[]).flatMap(n=>(n.tk||[]).map(t=>{const c=(COMPANIES||[]).find(x=>x.ticker===t);return c&&c.vertical;}).filter(Boolean)))];
+  const pills=[['all','All'],['brk','Last 48h']].concat(verts.map(v=>[v,vinfo(v).n]));
+  const pillHtml=pills.map(([id,l])=>`<button class="pill${NW_STATE.f===id?' on':''}" onclick="NW_STATE.f='${id}';buildNews();">${l}</button>`).join('');
+  const cutoff=new Date(Date.now()-48*3600*1000).toISOString().slice(0,10);
+  let items=(NEWS||[]);
+  if(NW_STATE.f==='brk')items=items.filter(n=>(n.d||'')>=cutoff);
+  else if(NW_STATE.f!=='all')items=items.filter(n=>(n.tk||[]).some(t=>{const c=(COMPANIES||[]).find(x=>x.ticker===t);return c&&c.vertical===NW_STATE.f;}));
+  const rows=items.slice(0,60).map(n=>{
+    const chips=(n.tk||[]).map(t=>`<span class="ticklink" data-tk="${t}">${t}</span>`).join(' ');
+    return `<div class="nw-row"><span class="nw-d">${n.d||''}</span><div class="nw-main"><a href="${n.u}" target="_blank" rel="noopener">${n.t}</a><div class="nw-meta">${n.s?n.s:''}${chips?' · '+chips:''}</div></div></div>`;
+  }).join('')||'<div style="padding:14px;text-align:center;color:var(--color-text-tertiary);font-size:11px">Nothing matches this filter.</div>';
+  const voices=(NEWS_V||[]).slice(0,12).map(v=>`
+    <div class="nw-voice">
+      <div class="nw-voice-h"><span class="nw-voice-s">${v.s}</span><span class="nw-d">${v.d||''}</span></div>
+      <a href="${v.u}" target="_blank" rel="noopener" class="nw-voice-t">${v.t}</a>
+      ${v.sum?`<div class="nw-voice-sum">${v.sum}…</div>`:''}
+    </div>`).join('');
+  cont.innerHTML=`
+    <div class="note"><b>Refreshed nightly</b> (weekdays ~21:30 UTC by the repo's data robot; last pull ${asof.slice(0,10)||'—'}). <b>Headlines</b> come from ticker- and theme-targeted news searches; <b>Leading voices</b> are the long-form feeds of the independent analysts driving the AI-hardware conversation (the free stand-in for X — most key accounts publish here). Tickers open the detail panel.</div>
+    ${voices?`<div class="ew-title" style="font-size:15px;margin-bottom:6px">Leading voices</div><div class="nw-voice-grid">${voices}</div>`:''}
+    <div class="ew-title" style="font-size:15px;margin:12px 0 4px">Headlines</div>
+    <div class="pills">${pillHtml}</div>
+    <div>${rows}</div>`;
 }
 
 /* ════════════════════════════
@@ -1657,6 +1710,7 @@ async function loadData(){
   ]);
   QUOTES=(quotesJ&&quotesJ.quotes)||null; QUOTES_META=(quotesJ&&quotesJ._meta)||null;
   IDX=(indicesJ&&indicesJ.symbols)||null; NEWS=(newsJ&&newsJ.items)||null;
+  NEWS_V=(newsJ&&newsJ.voices)||null;
   POLICY=await fetchJ('policy.json').catch(()=>null);
 
   /* Widget 1 data */
