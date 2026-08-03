@@ -46,6 +46,7 @@ VOICES = [
     ('More Than Moore', 'https://morethanmoore.substack.com/feed'),
     ('The Chip Letter', 'https://thechipletter.substack.com/feed'),
     ('Asianometry', 'https://www.asianometry.com/feed'),
+    ('ChipStrat', 'https://www.chipstrat.com/feed'),
 ]
 
 

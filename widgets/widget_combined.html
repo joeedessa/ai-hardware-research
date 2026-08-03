@@ -29,7 +29,46 @@
   --shadow-2:0 4px 16px rgba(22,24,29,.08),0 1px 3px rgba(22,24,29,.05);
   --shadow-3:0 12px 40px rgba(22,24,29,.16),0 2px 8px rgba(22,24,29,.08);
 }
+/* Dark theme — explicit via data-theme, or system preference when unset */
+:root[data-theme="dark"]{
+  --color-text-primary:#EDEDE8;
+  --color-text-secondary:#C2C4C9;
+  --color-text-tertiary:#8B8E96;
+  --color-text-info:#A5B4FC;
+  --color-background-primary:#1E2025;
+  --color-background-secondary:#26282E;
+  --color-background-info:#26284A;
+  --color-border-tertiary:#33363D;
+  --color-border-secondary:#454850;
+  --color-border-info:#4A4D8A;
+  --accent:#8B85F0;
+  --paper:#17181C;
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 4px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4);
+  --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --color-text-primary:#EDEDE8;
+    --color-text-secondary:#C2C4C9;
+    --color-text-tertiary:#8B8E96;
+    --color-text-info:#A5B4FC;
+    --color-background-primary:#1E2025;
+    --color-background-secondary:#26282E;
+    --color-background-info:#26284A;
+    --color-border-tertiary:#33363D;
+    --color-border-secondary:#454850;
+    --color-border-info:#4A4D8A;
+    --accent:#8B85F0;
+    --paper:#17181C;
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 4px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4);
+    --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
+  }
+}
 body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.theme-btn{border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:20px;font-size:12px;padding:2px 9px;cursor:pointer;color:var(--color-text-secondary);line-height:1.4}
+.theme-btn:hover{border-color:var(--accent)}
 ::selection{background:#4F46E522}
 #loading{font-size:15.0px;color:#70757F;padding:20px;text-align:center}
 
@@ -381,6 +420,35 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .sb-d{display:block;font-size:8.5px;font-weight:500}
 .sb-bench td{color:var(--color-text-tertiary)!important;background:var(--color-background-secondary)}
 .sb-bench td:first-child{font-weight:400;font-style:italic}
+/* ── Start Here ── */
+.sh-hero{max-width:680px;padding:6px 2px 2px}
+.sh-hero-t{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em;color:var(--color-text-primary);line-height:1.2}
+.sh-hero-d{font-size:12px;line-height:1.65;color:var(--color-text-secondary);margin-top:6px}
+.sh-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:12px;max-width:820px}
+.sh-stat{border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:9px 12px;background:var(--color-background-primary);box-shadow:var(--shadow-1);transition:border-color .14s,box-shadow .14s}
+.sh-stat:hover{border-color:var(--accent);box-shadow:var(--shadow-2)}
+.sh-stat-v{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums}
+.sh-stat-k{font-size:10px;font-weight:600;color:var(--color-text-secondary);margin-top:1px}
+.sh-stat-d{font-size:9.5px;color:var(--color-text-tertiary);line-height:1.4;margin-top:2px}
+.sh-paths{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.sh-path{border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:10px 12px;background:var(--color-background-primary);box-shadow:var(--shadow-1);cursor:pointer;transition:border-color .14s,box-shadow .14s}
+.sh-path:hover{border-color:var(--accent);box-shadow:var(--shadow-2)}
+.sh-path-t{font-family:var(--font-display);font-size:13.5px;font-weight:600;color:var(--color-text-primary)}
+.sh-path-tab{font-size:9.5px;font-weight:600;color:var(--accent);margin:1px 0 4px}
+.sh-path-d{font-size:10.5px;line-height:1.5;color:var(--color-text-secondary)}
+/* ── Mobile ── */
+@media (max-width:640px){
+  body{padding:8px}
+  .mast-title{font-size:18px}
+  .mast{gap:8px}
+  .ew-grid,.fm-sigs,.pol-grid,.pol-prog-grid,.pol-levers,.hmc-grid,.nw-voice-grid,.sh-paths,.cluster-grid,.q4-grid,.cat-grid,.cy-grid{grid-template-columns:1fr!important}
+  .sh-stats{grid-template-columns:repeat(2,1fr)}
+  .dw-mkt{grid-template-columns:repeat(3,1fr)}
+  #drawer{width:100vw;border-left:none}
+  .ew-card{padding:9px 10px}
+  .nw-d{min-width:58px}
+  .fm{padding:10px 11px}
+}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap}
@@ -498,12 +566,24 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
   </div>
   <div class="mast-mkt" id="mast-mkt" style="display:none"></div>
   <span class="mast-froth" id="mast-froth" style="display:none"><span class="fm-pulse"></span><span>Froth Monitor</span></span>
+  <button class="theme-btn" id="theme-btn" title="Toggle light / dark" onclick="toggleTheme()">◐</button>
 </header>
+<script>
+(function(){const t=localStorage.getItem('aihw-theme');if(t)document.documentElement.dataset.theme=t;})();
+function toggleTheme(){
+  const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=next;
+  localStorage.setItem('aihw-theme',next);
+}
+</script>
 <div id="alert-strip" style="display:none"></div>
 
 <div class="tabs">
+  <div class="tab on" onclick="ST('sh',this)">Start here</div>
+  <div class="tab-group-sep"></div>
   <!-- Widget 1 tabs -->
-  <div class="tab on" onclick="ST('mx',this)">Universe matrix</div>
+  <div class="tab" onclick="ST('mx',this)">Universe matrix</div>
   <div class="tab" onclick="ST('co',this)">Companies</div>
   <div class="tab" onclick="ST('nw',this)">News</div>
   <div class="tab" onclick="ST('vx',this)">Chain explorer</div>
@@ -533,7 +613,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 </div>
 
 <!-- ── Widget 1 views ── -->
-<div class="view on" id="view-mx">
+<div class="view" id="view-mx">
   <div class="note"><b>Dimension A</b> — 14 verticals × 10 supply-chain stages (ex-materials). <b>Click any column or row name</b> for a plain-English explainer of what it is. <span style="background:#534AB70A;border:.5px solid #534AB7;padding:0 4px;border-radius:2px;color:#534AB7;font-weight:500">blue cells</span> = analytical detail, click to open. Other cells jump to that spot in the chain explorer. <b>Dim B</b> (blue band) = cross-cutting chokepoints. <b>Dim C</b> (bottom panels) = equipment, Asian chokepoints, and the AI datacenter stack.</div>
   <div class="mxs"><div id="mxg" style="display:grid;gap:2px;min-width:1050px"></div></div>
   <div class="det-box" id="mx-det"></div>
@@ -593,6 +673,10 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 <div class="view" id="view-hm">
   <div class="note"><b>The question this tab answers: if a country were suddenly cut off — blockade, export ban, disaster — how much irreplaceable AI capability would the world lose, and which of our names ARE that capability?</b> Each card below is one country: how many of our 25 "chokepoint owners" (conviction-3 — near-monopoly, hardest to replace) sit there, what is uniquely made there, and the tickers themselves. Cards are ranked by concentration — the top of the list IS the map's takeaway. The grid underneath shows the same data broken out by vertical, for detail work.</div>
   <div id="hm-cont"></div>
+</div>
+
+<div class="view on" id="view-sh">
+  <div id="sh-cont"></div>
 </div>
 
 <div class="view" id="view-nw">
@@ -732,8 +816,43 @@ function ST(id,el){
     else if(id==='sr')buildSources();
     else if(id==='xc')buildExcluded();
     else if(id==='nw')buildNews();
+    else if(id==='sh')buildStartHere();
+    else if(id==='mx')buildMatrix();
     built[id]=true;
   }
+}
+
+/* ── Start Here — orientation + live today panel ── */
+function goTab(id){const t=[...document.querySelectorAll('.tab')].find(x=>(x.getAttribute('onclick')||'').includes("'"+id+"'"));if(t)ST(id,t);}
+function buildStartHere(){
+  const cont=document.getElementById('sh-cont');
+  const conv3=(COMPANIES||[]).filter(c=>c.conviction===3).length;
+  const openWins=QUOTES?(COMPANIES||[]).filter(c=>c.froth===1&&QUOTES[c.ticker]&&QUOTES[c.ticker].dd<=-15).length:null;
+  const smh=IDX&&IDX['SMH'],spy=IDX&&IDX['SPY'];
+  const rel=(smh&&spy&&smh.m1!=null&&spy.m1!=null)?(smh.m1-spy.m1).toFixed(1):null;
+  const voice=(NEWS_V||[])[0];
+  const today=[
+    ALERTS&&ALERTS.alerts?{k:'Live signals',v:ALERTS.alerts.length,d:'from last night’s scan — see the strip above',go:null}:null,
+    openWins!=null?{k:'Entry windows open',v:openWins,d:'insulated chokepoints >15% off their highs',go:'pf'}:null,
+    rel!=null?{k:'Semis vs market, 1mo',v:(rel>0?'+':'')+rel+'%',d:'SMH minus SPY — the froth thermometer',go:'cy'}:null,
+    {k:'Chokepoint owners',v:conv3,d:'conviction-3 names — the spine of the universe',go:'co'},
+  ].filter(Boolean).map(x=>`<div class="sh-stat"${x.go?` onclick="goTab('${x.go}')" style="cursor:pointer"`:''}><div class="sh-stat-v">${x.v}</div><div class="sh-stat-k">${x.k}</div><div class="sh-stat-d">${x.d}</div></div>`).join('');
+  const paths=[
+    ['Read the market','cy','Cycle & innings','The Froth Monitor: July’s shakeout signals, tagged froth / intact / opportunity, plus where each vertical sits in its cycle.'],
+    ['Find opportunities','pf','Portfolio Summary','Entry Windows (repriced-not-broken chokepoints), the froth-concentration avoid list, and the Scoreboard grading the framework nightly.'],
+    ['Research a company','co','Companies','Search and filter all 225 names. Click any card — or any ticker anywhere — for thesis, froth tag, live price, peers and headlines.'],
+    ['Understand the machine','vx','Chain explorer','Every vertical’s supply chain in plain English, stage by stage. Or trace one product end-to-end in Walk-throughs.'],
+    ['Track what’s changing','nw','News','Nightly headlines + the leading independent voices. Catalyst calendar and Policy & Fiscal forces carry the dated triggers.'],
+  ].map(p=>`<div class="sh-path" onclick="goTab('${p[1]}')"><div class="sh-path-t">${p[0]}</div><div class="sh-path-tab">${p[2]} →</div><div class="sh-path-d">${p[3]}</div></div>`).join('');
+  cont.innerHTML=`
+    <div class="sh-hero">
+      <div class="sh-hero-t">A supply-chain map for the AI hardware trade</div>
+      <div class="sh-hero-d">${(COMPANIES||[]).length} companies across 14 verticals, organized around one idea: <b>own the chokepoints</b> — the near-monopolies every AI product must pass through — and know the difference between a broken thesis and a repriced one. Everything cites its source, refreshes nightly, and grades itself.</div>
+    </div>
+    <div class="sh-stats">${today}</div>
+    <div class="dw-sect" style="margin:14px 0 6px">Five ways in</div>
+    <div class="sh-paths">${paths}</div>
+    ${voice?`<div class="dw-sect" style="margin:14px 0 5px">Latest from the voices</div><div class="nw-voice" style="max-width:560px"><div class="nw-voice-h"><span class="nw-voice-s">${esc(voice.s)}</span><span class="nw-d">${esc(voice.d)}</span></div><a class="nw-voice-t" href="${esc(voice.u)}" target="_blank" rel="noopener">${esc(voice.t)}</a></div>`:''}`;
 }
 
 /* ── News tab — nightly headlines + leading long-form voices ── */
@@ -1362,13 +1481,13 @@ function buildChokeMap(){
   });
   // Heat intensity by conv-3 count: 0=blank, 1=light, 2=med, 3+=dark
   function cellStyle(cell){
-    if(cell.t===0) return 'background:#FAFAFA;color:#D1D5DB;';
+    if(cell.t===0) return 'background:var(--color-background-secondary);color:#D1D5DB;';
     const c3=cell.c3;
     if(c3>=3) return `background:#16A34A55;color:#0a4a25;`;
     if(c3===2) return `background:#16A34A33;color:#0a4a25;`;
     if(c3===1) return `background:#16A34A1A;color:#0a4a25;`;
     if(cell.c2>=2) return `background:#3B82F614;color:var(--color-text-secondary);`;
-    return `background:#FFFFFF;color:var(--color-text-secondary);`;
+    return `background:var(--color-background-primary);color:var(--color-text-secondary);`;
   }
   // ── Story-first geography risk cards ──
   const cardGeos=[...BUCKETS].map(b=>{
@@ -1413,13 +1532,13 @@ function buildChokeMap(){
       html+=`<div class="hm-cell" data-v="${v.id}" data-g="${b.id}" title="${title}" style="${sty}padding:4px 2px;text-align:center;cursor:${cell.t?'pointer':'default'};border-radius:2px;min-height:40px;display:flex;flex-direction:column;justify-content:center;align-items:center">${inner}</div>`;
     });
     const rt=rowTotal[v.id];
-    html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:600;color:var(--color-text-secondary);background:#F9FAFB;border-radius:2px;display:flex;flex-direction:column;justify-content:center"><span>${rt.c3||'·'}</span><span style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${rt.t}</span></div>`;
+    html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:600;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:2px;display:flex;flex-direction:column;justify-content:center"><span>${rt.c3||'·'}</span><span style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${rt.t}</span></div>`;
   });
   // Totals row
-  html+=`<div style="display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--color-text-tertiary);padding:0 6px;background:#F9FAFB">Σ</div>`;
+  html+=`<div style="display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--color-text-tertiary);padding:0 6px;background:var(--color-background-secondary)">Σ</div>`;
   BUCKETS.forEach(b=>{
     const ct=colTotal[b.id];
-    html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:600;color:var(--color-text-secondary);background:#F9FAFB;border-radius:2px"><div>${ct.c3||'·'}</div><div style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${ct.t}</div></div>`;
+    html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:600;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:2px"><div>${ct.c3||'·'}</div><div style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${ct.t}</div></div>`;
   });
   html+=`<div style="padding:4px 2px;text-align:center;font-size:11px;font-weight:700;color:var(--color-text-primary);background:#16A34A22;border-radius:2px"><div>${grandTotal.c3}</div><div style="font-size:9px;color:var(--color-text-tertiary);font-weight:400">${grandTotal.t}</div></div>`;
   html+=`</div></div>`;
@@ -1448,9 +1567,9 @@ function buildChokeMap(){
       const b=BUCKETS.find(x=>x.id===g);
       const chips=cell.ts.sort((a,b)=>b.conviction-a.conviction).map(c=>{
         const cnv={1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[c.conviction];
-        return `<span class="ticklink" data-tk="${c.ticker}" title="${c.name.replace(/"/g,'&quot;')} — ${c.chain_layer.replace(/"/g,'&quot;')}" style="display:inline-block;margin:2px 3px;font-size:10.5px;padding:1px 6px;background:#fff;border:.5px solid ${cnv};border-left:3px solid ${cnv};border-radius:2px">${c.ticker} <span style="color:var(--color-text-tertiary);font-size:9.5px">${c.conviction}</span></span>`;
+        return `<span class="ticklink" data-tk="${c.ticker}" title="${c.name.replace(/"/g,'&quot;')} — ${c.chain_layer.replace(/"/g,'&quot;')}" style="display:inline-block;margin:2px 3px;font-size:10.5px;padding:1px 6px;background:var(--color-background-primary);border:.5px solid ${cnv};border-left:3px solid ${cnv};border-radius:2px">${c.ticker} <span style="color:var(--color-text-tertiary);font-size:9.5px">${c.conviction}</span></span>`;
       }).join('');
-      det.innerHTML=`<div style="border:.5px solid var(--color-border-tertiary);border-left:3px solid ${vc.c};border-radius:4px;padding:8px 10px;background:#fff">
+      det.innerHTML=`<div style="border:.5px solid var(--color-border-tertiary);border-left:3px solid ${vc.c};border-radius:4px;padding:8px 10px;background:var(--color-background-primary)">
         <div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:2px">${vc.sn} × ${b.flag} ${b.label}</div>
         <div style="font-size:10.5px;color:var(--color-text-tertiary);margin-bottom:6px">${cell.t} names · ${cell.c3} chokepoint-3 · ${cell.c2} interested-2 · ${cell.c1} monitor-1 — click any ticker to filter Companies</div>
         ${chips}
@@ -1545,14 +1664,14 @@ function renderCoCard(c){
   const convLabel={1:'monitor',2:'interested',3:'chokepoint owner'}[c.conviction]||'';
   const themes=(c.themes||[]).map(t=>{
     const tm=(THEMES_REG||[]).find(x=>x.id===t)||{label:t};
-    return `<span style="display:inline-block;background:#F3F4F6;color:var(--color-text-secondary);padding:1px 5px;border-radius:2px;margin:1px;font-size:9.5px;cursor:pointer;border:.5px solid #E5E7EB" onclick="CO_STATE.theme='${t}';renderCoPills();renderCo();" title="filter by ${tm.label}">${tm.label}</span>`;
+    return `<span style="display:inline-block;background:var(--color-background-secondary);color:var(--color-text-secondary);padding:1px 5px;border-radius:2px;margin:1px;font-size:9.5px;cursor:pointer;border:.5px solid #E5E7EB" onclick="CO_STATE.theme='${t}';renderCoPills();renderCo();" title="filter by ${tm.label}">${tm.label}</span>`;
   }).join('');
   const srcs=(c.sources||[]).map(s=>{
     const short=s.replace(/^citrini-/,'').replace(/-\d{4}-\d{2}$/,'');
     return `<span style="display:inline-block;background:var(--color-background-info);color:var(--color-text-info);padding:1px 5px;border-radius:2px;margin:1px;font-size:9.5px;border:.5px solid var(--color-border-info)" title="${s}">${short}</span>`;
   }).join('');
   const footer=(srcs||themes)?`<div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${srcs?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-right:2px">src:</span>${srcs}`:''}${themes?`<span style="font-size:9.5px;color:var(--color-text-tertiary);margin-left:${srcs?'6px':'0'};margin-right:2px">themes:</span>${themes}`:''}</div>`:'';
-  return `<div class="co-card" data-tk="${c.ticker}" style="border:.5px solid var(--color-border-tertiary);border-radius:7px;padding:7px 10px;margin-bottom:5px;background:#fff;box-shadow:var(--shadow-1)">
+  return `<div class="co-card" data-tk="${c.ticker}" style="border:.5px solid var(--color-border-tertiary);border-radius:7px;padding:7px 10px;margin-bottom:5px;background:var(--color-background-primary);box-shadow:var(--shadow-1)">
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px">
       <span style="font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--color-text-primary)">${c.ticker}</span>
       <span style="font-size:12.5px;color:var(--color-text-primary);font-weight:500">${c.name}</span>
@@ -1591,7 +1710,7 @@ function buildWalkthroughs(){
         </div>
       </div>`;
     }).join('');
-    return `<div style="border:.5px solid var(--color-border-tertiary);border-left:3px solid ${c};border-radius:4px;padding:10px 14px;margin-bottom:10px;background:#fff">
+    return `<div style="border:.5px solid var(--color-border-tertiary);border-left:3px solid ${c};border-radius:4px;padding:10px 14px;margin-bottom:10px;background:var(--color-background-primary)">
       <div style="font-size:13.5px;font-weight:600;color:var(--color-text-primary)">${w.title}</div>
       <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">${w.subtitle||''}</div>
       <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:6px;padding:6px 8px;background:${c}08;border-radius:3px;border-left:2px solid ${c}55">${linkifyTickers(w.intro||'')}</div>
@@ -1654,7 +1773,7 @@ function renderGl(){
           return `<span style="display:inline-block;color:var(--color-text-info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;margin-right:6px" onclick="GL_STATE.q='${esc}';GL_STATE.cat=null;document.getElementById('gl-search').value='${esc}';renderGlPills();renderGl();">${x}</span>`;
         }).join('');
         const exp=t.expansion?` <span style="color:var(--color-text-tertiary);font-size:11px;font-weight:400">— ${t.expansion}</span>`:'';
-        return `<div style="border:.5px solid var(--color-border-tertiary);border-left:2px solid ${cc};border-radius:3px;padding:6px 9px;margin-bottom:4px;background:#fff">
+        return `<div style="border:.5px solid var(--color-border-tertiary);border-left:2px solid ${cc};border-radius:3px;padding:6px 9px;margin-bottom:4px;background:var(--color-background-primary)">
           <div style="font-size:12px;font-weight:600;color:var(--color-text-primary)">${t.term}${exp}</div>
           <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5;margin-top:3px">${t.definition}</div>
           ${see?`<div style="font-size:10.5px;color:var(--color-text-tertiary);margin-top:4px"><b>see also:</b> ${see}</div>`:''}
@@ -1848,8 +1967,8 @@ async function loadData(){
   document.getElementById('app').style.display='';
 
   /* Build default tab */
-  buildMatrix();
-  built.mx=true;
+  buildStartHere();
+  built.sh=true;
 }
 
 loadData().catch(err=>{
