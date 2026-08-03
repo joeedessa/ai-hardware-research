@@ -92,6 +92,8 @@
     {"ticker": "APLD", "name": "Applied Digital", "reason": "Bitcoin-heritage DC converter — CoreWeave leases real, but leverage + froth profile", "category": "bitcoin-infra", "source_ref": ["ms-value-chain-2026-07"]},
     {"ticker": "BN", "name": "Brookfield", "reason": "Asset-manager capital layer of the MS map — finance, not hardware", "category": "capital-layer", "source_ref": ["ms-value-chain-2026-07"]},
     {"ticker": "BX", "name": "Blackstone", "reason": "DC private-equity capital layer (QTS) — finance, not hardware", "category": "capital-layer", "source_ref": ["ms-value-chain-2026-07"]},
-    {"ticker": "IBM", "name": "IBM", "reason": "Enterprise/tier-2 cloud layer of the MS map; no hardware chokepoint", "category": "software-saas", "source_ref": ["ms-value-chain-2026-07"]}
+    {"ticker": "IBM", "name": "IBM", "reason": "Enterprise/tier-2 cloud layer of the MS map; no hardware chokepoint", "category": "software-saas", "source_ref": ["ms-value-chain-2026-07"]},
+    {"ticker": "KEYS", "name": "Keysight", "reason": "Test & measurement instruments — R&D/lab layer, not a production chokepoint; production test covered via Advantest/Teradyne/Cohu/Aehr", "category": "diversified-industrial", "source_ref": ["gap-audit-2026-08"]},
+    {"ticker": "TXN", "name": "Texas Instruments", "reason": "Broad analog — huge but diffuse AI exposure; the specific AI power-stage story is covered via MPWR/onsemi/Infineon/STM", "category": "diversified-industrial", "source_ref": ["gap-audit-2026-08"]}
   ]
 }
