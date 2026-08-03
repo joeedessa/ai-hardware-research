@@ -369,6 +369,18 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .nw-voice-t{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--color-text-primary);text-decoration:none;line-height:1.3;display:block}
 .nw-voice-t:hover{color:var(--accent)}
 .nw-voice-sum{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5;margin-top:3px}
+/* ── Alert strip + scoreboard ── */
+#alert-strip{display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:4px 2px 8px}
+.al-lbl{font-size:9.5px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.03em;flex-shrink:0}
+.al-chip{font-size:9.5px;font-weight:500;padding:2px 8px;border-radius:20px;border:.5px solid;cursor:pointer;transition:box-shadow .12s;white-space:nowrap}
+.al-chip:hover{box-shadow:var(--shadow-1)}
+.al-chip b{font-size:8px;letter-spacing:.06em;font-weight:700}
+.sb td,.sb th{font-variant-numeric:tabular-nums}
+.sb td:first-child{font-weight:500;color:var(--color-text-primary)}
+.sb-n{font-size:9px;color:var(--color-text-tertiary);font-weight:400}
+.sb-d{display:block;font-size:8.5px;font-weight:500}
+.sb-bench td{color:var(--color-text-tertiary)!important;background:var(--color-background-secondary)}
+.sb-bench td:first-child{font-weight:400;font-style:italic}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap}
@@ -487,6 +499,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
   <div class="mast-mkt" id="mast-mkt" style="display:none"></div>
   <span class="mast-froth" id="mast-froth" style="display:none"><span class="fm-pulse"></span><span>Froth Monitor</span></span>
 </header>
+<div id="alert-strip" style="display:none"></div>
 
 <div class="tabs">
   <!-- Widget 1 tabs -->
@@ -663,7 +676,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B;
+let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -1244,6 +1257,25 @@ function buildPortfolio(){
       <div class="ew-avoid"><b>${ew.avoid.title}.</b> ${linkifyTickers(ew.avoid.body)}</div>`;
     cont.appendChild(box);
   }
+  /* Scoreboard — does the framework's ranking actually work? Computed nightly. */
+  if(PERF&&PERF.baskets){
+    const sb=mk('div','');
+    const cols=[['r1m','1 mo'],['r3m','3 mo'],['r6m','6 mo'],['r1y','1 yr']];
+    const smh=PERF.baskets['SMH (semis benchmark)']||{};
+    const rows=Object.entries(PERF.baskets).map(([name,b])=>{
+      const isB=name.includes('benchmark');
+      const cells=cols.map(([k])=>{
+        const v=b[k]; if(v==null)return '<td>—</td>';
+        const beat=!isB&&smh[k]!=null?(v-smh[k]):null;
+        return `<td style="color:${v>=0?'#15803D':'#B32B2A'}">${v>0?'+':''}${v}%${beat!=null?`<span class="sb-d" style="color:${beat>=0?'#16A34A':'#E24B4A'}">${beat>=0?'+':''}${beat.toFixed(1)} vs SMH</span>`:''}</td>`;
+      }).join('');
+      return `<tr class="${isB?'sb-bench':''}"><td>${name}${b.n>1?` <span class="sb-n">${b.n}</span>`:''}</td>${cells}</tr>`;
+    }).join('');
+    sb.innerHTML=`<div class="ew-title" style="font-size:15px;margin:14px 0 2px">Scoreboard <span class="ew-asof">nightly · ${(PERF._meta.as_of||'').slice(0,10)}</span></div>
+      <div class="ew-intro">Does the framework's ranking actually work? Equal-weight, price-only returns of the dashboard's own baskets against the benchmarks. ${esc(PERF._meta.note||'')}</div>
+      <div style="overflow-x:auto"><table class="rt sb"><thead><tr><th>Basket</th>${cols.map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    cont.appendChild(sb);
+  }
   const banner=mk('div','banner');
   banner.innerHTML=`<div class="banner-title">${PORTFOLIO.defining_insight.title}</div><div class="banner-body">${PORTFOLIO.defining_insight.body}</div>`;
   cont.appendChild(banner);
@@ -1714,6 +1746,8 @@ async function loadData(){
   IDX=(indicesJ&&indicesJ.symbols)||null; NEWS=(newsJ&&newsJ.items)||null;
   NEWS_V=(newsJ&&newsJ.voices)||null;
   POLICY=await fetchJ('policy.json').catch(()=>null);
+  ALERTS=await fetchJ('alerts.json').catch(()=>null);
+  PERF=await fetchJ('performance.json').catch(()=>null);
 
   /* Widget 1 data */
   VC_COLS  = matrix.verticals;
@@ -1778,6 +1812,16 @@ async function loadData(){
     if(krw)h+=chip('USD/KRW',Math.round(krw.p).toLocaleString(),krw.d1);
     if(h){const el=document.getElementById('mast-mkt');el.innerHTML=h;el.style.display='flex';
       el.title='SMH/SPY chip = 1-month relative move of semis vs S&P — the froth thermometer. As of '+((quotesJ&&quotesJ._meta&&quotesJ._meta.as_of)||'').slice(0,10);}
+  }
+
+  /* Alert strip — live data checked nightly against the dashboard's own judgments */
+  if(ALERTS&&ALERTS.alerts&&ALERTS.alerts.length){
+    const AS={window:{c:'#16A34A',l:'ENTRY'},move:{c:'#EF9F27',l:'MOVE'},froth:{c:'#E24B4A',l:'FROTH'}};
+    const el=document.getElementById('alert-strip');
+    el.innerHTML=`<span class="al-lbl" title="Computed nightly: insulated names past the −15% entry threshold, big single-day moves in conviction-3 names, high-froth names back near their highs">⚡ ${ALERTS.alerts.length} signal${ALERTS.alerts.length===1?'':'s'} · ${(ALERTS._meta.as_of||'').slice(0,10)}</span>`+
+      ALERTS.alerts.map(a=>{const s=AS[a.type]||AS.move;
+        return `<span class="al-chip" style="color:${s.c};border-color:${s.c}44;background:${s.c}0D" title="${a.msg.replace(/"/g,'&quot;')}" onclick="openCompanyDrawer('${a.tk}')"><b>${s.l}</b> ${a.tk} <span style="font-variant-numeric:tabular-nums">${a.val>0?'+':''}${a.val}%</span></span>`;}).join('');
+    el.style.display='flex';
   }
 
   /* Masthead froth pill → Cycle tab */

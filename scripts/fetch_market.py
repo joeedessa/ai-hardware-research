@@ -177,6 +177,59 @@ def main():
         json.dump({'_meta': {'as_of': now}, 'symbols': idx}, f, separators=(',', ':'))
     print(f'indices.json: {len(idx)}/{len(INDICES)}')
 
+    # ── Alerts: live data checked against the dashboard's own judgments ──
+    froth = {c['ticker']: c.get('froth') for c in comp}
+    conv = {c['ticker']: c.get('conviction') for c in comp}
+    names = {c['ticker']: c['name'] for c in comp}
+    alerts = []
+    for t, q in quotes.items():
+        dd, d1 = q.get('dd'), q.get('d1')
+        if froth.get(t) == 1 and dd is not None and dd <= -15:
+            alerts.append({'tk': t, 'type': 'window', 'val': dd,
+                           'msg': f"{names[t]} ({t}) is {dd}% off its 52w high — insulated name past the entry threshold"})
+        if froth.get(t) == 3 and dd is not None and dd >= -5:
+            alerts.append({'tk': t, 'type': 'froth', 'val': dd,
+                           'msg': f"{names[t]} ({t}) back within 5% of its 52w high — froth rebuilt"})
+        if conv.get(t) == 3 and d1 is not None and abs(d1) >= 6:
+            alerts.append({'tk': t, 'type': 'move', 'val': d1,
+                           'msg': f"{names[t]} ({t}) moved {d1:+}% today — conviction-3 name, check the tape"})
+    order = {'window': 0, 'move': 1, 'froth': 2}
+    alerts.sort(key=lambda a: (order[a['type']], a['val']))
+    with open(os.path.join(ROOT, 'alerts.json'), 'w') as f:
+        json.dump({'_meta': {'as_of': now}, 'alerts': alerts}, f, separators=(',', ':'))
+    print(f'alerts.json: {len(alerts)} alerts')
+
+    # ── Performance scoreboard: does the framework's ranking actually work? ──
+    def closes_of(sym):
+        try:
+            return [float(x) for x in hist[sym].dropna(subset=['Close'])['Close']]
+        except Exception:
+            return []
+
+    def ret(cl, nd):
+        return (cl[-1] / cl[-(nd + 1)] - 1) * 100 if len(cl) > nd else None
+
+    def basket(tks):
+        out = {}
+        for label, nd in [('r1m', 21), ('r3m', 63), ('r6m', 126), ('r1y', 250)]:
+            rs = [r for r in (ret(closes_of(ymap.get(t, t)), nd) for t in tks) if r is not None]
+            out[label] = round(sum(rs) / len(rs), 1) if rs else None
+        out['n'] = len(tks)
+        return out
+
+    baskets = {
+        'Conviction-3 chokepoints': basket([t for t, v in conv.items() if v == 3]),
+        'Froth lens: insulated': basket([t for t, v in froth.items() if v == 1]),
+        'Froth lens: high-froth': basket([t for t, v in froth.items() if v == 3]),
+        'SMH (semis benchmark)': basket(['SMH']),
+        'SPY (market benchmark)': basket(['SPY']),
+    }
+    with open(os.path.join(ROOT, 'performance.json'), 'w') as f:
+        json.dump({'_meta': {'as_of': now,
+                             'note': 'Equal-weight, price-only, local-currency returns; no rebalancing, dividends or FX. A sanity check on the framework, not a track record.'},
+                   'baskets': baskets}, f, separators=(',', ':'))
+    print('performance.json:', {k: v['r1m'] for k, v in baskets.items()})
+
     # ── News via Google News RSS ──
     try:
         import feedparser
