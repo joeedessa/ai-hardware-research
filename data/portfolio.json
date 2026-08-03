@@ -93,80 +93,285 @@
       "n": "Foundry & Packaging",
       "c": "#2563EB",
       "cats": [
-        "TSMC N2 volume ramp + A16 (now)",
-        "CoWoS capacity adds AP6/AP7 (12m)",
-        "Arizona fab leading-edge ramp (12m)",
-        "FOPLP / panel-level packaging at scale (3yr)"
+        {
+          "t": "TSMC Q3 report — does capex fear break?",
+          "h": "now",
+          "status": "pending",
+          "p": "TSMC raised its 2026 build budget to $60–64B and the stock FELL. The next quarterly report shows whether the market goes back to reading big capex as strong demand.",
+          "why": "The best sentiment gauge for the whole AI supply chain — and the catalyst on our #1 entry window."
+        },
+        {
+          "t": "N2 (2-nanometer) volume ramp, A16 behind it",
+          "h": "now",
+          "status": "pending",
+          "p": "TSMC's newest manufacturing generation is filling with orders through 2026; the next one (A16) is already being sold.",
+          "why": "Confirms the leading edge stays sold out — the core of the TSM thesis.",
+          "note": "on track"
+        },
+        {
+          "t": "CoWoS packaging capacity additions (AP6/AP7)",
+          "h": "12m",
+          "status": "pending",
+          "p": "New packaging plants to relieve the #1 AI bottleneck — ~1M wafers of 2026 demand already booked, Nvidia holding ~60%.",
+          "why": "More CoWoS = more AI chips can physically ship; watch who catches the overflow (ASE, Amkor)."
+        },
+        {
+          "t": "Panel-level packaging at scale",
+          "h": "3yr",
+          "status": "pending",
+          "p": "The next escape from round-wafer size limits: building chip packages on large rectangular panels instead.",
+          "why": "Would reshuffle the packaging-equipment winners."
+        }
       ]
     },
     {
       "n": "Memory (HBM)",
       "c": "#7C3AED",
       "cats": [
-        "HBM3E sold out; pricing firm (now)",
-        "HBM4 ramp + Nvidia qual (12m)",
-        "Samsung share recovery vs SK Hynix (12m)",
-        "CXMT domestic HBM progress (3yr)"
+        {
+          "t": "HBM4 qualified by all three makers",
+          "h": "12m",
+          "status": "landed",
+          "p": "For the first time in HBM's history, SK Hynix, Samsung AND Micron all passed qualification for the same generation — and all ship for Vera Rubin.",
+          "why": "Confirms structural demand — but three qualified suppliers also means more supply. Watch pricing.",
+          "note": "landed Jun–Jul 2026"
+        },
+        {
+          "t": "SK Hynix Q3: delayed HBM4 revenue lands",
+          "h": "now",
+          "status": "pending",
+          "p": "The HBM4 shipments that slipped out of Q2 get recognized in the September quarter — the print that answers July's air-pocket selloff.",
+          "why": "The catalyst on our #2 entry window: confirms or breaks the 'repriced, not broken' read."
+        },
+        {
+          "t": "Samsung share recovery vs SK Hynix",
+          "h": "12m",
+          "status": "landed",
+          "p": "Samsung fell badly behind in AI memory; it is now qualified and shipping an estimated 25–30% of Nvidia's newest platform.",
+          "why": "Drives the Samsung re-rating ('Korea Unlocked') thesis.",
+          "note": "underway"
+        },
+        {
+          "t": "CXMT — China's domestic HBM attempt",
+          "h": "3yr",
+          "status": "pending",
+          "p": "China's memory champion trying to build HBM without Western tools.",
+          "why": "The long-term supply and geopolitics wildcard for memory pricing."
+        }
       ]
     },
     {
       "n": "AI Accelerators",
       "c": "#16A34A",
       "cats": [
-        "Blackwell Ultra GB300 shipping (now)",
-        "Vera Rubin + AMD MI400 launch (12m)",
-        "Custom ASIC share gains (Google/Meta/OpenAI) (12m)",
-        "Inference-vs-training mix shift (3yr)"
+        {
+          "t": "Vera Rubin ships in volume",
+          "h": "12m",
+          "status": "landed",
+          "p": "Nvidia's next flagship platform is in full production and ships in Q3 — each GPU carries 288GB of HBM4 across eight stacks.",
+          "why": "Resets the content story downstream: more memory, more optics, more power per chip.",
+          "note": "full production Jun; ships Q3"
+        },
+        {
+          "t": "Custom-ASIC share gains go mainstream",
+          "h": "12m",
+          "status": "landed",
+          "p": "The big AI labs increasingly co-design their own chips with Broadcom or Marvell instead of buying only Nvidia — OpenAI signed ~$10B with Broadcom starting late 2026.",
+          "why": "Confirms the custom-silicon thesis: value shifts to the ASIC partners and the network.",
+          "note": "OpenAI×AVGO ~$10B"
+        },
+        {
+          "t": "Hyperscaler capex guidance holds ~$700B",
+          "h": "now",
+          "status": "pending",
+          "p": "The five biggest US cloud builders plan ~$700B of 2026 investment — revised UP $173B since January. Every earnings season re-tests it.",
+          "why": "The demand spine under every name in this dashboard. Never stop watching this number."
+        },
+        {
+          "t": "Inference-vs-training mix shift",
+          "h": "3yr",
+          "status": "pending",
+          "p": "As AI moves from building models to running them everywhere, cheaper inference silicon takes a growing share of spend — inference prices are already down 30–40% this year.",
+          "why": "Decides how durable Nvidia's premium is, and which GPU renters survive."
+        }
       ]
     },
     {
       "n": "Optical & CPO",
       "c": "#D97706",
       "cats": [
-        "1.6T transceiver ramp (now)",
-        "Nvidia/Broadcom CPO on TSMC COUPE (12m)",
-        "EML laser capacity easing? (12m)",
-        "LPO/CPO reshaping value chain (3yr)"
+        {
+          "t": "Co-packaged optics enters volume production",
+          "h": "12m",
+          "status": "landed",
+          "p": "Optics built directly into the switch — Nvidia on TSMC's COUPE process, Broadcom's Bailly — started shipping in real volume. No longer a roadmap item.",
+          "why": "Confirms the optics content story; the bottleneck moved to optical-engine yield — good for COHR, LITE, FOCI.",
+          "note": "landed Jul 2026"
+        },
+        {
+          "t": "1.6-terabit transceiver ramp",
+          "h": "now",
+          "status": "pending",
+          "p": "The next speed grade of plug-in optics ramping through 2026.",
+          "why": "Content per GPU keeps climbing — the core optics thesis.",
+          "note": "ongoing"
+        },
+        {
+          "t": "EML laser capacity — does the shortage ease?",
+          "h": "12m",
+          "status": "pending",
+          "p": "The tiny lasers at the heart of every optical module remain the chokepoint; capacity comes on slowly.",
+          "why": "Tight lasers mean pricing power for the few makers; a real easing would soften it."
+        },
+        {
+          "t": "LPO/CPO reshuffle of the value chain",
+          "h": "3yr",
+          "status": "pending",
+          "p": "As optics integrate into the chip package, today's module assemblers risk losing their seat at the table.",
+          "why": "Decides who captures optics value in 2028+ — component owners over assemblers."
+        }
       ]
     },
     {
       "n": "Power & Cooling",
       "c": "#65A30D",
       "cats": [
-        "Liquid cooling attach-rate surge (now)",
-        "CDU capacity build-out (12m)",
-        "800VDC architecture adoption (12m)",
-        "Onsite nuclear/gas PPAs scaling (3yr)"
+        {
+          "t": "Liquid-cooling attach rates keep surging",
+          "h": "now",
+          "status": "pending",
+          "p": "New AI racks increasingly REQUIRE water cooling; attach rises with every GPU generation.",
+          "why": "Drives Vertiv, AVC, Auras — cooling grows faster than the market it serves.",
+          "note": "ongoing"
+        },
+        {
+          "t": "800-volt DC racks — first volume shipments",
+          "h": "12m",
+          "status": "pending",
+          "p": "Racks are being redesigned around 800V DC power (borrowed from the EV industry) for Nvidia's next platforms; first real shipments expected imminently.",
+          "why": "Opens the SiC/GaN power-chip story: Infineon, onsemi, Navitas, Delta, Lite-On.",
+          "note": "Q3 2026 expected"
+        },
+        {
+          "t": "Grid equipment lead times stay multi-year",
+          "h": "12m",
+          "status": "pending",
+          "p": "Transformers and switchgear still quote waits measured in years.",
+          "why": "The physical ceiling on AI growth — supports Hitachi Energy, Siemens Energy, GE Vernova."
+        },
+        {
+          "t": "Nuclear/gas behind-the-fence deals scale",
+          "h": "3yr",
+          "status": "pending",
+          "p": "Datacenters signing direct contracts with power plants next door instead of waiting years for grid hookups.",
+          "why": "Turns the AI-power story from narrative into contracted cash flow — the CEG/VST layer."
+        }
       ]
     },
     {
       "n": "Humanoid Robotics",
       "c": "#DC2626",
       "cats": [
-        "Optimus / Figure pilot production (now)",
-        "Reducer + roller-screw order flow (12m)",
-        "China actuator cost-down progress (12m)",
-        "Mass-market unit economics proven? (3yr)"
+        {
+          "t": "Optimus pilot production is running",
+          "h": "now",
+          "status": "landed",
+          "p": "Tesla's robot line is live — roughly 100–150/week in July, targeting 1,000/week by September, all for internal use first.",
+          "why": "The volume signal the whole actuator chain has been waiting for.",
+          "note": "Fremont ramping since Jul"
+        },
+        {
+          "t": "Reducer & roller-screw order flow",
+          "h": "12m",
+          "status": "landed",
+          "p": "The component makers (precision gears, screws) began receiving real purchase orders, not just samples — supplier stocks surged Jul 10.",
+          "why": "Confirms the T-chain thesis (Tuopu, Shuanghuan, Beite). Now watch order sizes against the stock moves.",
+          "note": "orders since Jul 10"
+        },
+        {
+          "t": "Unitree IPO prices on the STAR board",
+          "h": "now",
+          "status": "pending",
+          "p": "China's leading robot maker goes public (~$619M raise filed) — and its filing revealed profits HALVED.",
+          "why": "The first real public-market test of humanoid-maker economics.",
+          "note": "filed; pricing pending"
+        },
+        {
+          "t": "China actuator cost-down",
+          "h": "12m",
+          "status": "pending",
+          "p": "Chinese suppliers driving joint costs down fast enough to make robots economical.",
+          "why": "Decides where actuator value settles — Japanese quality vs Chinese price."
+        },
+        {
+          "t": "Mass-market unit economics proven?",
+          "h": "3yr",
+          "status": "pending",
+          "p": "Can anyone build a genuinely useful humanoid below ~$30–50K at real scale?",
+          "why": "The make-or-break question for the size of the entire theme."
+        }
       ]
     },
     {
       "n": "AI / Smart Glasses",
       "c": "#9333EA",
       "cats": [
-        "Meta Ray-Ban Display sales (now)",
-        "Android XR device wave (12m)",
-        "Micro-display tech winner emerging (3yr)",
-        "True all-day AR glasses (3yr)"
+        {
+          "t": "Meta Ray-Ban Display sell-through",
+          "h": "now",
+          "status": "pending",
+          "p": "The first mainstream glasses with a built-in display — do people keep buying them after the novelty?",
+          "why": "The consumer on-ramp for the whole AR component chain."
+        },
+        {
+          "t": "Android XR device wave",
+          "h": "12m",
+          "status": "pending",
+          "p": "Google's glasses platform brings more hardware brands to market.",
+          "why": "More devices = more volume for displays, waveguides and the Qualcomm SoC layer."
+        },
+        {
+          "t": "A micro-display technology winner emerges",
+          "h": "3yr",
+          "status": "pending",
+          "p": "MicroLED vs OLED-on-silicon vs LCoS — still no winner for true AR glasses.",
+          "why": "Picks the winners in the display vertical; several leaders are still private."
+        }
       ]
     },
     {
       "n": "Equipment & EDA",
       "c": "#0EA5E9",
       "cats": [
-        "High-NA EUV deployments Intel/Samsung (now)",
-        "WFE recovery post China-localization (12m)",
-        "EDA export-control policy swings (12m)",
-        "China WFE localization ex-litho (3yr)"
+        {
+          "t": "High-NA EUV used in real production",
+          "h": "now",
+          "status": "landed",
+          "p": "ASML's newest ~$380M machines are now running actual manufacturing at Intel (the 18A process) — not just development work.",
+          "why": "Validates the next decade of ASML's roadmap; watch TSMC and Samsung follow.",
+          "note": "Intel 18A confirmed Jul"
+        },
+        {
+          "t": "WFE recovery after China digestion",
+          "h": "12m",
+          "status": "pending",
+          "p": "Chinese fabs over-ordered equipment for years; that hangover is fading just as AI fab construction accelerates.",
+          "why": "Sets up the cycle turn for AMAT, Lam, TEL, KLA."
+        },
+        {
+          "t": "EDA export-control swings",
+          "h": "12m",
+          "status": "pending",
+          "p": "US rules on selling chip-design software to China keep changing with the political weather.",
+          "why": "The main risk overhang on Synopsys/Cadence multiples."
+        },
+        {
+          "t": "China tool localization (ex-litho)",
+          "h": "3yr",
+          "status": "pending",
+          "p": "China replacing Western fab tools wherever it can (NAURA, AMEC) — lithography excepted.",
+          "why": "Long-term share risk in mid-tier tools; ASML's moat stays intact."
+        }
       ]
     }
   ],
@@ -221,5 +426,9 @@
       "title": "Where the froth concentrates",
       "body": "The narrative-priced layer, flagged high-froth on the lens: VST (AI-power torque without contracts — CEG is the contracted way), CRWV and NBIS (GPU renters squeezed between 30–40% inference-price deflation and multi-$B lease obligations), ARM (royalty moat priced for decades of share gains), BE (story ahead of margins), SMCI (share-gain story with DELL and HPE closing in). Not shorts — just where a froth unwind lands first."
     }
+  },
+  "catalyst_meta": {
+    "as_of": "2026-08-03",
+    "lifecycle": "Each catalyst carries status pending/landed/slipped. Landed items stay visible (checked off) for one review cycle before rotating out — a landed catalyst is thesis confirmation, not noise. Reconciling this table against the news is a standing step of every research-loop sweep; if as_of is >60 days old, treat the table as stale."
   }
 }

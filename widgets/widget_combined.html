@@ -299,6 +299,23 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .dw-newsrow a:hover{color:var(--accent)}
 .dw-newsrow span{font-size:9px;color:var(--color-text-tertiary)}
 .ew-dd{font-size:8.5px;font-weight:600;padding:1.5px 7px;border-radius:20px;font-variant-numeric:tabular-nums;margin-left:auto}
+/* ── Catalyst calendar ── */
+.ct-land{background:#16A34A14;color:#15803D;border:.5px solid #16A34A44}
+.ct-slip{background:#EF9F2714;color:#B45309;border:.5px solid #EF9F2744}
+.cat-item{padding:3px 0;border-bottom:.5px solid var(--color-border-tertiary);cursor:pointer}
+.cat-item:last-child{border-bottom:none}
+.cat-item:hover .cat-t{color:var(--color-text-primary)}
+.cat-item-h{display:flex;align-items:center;gap:5px;min-width:0}
+.cat-t{font-size:10.5px;font-weight:500;color:var(--color-text-secondary);line-height:1.35;flex:1}
+.cat-item.landed .cat-t{color:#15803D}
+.cat-note{font-size:8.5px;color:var(--color-text-tertiary);font-style:italic;flex-shrink:0}
+.cat-chev{font-size:7px;color:var(--color-text-tertiary);transition:transform .15s;flex-shrink:0}
+.cat-item.ex .cat-chev{transform:rotate(180deg)}
+.cat-x{display:none;padding:4px 0 3px 24px}
+.cat-item.ex .cat-x{display:block}
+.cat-p{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5}
+.cat-why{font-size:10px;color:var(--color-text-tertiary);line-height:1.5;margin-top:3px}
+.cat-why b{color:var(--color-text-secondary);font-weight:600}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap;position:sticky;top:33px;background:var(--color-background-primary);z-index:5}
@@ -1117,18 +1134,26 @@ function buildPortfolio(){
   });
   cont.appendChild(qg);
   const catLabel=mk('div','');catLabel.style.cssText='font-size:10.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px;padding-bottom:3px;border-bottom:.5px solid var(--color-border-tertiary)';
-  catLabel.textContent='Key catalysts by vertical — now / 12m / 3yr';cont.appendChild(catLabel);
+  const catAsOf=(PORTFOLIO.catalyst_meta&&PORTFOLIO.catalyst_meta.as_of)||'';
+  catLabel.innerHTML=`Catalyst calendar — what confirms or kills each thesis${catAsOf?` <span style="text-transform:none;letter-spacing:0;font-weight:400">· reconciled ${catAsOf}</span>`:''}`;cont.appendChild(catLabel);
   const cat_note=mk('div','note');
-  cat_note.innerHTML='<span class="ct-pill ct-now">now</span> already in motion &nbsp;<span class="ct-pill ct-12m">12m</span> next 12 months &nbsp;<span class="ct-pill ct-3y">3yr</span> 2-3 year horizon';
+  cat_note.innerHTML='<span class="ct-pill ct-now">now</span> in motion &nbsp;<span class="ct-pill ct-12m">12m</span> next 12 months &nbsp;<span class="ct-pill ct-3y">3yr</span> 2–3 years &nbsp;<span class="ct-pill ct-land">✓ landed</span> happened — thesis confirmation &nbsp;·&nbsp; click any catalyst for the plain-English what &amp; why';
   cont.appendChild(cat_note);
   const catg=mk('div','cat-grid');
   CY_CATS.forEach(cy=>{
     const c=mk('div','cat-card');
     const cats=cy.cats.map(cat=>{
-      const tag=cat.includes('(now)')?'ct-now':cat.includes('(12m)')?'ct-12m':cat.includes('(3yr)')?'ct-3y':'ct-on';
-      const label=cat.includes('(now)')?'now':cat.includes('(12m)')?'12m':cat.includes('(3yr)')?'3yr':'ongoing';
-      const text=cat.replace(/\((now|12m|3yr|ongoing)\)/g,'').trim();
-      return `<div style="display:flex;align-items:flex-start;gap:4px;padding:2px 0;border-bottom:.5px solid var(--color-border-tertiary)"><span class="ct-pill ${tag}" style="flex-shrink:0;margin-top:1px">${label}</span><span style="font-size:10.0px;color:var(--color-text-secondary);line-height:1.4">${text}</span></div>`;
+      if(typeof cat==='string'){ /* legacy format fallback */
+        return `<div class="cat-item"><div class="cat-item-h"><span class="ct-pill ct-on">·</span><span class="cat-t">${cat}</span></div></div>`;
+      }
+      const hp={now:['ct-now','now'],'12m':['ct-12m','12m'],'3yr':['ct-3y','3yr']}[cat.h]||['ct-on','·'];
+      const pill=cat.status==='landed'?`<span class="ct-pill ct-land">✓</span>`
+        :cat.status==='slipped'?`<span class="ct-pill ct-slip">⚠</span>`
+        :`<span class="ct-pill ${hp[0]}">${hp[1]}</span>`;
+      return `<div class="cat-item${cat.status==='landed'?' landed':''}" onclick="this.classList.toggle('ex')">
+        <div class="cat-item-h">${pill}<span class="cat-t">${cat.t}</span>${cat.note?`<span class="cat-note">${cat.note}</span>`:''}<span class="cat-chev">▼</span></div>
+        <div class="cat-x"><div class="cat-p">${cat.p}</div><div class="cat-why"><b>Why it matters:</b> ${linkifyTickers(cat.why)}</div></div>
+      </div>`;
     }).join('');
     c.innerHTML=`<div class="cat-head"><div class="cat-dot" style="background:${cy.c}"></div><div class="cat-name">${cy.n}</div></div>${cats}`;
     catg.appendChild(c);
