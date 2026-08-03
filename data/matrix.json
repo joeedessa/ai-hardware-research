@@ -108,43 +108,53 @@
   "chain_stages": [
     {
       "id": "ip",
-      "n": "Design IP & EDA"
+      "n": "Design IP & EDA",
+      "plain": "The blueprints stage: design software and licensed building blocks every product starts from. Money here is royalties and licenses — no factories, high margins."
     },
     {
       "id": "ds",
-      "n": "Architecture & design"
+      "n": "Architecture & design",
+      "plain": "Deciding what to build: architecting the chip, system or robot before anything is manufactured. The brand names live here, but so does the fiercest competition."
     },
     {
       "id": "eq",
-      "n": "Capital equipment"
+      "n": "Capital equipment",
+      "plain": "The machines that make the things: fab tools, bonders, testers, MOCVD reactors. Sold to factories — a classic picks-and-shovels layer with monopoly pockets."
     },
     {
       "id": "in",
-      "n": "Inputs & substrates"
+      "n": "Inputs & substrates",
+      "plain": "The raw inputs one step above raw materials: silicon wafers, photomasks, resists, substrates, special films. Quiet, Japan-heavy near-monopolies."
     },
     {
       "id": "ff",
-      "n": "Front-end fabrication"
+      "n": "Front-end fabrication",
+      "plain": "The actual manufacturing of the silicon — running wafers through fabs. Enormously capital-intensive; whoever has capacity holds the leverage."
     },
     {
       "id": "bp",
-      "n": "Packaging, assembly & test"
+      "n": "Packaging, assembly & test",
+      "plain": "Everything after the wafer: cutting, stacking, wiring and testing chips into finished packages. Today's #1 AI bottleneck (CoWoS) lives at this stage."
     },
     {
       "id": "mi",
-      "n": "Module / sub-system"
+      "n": "Module / sub-system",
+      "plain": "Assembling chips into working parts: memory modules, GPU boards, optical transceivers, robot joints. Value depends on how replaceable the assembler is."
     },
     {
       "id": "si",
-      "n": "System integration / ODM"
+      "n": "System integration / ODM",
+      "plain": "Building the finished machine — servers, racks, robots, glasses — mostly by Taiwanese contract manufacturers. Huge revenue, thin margins, low moats."
     },
     {
       "id": "em",
-      "n": "End-market & deployment"
+      "n": "End-market & deployment",
+      "plain": "Who buys it and deploys it: hyperscalers, datacenters, factories, consumers. Demand starts here and flows backward up every column."
     },
     {
       "id": "sw",
-      "n": "Software & standards"
+      "n": "Software & standards",
+      "plain": "The software and standards that lock ecosystems in place — CUDA, chiplet standards, robot autonomy stacks. Often where the most durable moats hide."
     }
   ],
   "cells": {

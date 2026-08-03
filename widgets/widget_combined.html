@@ -61,8 +61,22 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 
 /* ── Widget 1: Matrix ── */
 .mxs{overflow-x:auto}
-.mch{border-radius:3px 3px 0 0;padding:3px 2px;text-align:center;font-size:10.0px;font-weight:500;line-height:1.2;pointer-events:none}
-.mrl{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);display:flex;align-items:center;padding-right:3px;line-height:1.2}
+.mch{border-radius:3px 3px 0 0;padding:3px 2px;text-align:center;font-size:10.0px;font-weight:500;line-height:1.2;cursor:pointer;transition:filter .12s}
+.mch:hover{filter:brightness(.92)}
+.mrl{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);display:flex;align-items:center;padding-right:3px;line-height:1.2;cursor:pointer;border-radius:4px;transition:background .12s,color .12s}
+.mrl:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+/* ── Matrix explainer bubble ── */
+#mx-bubble{position:fixed;z-index:80;width:min(320px,86vw);background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:10px;box-shadow:var(--shadow-3);padding:11px 13px;display:none}
+#mx-bubble.on{display:block;animation:mxb .16s ease-out}
+@keyframes mxb{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.mxb-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.mxb-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.mxb-title{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--color-text-primary)}
+.mxb-kind{font-size:8.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin-left:auto}
+.mxb-body{font-size:11.5px;line-height:1.55;color:var(--color-text-secondary)}
+.mxb-stats{font-size:9.5px;color:var(--color-text-tertiary);margin-top:6px;font-variant-numeric:tabular-nums}
+.mxb-act{display:inline-block;margin-top:7px;font-size:10.5px;font-weight:500;color:var(--accent);cursor:pointer}
+.mxb-act:hover{text-decoration:underline}
 .mc{border-radius:2px;padding:3px 3px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;min-height:28px;transition:all .1s;position:relative}
 .mc:hover{background:var(--color-background-primary);border-color:var(--color-border-secondary)}
 .mc.hi{border-color:#534AB7;background:#534AB70A}
@@ -436,7 +450,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 
 <!-- ── Widget 1 views ── -->
 <div class="view on" id="view-mx">
-  <div class="note"><b>Dimension A</b> — 13 hardware verticals × 10 supply-chain stages (ex-materials). <span style="background:#534AB70A;border:.5px solid #534AB7;padding:0 4px;border-radius:2px;color:#534AB7;font-weight:500">blue cells</span> = analytical detail, click to open. Other cells navigate to that vertical in the explorer. <b>Dim B</b> (blue band) = cross-cutting chokepoints. <b>Dim C</b> (bottom panels) = equipment, Asian chokepoints, and the AI datacenter stack.</div>
+  <div class="note"><b>Dimension A</b> — 14 verticals × 10 supply-chain stages (ex-materials). <b>Click any column or row name</b> for a plain-English explainer of what it is. <span style="background:#534AB70A;border:.5px solid #534AB7;padding:0 4px;border-radius:2px;color:#534AB7;font-weight:500">blue cells</span> = analytical detail, click to open. Other cells jump to that spot in the chain explorer. <b>Dim B</b> (blue band) = cross-cutting chokepoints. <b>Dim C</b> (bottom panels) = equipment, Asian chokepoints, and the AI datacenter stack.</div>
   <div class="mxs"><div id="mxg" style="display:grid;gap:2px;min-width:1050px"></div></div>
   <div class="det-box" id="mx-det"></div>
   <div class="bband"><div class="binner" id="binner"><div class="blbl">Dimension B — Cross-cutting chokepoints: key bottleneck, China localization, key Japan supplier (full detail in Picks &amp; Shovels tab)</div><div id="brows"></div></div></div>
@@ -641,10 +655,15 @@ function buildMatrix(){
   VC_COLS.forEach(v=>{
     const h=mk('div','mch');
     h.style.cssText=`background:${v.c}18;border:.5px solid ${v.c}44;color:${v.c}`;
-    h.textContent=v.sn;g.appendChild(h);
+    h.textContent=v.sn;h.title='What is this vertical? Click for a plain-English explainer';
+    h.addEventListener('click',e=>showMxBubble(e,'v',v.id));
+    g.appendChild(h);
   });
   ROWS.forEach(row=>{
-    const rl=mk('div','mrl');rl.textContent=row.n;g.appendChild(rl);
+    const rl=mk('div','mrl');rl.textContent=row.n;
+    rl.title='What is this stage? Click for a plain-English explainer';
+    rl.addEventListener('click',e=>showMxBubble(e,'r',row.id));
+    g.appendChild(rl);
     VC_COLS.forEach(v=>{
       const tags=(MXC[row.id]||{})[v.id]||[];
       const key=`${row.id}_${v.id}`;
@@ -670,6 +689,46 @@ function buildMatrix(){
   g.appendChild(leg);
   buildBBand(nC);buildCBand();
 }
+
+/* Plain-English explainer bubble for matrix column (vertical) / row (stage) names. */
+function showMxBubble(e,kind,id){
+  e.stopPropagation();
+  const b=document.getElementById('mx-bubble');
+  let dot='',title='',body='',stats='',act='';
+  if(kind==='v'){
+    const vc=(VC_COLS||[]).find(x=>x.id===id)||{};
+    const ev=(typeof VC!=='undefined'&&VC&&VC[id])||{};
+    const recs=(COMPANIES||[]).filter(c=>c.vertical===id);
+    const c3=recs.filter(c=>c.conviction===3).length;
+    dot=`<span class="mxb-dot" style="background:${vc.c||'#6B7280'}"></span>`;
+    title=ev.n||vc.sn||id;
+    body=ev.plain||(ev.note||'').slice(0,180);
+    stats=`${recs.length} companies tracked${c3?` · ${c3} chokepoint-owner${c3>1?'s':''}`:''}`;
+    act=`<span class="mxb-act" onclick="hideMxBubble();const t=[...document.querySelectorAll('.tab')].find(x=>(x.getAttribute('onclick')||'').includes(String.fromCharCode(39)+'vx'+String.fromCharCode(39)));ST('vx',t);loadV('${id}')">Explore the ${ (ev.n||vc.sn||id)} chain →</span>`;
+  }else{
+    const row=(ROWS||[]).find(x=>x.id===id)||{};
+    dot=`<span class="mxb-dot" style="background:var(--color-border-secondary)"></span>`;
+    title=row.n||id;
+    body=row.plain||'';
+    stats='This stage cuts across every column — read the row left to right to compare how each vertical handles it.';
+  }
+  b.innerHTML=`<div class="mxb-head">${dot}<span class="mxb-title">${title}</span><span class="mxb-kind">${kind==='v'?'vertical':'supply-chain stage'}</span></div><div class="mxb-body">${body}</div>${stats?`<div class="mxb-stats">${stats}</div>`:''}${act}`;
+  b.classList.add('on');
+  const r=e.currentTarget.getBoundingClientRect();
+  const bw=Math.min(320,window.innerWidth*.86);
+  let left=Math.max(8,Math.min(r.left,window.innerWidth-bw-8));
+  b.style.left=left+'px';
+  b.style.top='0px';b.style.visibility='hidden';
+  requestAnimationFrame(()=>{
+    const bh=b.offsetHeight;
+    const below=r.bottom+6, above=r.top-bh-6;
+    b.style.top=(below+bh<window.innerHeight-8?below:Math.max(8,above))+'px';
+    b.style.visibility='';
+  });
+}
+function hideMxBubble(){document.getElementById('mx-bubble').classList.remove('on');}
+document.addEventListener('click',e=>{if(!e.target.closest('#mx-bubble,.mch,.mrl'))hideMxBubble();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideMxBubble();});
 
 function showMxDet(key){
   const d=document.getElementById('mx-det');
@@ -1689,6 +1748,7 @@ function closeDrawer(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
 </script>
+<div id="mx-bubble"></div>
 <div id="drawer-bk" onclick="closeDrawer()"></div>
 <aside id="drawer" role="dialog" aria-label="Detail panel">
   <div class="dw-accent" id="dw-accent"></div>
