@@ -373,6 +373,48 @@
           "why": "Long-term share risk in mid-tier tools; ASML's moat stays intact."
         }
       ]
+    },
+    {
+      "n": "Policy & Fiscal",
+      "c": "#475569",
+      "cats": [
+        {
+          "t": "China rare-earth truce: renew or lapse (Nov 10)",
+          "h": "now",
+          "status": "pending",
+          "p": "The Oct-2025 escalation of China's rare-earth controls is suspended only until Nov 10, 2026. Renewal keeps the peace; a lapse re-arms the materials weapon overnight.",
+          "why": "A dated, binary event under the robotics, optics and fab-chemical chains — position sizing should know the date.",
+          "note": "dated: Nov 10, 2026"
+        },
+        {
+          "t": "Next GPU export-rule revision",
+          "h": "now",
+          "status": "pending",
+          "p": "The H200 was banned, unbanned, then tariffed at 25% within a year; 'green-zone' chips flow while frontier GPUs stay blocked. Another revision is always one announcement away.",
+          "why": "Swings NVDA/AMD China revenue by billions and re-prices the Chinese domestic-chip cohort in mirror image."
+        },
+        {
+          "t": "Blanket WFE-ban legislation",
+          "h": "12m",
+          "status": "pending",
+          "p": "Congressional push (Feb 2026) to replace leaky entity-specific equipment controls with a China-wide ban.",
+          "why": "Would cut the remaining China backlog at AMAT, Lam, KLA and Tokyo Electron — and accelerate NAURA/AMEC substitution."
+        },
+        {
+          "t": "CHIPS 2.0 / AI-infrastructure fiscal package",
+          "h": "12m",
+          "status": "pending",
+          "p": "Washington's follow-up debate: extending fab subsidies toward AI datacenters, power and packaging.",
+          "why": "Decides whether the dci/power build-out gets the same fiscal tailwind fabs got."
+        },
+        {
+          "t": "EU Chips Act 2.0 enacted",
+          "h": "12m",
+          "status": "pending",
+          "p": "The June 2026 proposal (demand-side procurement, smaller-country niches) moves through Brussels.",
+          "why": "Funds the European specialist cohort — ASML, AIXTRON, SUSS, Soitec, AT&S."
+        }
+      ]
     }
   ],
   "entry_windows": {

@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "description": "Policy & fiscal forces acting on the universe — regime state (what the rules ARE right now), fiscal programs (who is paying whom), and levers to watch. Reconcile alongside the catalyst calendar; >60 days without reconciling = stale.",
+    "as_of": "2026-08-03"
+  },
+  "regimes": [
+    {
+      "side": "US → China",
+      "c": "#2563EB",
+      "title": "Export controls: tiered and whiplash-prone",
+      "state": "Within twelve months Washington banned the H200, unbanned it (BIS rule effective Jan 16, 2026), then put a 25% tariff on it. Current shape: 'green-zone' chips (H20-class) flow freely, H200 sells under license + tariff, frontier GPUs stay banned. Jun 2026: BIS affirmed controls reach Chinese firms' overseas subsidiaries (closing the offshore loophole). Feb 2026: eight lawmakers pushed for a blanket WFE ban to China — entity-specific controls judged leaky.",
+      "watch": "The regime changes with the political weather — that volatility, not any single rule, is the risk to price. NVDA/AMD China revenue swings on every revision; a blanket WFE ban would hit AMAT/LRCX/KLAC/8035.T's China backlogs.",
+      "hits": "acc, wfe, eda"
+    },
+    {
+      "side": "China → US/allies",
+      "c": "#DC2626",
+      "title": "Materials leverage: suspended, not dismantled",
+      "state": "China built a 12-category rare-earth/critical-materials control regime through 2025 (gallium/germanium ~98% refined share, tungsten hexafluoride, electronic-grade HF, 'look-through' end-user tracing — domestic-vs-export price gaps up to 100x). The Oct 2025 escalation was SUSPENDED for one year at the Xi-Trump truce — expiring Nov 10, 2026. Separate controls now aimed at Japan.",
+      "watch": "The Nov 10 expiry is a dated, binary event sitting under the robotics (magnets), optics (Ge/Ga) and fab-chemicals chains. Raw-materials names live in the Hard Assets sibling map — but the POLICY shock lands on this universe's act/opt/wfe verticals.",
+      "hits": "act, opt, wfe, sen"
+    },
+    {
+      "side": "China domestic",
+      "c": "#7C3AED",
+      "title": "Substitution mandates + Big Fund capital",
+      "state": "State-directed decoupling: domestic-substitution quotas push SMIC/NAURA/Cambricon/Empyrean into captive demand regardless of economics, funded by Big Fund III (~$50B) plus provincial money. Antitrust probes of US chipmakers held as a retaliation card.",
+      "watch": "Makes the china-localization cohort (30 tagged names) partly policy-driven rather than market-driven — treat their revenue 'demand' accordingly in conviction terms.",
+      "hits": "fdy, wfe, eda, acc, mem"
+    }
+  ],
+  "fiscal_programs": [
+    {
+      "prog": "US CHIPS Act + 48D tax credit",
+      "size": "$52B grants + 25% ITC",
+      "c": "#2563EB",
+      "who": "TSM (Arizona), INTC (18A buildout + high-NA), MU, 005930.KS (Taylor), AMKR-class OSAT reshoring — plus every fab-tool maker selling into subsidized shells (AMAT, LRCX, KLAC).",
+      "note": "Reshoring changes geography, not chokepoint ownership — the same names win, in more expensive fabs. Watch a possible CHIPS 2.0 and datacenter-power permitting reform as the AI-era sequels."
+    },
+    {
+      "prog": "China Big Fund III",
+      "size": "~$50B (2024-)",
+      "c": "#DC2626",
+      "who": "0981.HK SMIC, 002371.SZ NAURA, 688256.SH Cambricon, 301269.SZ Empyrean, 688234.SH SICC, CXMT (private) — the whole china-localization theme.",
+      "note": "Capital without EUV access: expect capacity in mature nodes + brute-force advanced attempts. Deflationary for mature-node economics globally (our excluded lagging-edge names)."
+    },
+    {
+      "prog": "Japan subsidies (METI)",
+      "size": "~$25B+ committed",
+      "c": "#16A34A",
+      "who": "Rapidus (private, 2nm), TSM Kumamoto JV, 285A.T Kioxia, plus the equipment/materials complex (8035.T, Shin-Etsu, SUMCO) that a domestic fab base feeds.",
+      "note": "Reinforces the japan-chokepoint theme — Japan pays to keep its materials/equipment moat physically at home."
+    },
+    {
+      "prog": "EU Chips Act 2.0",
+      "size": "proposed Jun 2026, demand-side",
+      "c": "#0EA5E9",
+      "who": "ASML, AIXA.DE, SMHN.DE, SOI.PA, IFX.DE, ATS.VI, ENR.DE — the 9 records tagged eu-chips-act.",
+      "note": "Pivot from mega-fab dreams to procurement + smaller-country niches — bullish the European equipment/substrate specialists rather than fab shells."
+    },
+    {
+      "prog": "Korea K-Chips tax credits",
+      "size": "expanded 2025-26",
+      "c": "#7C3AED",
+      "who": "000660.KS, 005930.KS + the Korean back-end cohort (Hanmi, Doosan Tesna, SEMCO, LG Innotek, Wonik IPS).",
+      "note": "Underwrites the HBM capex race — and the 'Korea Unlocked' re-rating thesis."
+    },
+    {
+      "prog": "Sovereign AI capex (Gulf, EU, Asia)",
+      "size": "$100B+ pipeline",
+      "c": "#D97706",
+      "who": "Demand-side force: buys NVDA/AMD systems, Dell/SMCI/HPE integration, dci power/cooling — a second buyer class beside hyperscalers.",
+      "note": "Fiscal money is less ROI-sensitive than corporate capex — it cushions the froth scenario where hyperscalers pause."
+    }
+  ],
+  "levers": [
+    {
+      "l": "Nov 10, 2026 — China rare-earth truce expires",
+      "hits": "act, opt, wfe",
+      "d": "Renewal = status quo; lapse = magnets/Ga/Ge/chemicals shock into robotics, optics and fab chemicals. The single most dated policy risk on the board."
+    },
+    {
+      "l": "Blanket US WFE-ban push",
+      "hits": "wfe",
+      "d": "If entity-lists give way to a China-wide equipment ban, AMAT/LRCX/KLAC/8035.T lose the remaining China backlog; ASML already effectively there on EUV."
+    },
+    {
+      "l": "GPU rules: next revision",
+      "hits": "acc",
+      "d": "Every H-series reclassification swings NVDA/AMD China revenue by $Bs and re-prices Cambricon/Huawei's captive market share in mirror image."
+    },
+    {
+      "l": "Section 232 semiconductor tariffs",
+      "hits": "fdy, pkg, dci",
+      "d": "Chip/electronics tariffs would tax the Taiwan-assembled AI supply chain broadly — ODMs and packaged-silicon importers first."
+    },
+    {
+      "l": "EDA license regime",
+      "hits": "eda",
+      "d": "The on/off lever on SNPS/CDNS China revenue (~10-15%) — historically toggled with little warning; Empyrean is the mirror trade."
+    },
+    {
+      "l": "China antitrust / procurement bans",
+      "hits": "acc, mem",
+      "d": "Retaliation card against US chipmakers with China exposure (MU precedent 2023; NVDA probe on file)."
+    }
+  ]
+}

@@ -316,6 +316,28 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .cat-p{font-size:10.5px;color:var(--color-text-secondary);line-height:1.5}
 .cat-why{font-size:10px;color:var(--color-text-tertiary);line-height:1.5;margin-top:3px}
 .cat-why b{color:var(--color-text-secondary);font-weight:600}
+/* ── Policy & Fiscal ── */
+.pol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px}
+.pol-card{border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:10px 12px;background:var(--color-background-primary);box-shadow:var(--shadow-1)}
+.pol-side{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.pol-title{font-family:var(--font-display);font-size:13.5px;font-weight:600;color:var(--color-text-primary);margin:2px 0 4px}
+.pol-state{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary)}
+.pol-watch{font-size:10px;line-height:1.5;color:var(--color-text-secondary);background:#EF9F270D;border-left:3px solid #EF9F27;border-radius:4px;padding:5px 8px;margin-top:6px}
+.pol-watch b{color:#B45309}
+.pol-hits{font-size:8.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary);margin-top:5px}
+.pol-prog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px}
+.pol-prog{border:.5px solid var(--color-border-tertiary);border-radius:8px;padding:7px 10px;background:var(--color-background-primary)}
+.pol-prog-h{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.pol-dot{width:8px;height:8px;border-radius:3px;flex-shrink:0}
+.pol-prog-n{font-size:11px;font-weight:600;color:var(--color-text-primary)}
+.pol-size{font-size:9px;font-weight:600;color:var(--color-text-tertiary);margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pol-who{font-size:10px;line-height:1.5;color:var(--color-text-secondary)}
+.pol-note{font-size:9.5px;line-height:1.45;color:var(--color-text-tertiary);margin-top:3px;font-style:italic}
+.pol-levers{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:6px}
+.pol-lever{border:.5px solid var(--color-border-tertiary);border-left:3px solid #475569;border-radius:7px;padding:6px 9px;background:var(--color-background-primary)}
+.pol-lever-h{display:flex;align-items:baseline;gap:6px}
+.pol-lever-t{font-size:10.5px;font-weight:600;color:var(--color-text-primary)}
+.pol-lever-d{font-size:10px;line-height:1.5;color:var(--color-text-secondary);margin-top:2px}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
 .rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap;position:sticky;top:33px;background:var(--color-background-primary);z-index:5}
@@ -497,6 +519,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 </div>
 
 <div class="view" id="view-geo">
+  <div id="pol-cont"></div>
   <div class="pills">
     <button class="pill on" onclick="setGV('hm',this)">Heat map (scores 1–5)</button>
     <button class="pill" onclick="setGV('am',this)">Actor control map</button>
@@ -604,7 +627,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS;
+let QUOTES,QUOTES_META,IDX,NEWS,POLICY;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -855,7 +878,38 @@ function buildExpls(){
   });
 }
 
+/* Policy & Fiscal forces section — atop the Geopolitical tab, from policy.json. */
+function buildPolicy(){
+  const el=document.getElementById('pol-cont');
+  if(!el||!POLICY){if(el)el.style.display='none';return;}
+  const regimes=POLICY.regimes.map(r=>`
+    <div class="pol-card" style="border-top:3px solid ${r.c}">
+      <div class="pol-side" style="color:${r.c}">${r.side}</div>
+      <div class="pol-title">${r.title}</div>
+      <div class="pol-state">${linkifyTickers(r.state)}</div>
+      <div class="pol-watch"><b>Watch:</b> ${linkifyTickers(r.watch)}</div>
+      <div class="pol-hits">hits: ${r.hits}</div>
+    </div>`).join('');
+  const progs=POLICY.fiscal_programs.map(f=>`
+    <div class="pol-prog">
+      <div class="pol-prog-h"><span class="pol-dot" style="background:${f.c}"></span><span class="pol-prog-n">${f.prog}</span><span class="pol-size">${f.size}</span></div>
+      <div class="pol-who">${linkifyTickers(f.who)}</div>
+      <div class="pol-note">${linkifyTickers(f.note)}</div>
+    </div>`).join('');
+  const levers=POLICY.levers.map(l=>`
+    <div class="pol-lever"><div class="pol-lever-h"><span class="pol-lever-t">${l.l}</span><span class="pol-hits" style="margin-left:auto">hits: ${l.hits}</span></div><div class="pol-lever-d">${linkifyTickers(l.d)}</div></div>`).join('');
+  el.innerHTML=`
+    <div class="ew-title" style="margin-bottom:2px">Policy &amp; fiscal forces <span class="ew-asof">reconciled ${(POLICY._meta&&POLICY._meta.as_of)||''}</span></div>
+    <div class="ew-intro">The rules and the subsidies acting on this universe — regime state first, then who is paying whom, then the levers that can move overnight. Tickers are clickable; the <b>Policy Lever</b> theme filter in Companies lists the 20 most exposed names.</div>
+    <div class="pol-grid">${regimes}</div>
+    <div class="dw-sect" style="margin-top:12px">Fiscal programs — who pays whom</div>
+    <div class="pol-prog-grid">${progs}</div>
+    <div class="dw-sect" style="margin-top:12px">Levers to watch</div>
+    <div class="pol-levers">${levers}</div>
+    <div style="border-bottom:.5px solid var(--color-border-tertiary);margin:14px 0 10px"></div>`;
+}
 function buildGeo(){
+  buildPolicy();
   const g=document.getElementById('hmg');
   g.style.gridTemplateColumns='90px repeat(4,1fr)';
   g.appendChild(mk('div',''));
@@ -1558,6 +1612,7 @@ async function loadData(){
   ]);
   QUOTES=(quotesJ&&quotesJ.quotes)||null; QUOTES_META=(quotesJ&&quotesJ._meta)||null;
   IDX=(indicesJ&&indicesJ.symbols)||null; NEWS=(newsJ&&newsJ.items)||null;
+  POLICY=await fetchJ('policy.json').catch(()=>null);
 
   /* Widget 1 data */
   VC_COLS  = matrix.verticals;
