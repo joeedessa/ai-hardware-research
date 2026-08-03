@@ -338,9 +338,15 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 .pol-lever-h{display:flex;align-items:baseline;gap:6px}
 .pol-lever-t{font-size:10.5px;font-weight:600;color:var(--color-text-primary)}
 .pol-lever-d{font-size:10px;line-height:1.5;color:var(--color-text-secondary);margin-top:2px}
+/* ── Chokepoint map affordances ── */
+.hm-cell{transition:box-shadow .12s,transform .12s}
+.hm-cell[style*="cursor:pointer"]:hover{box-shadow:0 0 0 1.5px var(--accent),var(--shadow-1);transform:translateY(-1px)}
+.hm-cell.sel{box-shadow:0 0 0 2px var(--accent)}
+.hm-geo:hover{background:var(--color-background-secondary)}
+.hm-vlab:hover{filter:brightness(.96)}
 .cy-filt{display:none}
 .rt{width:100%;border-collapse:collapse;min-width:620px}
-.rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap;position:sticky;top:33px;background:var(--color-background-primary);z-index:5}
+.rt th{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);text-align:left;padding:5px 6px;border-bottom:.5px solid var(--color-border-secondary);white-space:nowrap}
 .rt td{font-size:10.5px;padding:5px 6px;border-bottom:.5px solid var(--color-border-tertiary);vertical-align:middle;font-variant-numeric:tabular-nums}
 .rt tr:last-child td{border-bottom:none}
 .rt tr:hover td{background:var(--color-background-secondary)}
@@ -546,7 +552,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-s
 </div>
 
 <div class="view" id="view-hm">
-  <div class="note"><b>Where do the chokepoints sit?</b> 148 companies × 13 verticals × 9 chokepoint geographies. Cell value = conviction-3 names (the "chokepoint owners"). Background heat-tint reads the Asian-chokepoint thesis at a glance. Click any cell to expand the tickers in that intersection (clickable).</div>
+  <div class="note"><b>Where the chokepoints sit.</b> Rows are the verticals, columns are countries. In each cell the <b>big number counts conviction-3 chokepoint owners</b> based there; the small grey number is all tracked names. Greener cell = more chokepoints. <b>Everything is clickable</b> — a cell lists its companies right below the grid (each opens the detail panel), a country name explains that geography, a vertical name explains that vertical. The one-glance takeaway: the green mass sits in Taiwan · Korea · Japan — the dashboard's central risk and thesis.</div>
   <div id="hm-cont"></div>
 </div>
 
@@ -627,7 +633,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS,POLICY;
+let QUOTES,QUOTES_META,IDX,NEWS,POLICY,GEO_B;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -745,6 +751,12 @@ function showMxBubble(e,kind,id){
     body=ev.plain||(ev.note||'').slice(0,180);
     stats=`${recs.length} companies tracked${c3?` · ${c3} chokepoint-owner${c3>1?'s':''}`:''}`;
     act=`<span class="mxb-act" onclick="hideMxBubble();const t=[...document.querySelectorAll('.tab')].find(x=>(x.getAttribute('onclick')||'').includes(String.fromCharCode(39)+'vx'+String.fromCharCode(39)));ST('vx',t);loadV('${id}')">Explore the ${ (ev.n||vc.sn||id)} chain →</span>`;
+  }else if(kind==='g'){
+    const B={TW:['🇹🇼','Taiwan'],KR:['🇰🇷','Korea'],JP:['🇯🇵','Japan'],CN:['🇨🇳','China'],US:['🇺🇸','United States'],NL:['🇳🇱','Netherlands'],DE:['🇩🇪','Germany & Austria'],'EU+':['🇪🇺','Other Europe'],OTH:['🌐','Rest of world']}[id]||['🌐',id];
+    dot=`<span style="font-size:13px">${B[0]}</span>`;
+    title=B[1];
+    body=(typeof GEO_B!=='undefined'&&GEO_B&&GEO_B[id])||'';
+    stats='Column shows: big number = conviction-3 chokepoint owners based here, small number = all tracked names.';
   }else{
     const row=(ROWS||[]).find(x=>x.id===id)||{};
     dot=`<span class="mxb-dot" style="background:var(--color-border-secondary)"></span>`;
@@ -752,7 +764,7 @@ function showMxBubble(e,kind,id){
     body=row.plain||'';
     stats='This stage cuts across every column — read the row left to right to compare how each vertical handles it.';
   }
-  b.innerHTML=`<div class="mxb-head">${dot}<span class="mxb-title">${title}</span><span class="mxb-kind">${kind==='v'?'vertical':'supply-chain stage'}</span></div><div class="mxb-body">${body}</div>${stats?`<div class="mxb-stats">${stats}</div>`:''}${act}`;
+  b.innerHTML=`<div class="mxb-head">${dot}<span class="mxb-title">${title}</span><span class="mxb-kind">${kind==='v'?'vertical':kind==='g'?'geography':'supply-chain stage'}</span></div><div class="mxb-body">${body}</div>${stats?`<div class="mxb-stats">${stats}</div>`:''}${act}`;
   b.classList.add('on');
   const r=e.currentTarget.getBoundingClientRect();
   const bw=Math.min(320,window.innerWidth*.86);
@@ -1269,13 +1281,13 @@ function buildChokeMap(){
   html+=`<div></div>`;
   // Geo header row
   BUCKETS.forEach(b=>{
-    html+=`<div style="text-align:center;font-size:10.5px;font-weight:600;color:var(--color-text-secondary);padding:4px 2px" title="${b.label}">${b.flag}<br>${b.id}</div>`;
+    html+=`<div class="hm-geo" onclick="showMxBubble(event,'g','${b.id}')" style="text-align:center;font-size:10.5px;font-weight:600;color:var(--color-text-secondary);padding:4px 2px;cursor:pointer;border-radius:5px" title="${b.label} — click for what this geography means">${b.flag}<br>${b.id}</div>`;
   });
   html+=`<div style="text-align:center;font-size:10.5px;font-weight:600;color:var(--color-text-tertiary);padding:4px 2px">Σ</div>`;
   // Body rows
   VC_COLS.forEach(v=>{
     const vc=v.c;
-    html+=`<div style="display:flex;align-items:center;font-size:10.5px;color:var(--color-text-primary);padding:0 6px;border-left:3px solid ${vc};background:${vc}0A">${v.sn}</div>`;
+    html+=`<div class="hm-vlab" onclick="showMxBubble(event,'v','${v.id}')" style="display:flex;align-items:center;font-size:10.5px;color:var(--color-text-primary);padding:0 6px;border-left:3px solid ${vc};background:${vc}0A;cursor:pointer;border-radius:0 5px 5px 0" title="${v.sn} — click for what this vertical is">${v.sn}</div>`;
     BUCKETS.forEach(b=>{
       const cell=grid[v.id][b.id];
       const sty=cellStyle(cell);
@@ -1312,7 +1324,9 @@ function buildChokeMap(){
       const v=el.dataset.v, g=el.dataset.g;
       const cell=grid[v][g];
       const det=document.getElementById('hm-detail');
+      cont.querySelectorAll('.hm-cell.sel').forEach(x=>x.classList.remove('sel'));
       if(!cell.t){ det.innerHTML=''; return; }
+      el.classList.add('sel');
       const vc=VC_COLS.find(x=>x.id===v);
       const b=BUCKETS.find(x=>x.id===g);
       const chips=cell.ts.sort((a,b)=>b.conviction-a.conviction).map(c=>{
@@ -1324,6 +1338,7 @@ function buildChokeMap(){
         <div style="font-size:10.5px;color:var(--color-text-tertiary);margin-bottom:6px">${cell.t} names · ${cell.c3} chokepoint-3 · ${cell.c2} interested-2 · ${cell.c1} monitor-1 — click any ticker to filter Companies</div>
         ${chips}
       </div>`;
+      det.scrollIntoView({behavior:'smooth',block:'nearest'});
     });
   });
 }
@@ -1625,6 +1640,7 @@ async function loadData(){
   C_BAND   = matrix.c_band;
   GEO      = geo.heatmap;
   ACTORS   = geo.actor_map;
+  GEO_B    = geo.geo_blurbs||{};
   CYD      = cycle.cycles;
   FROTH    = cycle.froth_monitor||null;
   VC       = explorer.verticals;
