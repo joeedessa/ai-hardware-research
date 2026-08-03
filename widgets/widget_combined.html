@@ -66,9 +66,12 @@
     --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
   }
 }
-body{margin:0;padding:12px 14px;background:var(--paper);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-primary);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .theme-btn{border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:20px;font-size:12px;padding:2px 9px;cursor:pointer;color:var(--color-text-secondary);line-height:1.4}
 .theme-btn:hover{border-color:var(--accent)}
+/* Active demand-theme card: solid theme-color background needs white text (was color-on-color) */
+.tn.on .tn-name{color:#fff!important}
+.tn.on .tn-sub{color:rgba(255,255,255,.88)!important}
 ::selection{background:#4F46E522}
 #loading{font-size:15.0px;color:#70757F;padding:20px;text-align:center}
 
