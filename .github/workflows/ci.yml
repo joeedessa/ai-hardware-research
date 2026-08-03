@@ -1,0 +1,33 @@
+name: CI — validate data & widget
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate all data JSON
+        run: |
+          python - <<'EOF'
+          import json, glob
+          files = sorted(glob.glob('data/*.json'))
+          for f in files:
+              json.load(open(f))
+          print(f'{len(files)} data files valid')
+          EOF
+      - name: Syntax-check widget JavaScript
+        run: |
+          python - <<'EOF'
+          import re
+          html = open('widgets/widget_combined.html').read()
+          scripts = re.findall(r'<script>(.*?)</script>', html, re.S)
+          assert scripts, 'no script blocks found'
+          for i, s in enumerate(scripts):
+              open(f'/tmp/w{i}.js', 'w').write(s)
+          print(f'{len(scripts)} script block(s) extracted')
+          EOF
+          for f in /tmp/w*.js; do node --check "$f" && echo "$f OK"; done

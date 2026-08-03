@@ -117,6 +117,27 @@ def main():
         else:
             errors.append(t)
 
+    # Stooq fallback for plain US tickers Yahoo missed (free CSV, no key)
+    import urllib.request
+    for t in list(errors):
+        if not re.match(r'^[A-Z]+$', t):
+            continue
+        try:
+            url = f'https://stooq.com/q/d/l/?s={t.lower()}.us&i=d'
+            rows = urllib.request.urlopen(url, timeout=15).read().decode().strip().split('\n')[1:]
+            closes = [float(r.split(',')[4]) for r in rows[-260:] if r.count(',') >= 4]
+            if len(closes) >= 5:
+                p = closes[-1]
+                quotes[t] = {'p': round(p, 2), 'd1': pct(p, closes[-2]),
+                             'm1': pct(p, closes[-22]) if len(closes) >= 22 else None,
+                             'dd': round((p / max(closes) - 1) * 100, 1),
+                             'a50': round(sum(closes[-50:]) / min(50, len(closes)), 2),
+                             'a200': round(sum(closes[-200:]) / 200, 2) if len(closes) >= 200 else None,
+                             'src': 'stooq'}
+                errors.remove(t)
+        except Exception:
+            pass
+
     if len(quotes) < len(tickers) * 0.5:
         print(f'FATAL: only {len(quotes)}/{len(tickers)} quotes — keeping previous snapshot')
         sys.exit(1)
