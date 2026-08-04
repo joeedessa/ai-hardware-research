@@ -1,16 +1,16 @@
 {
   "_meta": {
     "description": "Policy & fiscal forces acting on the universe — regime state (what the rules ARE right now), fiscal programs (who is paying whom), and levers to watch. Reconcile alongside the catalyst calendar; >60 days without reconciling = stale.",
-    "as_of": "2026-08-03"
+    "as_of": "2026-08-04"
   },
   "regimes": [
     {
       "side": "US → China",
       "c": "#2563EB",
       "title": "Export controls: tiered and whiplash-prone",
-      "state": "Within twelve months Washington banned the H200, unbanned it (BIS rule effective Jan 16, 2026), then put a 25% tariff on it. Current shape: 'green-zone' chips (H20-class) flow freely, H200 sells under license + tariff, frontier GPUs stay banned. Jun 2026: BIS affirmed controls reach Chinese firms' overseas subsidiaries (closing the offshore loophole). Feb 2026: eight lawmakers pushed for a blanket WFE ban to China — entity-specific controls judged leaky.",
+      "state": "Within twelve months Washington banned the H200, unbanned it (BIS rule effective Jan 16, 2026), then put a 25% tariff on it. Current shape: 'green-zone' chips (H20-class) flow freely, H200 sells under license + tariff, frontier GPUs stay banned. Jun 2026: BIS affirmed controls reach Chinese firms' overseas subsidiaries (closing the offshore loophole). Feb 2026: eight lawmakers pushed for a blanket WFE ban to China — entity-specific controls judged leaky. Aug 4 2026: the FCC is drafting an import ban on NEW MODELS of Chinese optical transceivers — the first time the control regime reaches past chips into datacenter networking hardware (rationale: data theft / malware / service-disruption risk). Officials hope to publish this year; it could still be modified or shelved.",
       "watch": "The regime changes with the political weather — that volatility, not any single rule, is the risk to price. NVDA/AMD China revenue swings on every revision; a blanket WFE ban would hit AMAT/LRCX/KLAC/8035.T's China backlogs.",
-      "hits": "acc, wfe, eda"
+      "hits": "acc, wfe, eda, opt, net"
     },
     {
       "side": "China → US/allies",
@@ -74,6 +74,11 @@
     }
   ],
   "levers": [
+    {
+      "l": "FCC import ban on Chinese optical transceivers (drafting)",
+      "hits": "opt, net",
+      "d": "Chinese vendors hold >50% of the global datacenter-transceiver market, InnoLight alone ~27% (Counterpoint). A US import ban on new models would forcibly re-route that demand to COHR, LITE, AAOI, FN, CIEN, NOK, MTSI, SMTC — but the Foundation for American Innovation notes the Western vendors lack the SCALE to replace Chinese supply quickly, so the near-term effect is pricing power and shortage, not clean substitution. Mirror-image risk for 300308.SZ and 300502.SZ. Still drafting — could be modified or shelved."
+    },
     {
       "l": "Nov 10, 2026 — China rare-earth truce expires",
       "hits": "act, opt, wfe",

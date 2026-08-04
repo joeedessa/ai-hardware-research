@@ -201,12 +201,20 @@
       "c": "#D97706",
       "cats": [
         {
+          "t": "FCC transceiver import ban — published, shelved or watered down?",
+          "h": "now",
+          "status": "pending",
+          "p": "The FCC is drafting a ban on imports of new-model Chinese optical transceivers for US datacenters; officials hope to publish it within 2026. Chinese vendors supply >50% of the market today.",
+          "why": "The single biggest potential re-rating event for Western optics. Watch the published scope (new models only? retroactive? which speed grades?) — and whether COHR/LITE can actually add capacity fast enough to fill the gap.",
+          "note": "drafting — may be shelved"
+        },
+        {
           "t": "Co-packaged optics enters volume production",
           "h": "12m",
           "status": "landed",
           "p": "Optics built directly into the switch — Nvidia on TSMC's COUPE process, Broadcom's Bailly — started shipping in real volume. No longer a roadmap item.",
           "why": "Confirms the optics content story; the bottleneck moved to optical-engine yield — good for COHR, LITE, FOCI.",
-          "note": "landed Jul 2026"
+          "note": "landed Jul 2026; mass production confirmed Aug 2026"
         },
         {
           "t": "1.6-terabit transceiver ramp",
@@ -387,6 +395,13 @@
           "note": "dated: Nov 10, 2026"
         },
         {
+          "t": "Export controls reach networking hardware, not just chips",
+          "h": "12m",
+          "status": "pending",
+          "p": "The transceiver ban would be the first US control aimed at datacenter networking gear rather than semiconductors — a template that could extend to switches, cabling and other Chinese-supplied datacenter components.",
+          "why": "Widens the policy-lever blast radius from the acc/wfe/eda verticals into opt/net/dci. Watch for follow-on rules."
+        },
+        {
           "t": "Next GPU export-rule revision",
           "h": "now",
           "status": "pending",
@@ -470,7 +485,7 @@
     }
   },
   "catalyst_meta": {
-    "as_of": "2026-08-03",
+    "as_of": "2026-08-04",
     "lifecycle": "Each catalyst carries status pending/landed/slipped. Landed items stay visible (checked off) for one review cycle before rotating out — a landed catalyst is thesis confirmation, not noise. Reconciling this table against the news is a standing step of every research-loop sweep; if as_of is >60 days old, treat the table as stale."
   }
 }
