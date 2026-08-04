@@ -449,6 +449,14 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .sb-track-d{font-size:9.5px;color:var(--color-text-tertiary)}
 .sb-verdict{font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:20px;margin-left:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
 .sb-note{font-size:9.5px;line-height:1.5;color:var(--color-text-tertiary);margin-top:5px}
+.ew-cands{display:grid;gap:3px}
+.ew-cand{display:flex;align-items:baseline;gap:9px;padding:5px 9px;border:.5px solid var(--color-border-tertiary);border-left:3px solid #16A34A;border-radius:5px;background:var(--color-background-primary);cursor:pointer;transition:box-shadow .12s;min-width:0}
+.ew-cand:hover{box-shadow:var(--shadow-2)}
+.ew-cand-dd{font-family:var(--font-mono);font-size:11px;font-weight:600;color:#15803D;min-width:52px;font-variant-numeric:tabular-nums}
+.ew-cand-tk{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--color-text-primary);min-width:64px}
+.ew-cand-nm{font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ew-cand-v{font-size:8.5px;font-weight:600;padding:1px 6px;border-radius:20px;text-transform:uppercase;flex-shrink:0}
+.ew-cand-l{font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38%}
 /* ── Start Here ── */
 .sh-hero{max-width:680px;padding:6px 2px 2px}
 .sh-hero-t{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em;color:var(--color-text-primary);line-height:1.2}
@@ -1441,10 +1449,32 @@ function buildPortfolio(){
           <div class="ew-row"><span class="ew-lbl" style="color:#E24B4A">risk</span>${w.risk}</div>
         </div></div>`;
     }).join('');
-    box.innerHTML=`<div class="ew-title">Entry windows <span class="ew-asof">as of ${ew.as_of}</span></div>
+    let html=`<div class="ew-title">Entry windows <span class="ew-asof">annotated ${ew.as_of} · candidates refreshed nightly</span></div>
       <div class="ew-intro">${ew.intro}</div>
       <div class="ew-grid">${cards}</div>
       <div class="ew-avoid"><b>${ew.avoid.title}.</b> ${linkifyTickers(ew.avoid.body)}</div>`;
+    /* Reconcile the hand-written windows with what the nightly scan actually finds.
+       The machine proposes the candidate set; the annotations above are the human layer. */
+    if(ALERTS&&ALERTS.alerts){
+      const annotated=new Set(ew.windows.map(w=>w.ticker));
+      const extra=ALERTS.alerts.filter(a=>a.type==='window'&&!annotated.has(a.tk));
+      if(extra.length){
+        const rows=extra.map(a=>{
+          const c=(COMPANIES||[]).find(x=>x.ticker===a.tk)||{};
+          const v=vinfo(c.vertical);
+          return `<div class="ew-cand" onclick="openCompanyDrawer('${a.tk}')">
+            <span class="ew-cand-dd">${a.val}%</span>
+            <span class="ew-cand-tk">${a.tk}</span>
+            <span class="ew-cand-nm">${c.name||''}</span>
+            <span class="ew-cand-v" style="background:${v.c}18;color:${v.c}">${v.n}</span>
+            <span class="ew-cand-l">${c.chain_layer||''}</span></div>`;
+        }).join('');
+        html+=`<div class="dw-sect" style="margin:14px 0 4px">Also open — found by last night's scan, not yet written up</div>
+          <div class="ew-intro">Every insulated name past the −15% threshold. The six above are the ones with a written setup, watch trigger and risk; these are the rest of the candidate set, unannotated. Ranked by drawdown.</div>
+          <div class="ew-cands">${rows}</div>`;
+      }
+    }
+    box.innerHTML=html;
     cont.appendChild(box);
   }
   /* Scoreboard — forward record first (the only honest test), retrospective second. */
