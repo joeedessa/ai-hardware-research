@@ -1,4 +1,4 @@
-name: CI — validate data & widget
+name: CI — validate data & app
 
 on:
   push:
@@ -19,11 +19,11 @@ jobs:
               json.load(open(f))
           print(f'{len(files)} data files valid')
           EOF
-      - name: Syntax-check widget JavaScript
+      - name: Syntax-check dashboard JavaScript
         run: |
           python - <<'EOF'
           import re
-          html = open('widgets/widget_combined.html').read()
+          html = open('index.html').read()
           scripts = re.findall(r'<script>(.*?)</script>', html, re.S)
           assert scripts, 'no script blocks found'
           for i, s in enumerate(scripts):

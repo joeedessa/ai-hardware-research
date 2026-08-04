@@ -2,7 +2,7 @@
 """Nightly market-data refresh for the AI Hardware Research dashboard.
 
 Zero-cost pipeline: runs in GitHub Actions, pulls free data, commits JSON the
-widget already knows how to fetch.
+dashboard already knows how to fetch.
   - data/quotes.json  : price / 1d / 1mo / 52w-drawdown / 50-200DMA / mcap for
                         every ticker in companies.json (+ best-effort fwd P/E
                         for conviction-3 and froth-tagged names)
