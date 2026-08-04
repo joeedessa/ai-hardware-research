@@ -25,6 +25,11 @@
   --color-border-info:#C7C5F4;
   --accent:#4F46E5;
   --paper:#FBFAF7;
+  --lift:1;
+  --fl-red-bg:#FCEBEB;    --fl-red-fg:#791F1F;
+  --fl-amber-bg:#FAEEDA;  --fl-amber-fg:#633806;
+  --fl-green-bg:#E1F5EE;  --fl-green-fg:#085041;
+  --fl-indigo-bg:#EEEDFE; --fl-indigo-fg:#3C3489;
   --shadow-1:0 1px 2px rgba(22,24,29,.05);
   --shadow-2:0 4px 16px rgba(22,24,29,.08),0 1px 3px rgba(22,24,29,.05);
   --shadow-3:0 12px 40px rgba(22,24,29,.16),0 2px 8px rgba(22,24,29,.08);
@@ -43,6 +48,11 @@
   --color-border-info:#4A4D8A;
   --accent:#8B85F0;
   --paper:#17181C;
+    --lift:1.55;
+    --fl-red-bg:#E24B4A26;    --fl-red-fg:#F2A7A7;
+    --fl-amber-bg:#EF9F2726;  --fl-amber-fg:#F0C88A;
+    --fl-green-bg:#16A34A26;  --fl-green-fg:#86DCAE;
+    --fl-indigo-bg:#8B85F026; --fl-indigo-fg:#BDB8F7;
   --shadow-1:0 1px 2px rgba(0,0,0,.4);
   --shadow-2:0 4px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4);
   --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
@@ -61,6 +71,11 @@
     --color-border-info:#4A4D8A;
     --accent:#8B85F0;
     --paper:#17181C;
+    --lift:1.55;
+    --fl-red-bg:#E24B4A26;    --fl-red-fg:#F2A7A7;
+    --fl-amber-bg:#EF9F2726;  --fl-amber-fg:#F0C88A;
+    --fl-green-bg:#16A34A26;  --fl-green-fg:#86DCAE;
+    --fl-indigo-bg:#8B85F026; --fl-indigo-fg:#BDB8F7;
     --shadow-1:0 1px 2px rgba(0,0,0,.4);
     --shadow-2:0 4px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4);
     --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
@@ -86,8 +101,11 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .mast-sub b{color:var(--color-text-secondary);font-weight:600;font-variant-numeric:tabular-nums}
 .mast-froth{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:500;color:#B32B2A;background:#E24B4A10;border:.5px solid #E24B4A33;border-radius:20px;padding:3px 10px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .mast-froth:hover{background:#E24B4A1C;box-shadow:var(--shadow-1)}
-.tabs{display:flex;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:8px;overflow-x:auto;position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
+.tabs{display:flex;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:8px;overflow-x:auto;overflow-y:hidden;position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding-bottom:2px}
+.mxs,.bband,.tabs,[style*="overflow-x:auto"]{scrollbar-width:thin;scrollbar-color:var(--color-border-secondary) transparent}
+.mxs::-webkit-scrollbar,.bband::-webkit-scrollbar,.tabs::-webkit-scrollbar,[style*="overflow-x:auto"]::-webkit-scrollbar{height:9px;-webkit-appearance:none}
+.mxs::-webkit-scrollbar-thumb,.bband::-webkit-scrollbar-thumb,.tabs::-webkit-scrollbar-thumb,[style*="overflow-x:auto"]::-webkit-scrollbar-thumb{background:var(--color-border-secondary);border-radius:20px;border:2px solid transparent;background-clip:content-box}
+.mxs::-webkit-scrollbar-thumb:hover,.bband::-webkit-scrollbar-thumb:hover,.tabs::-webkit-scrollbar-thumb:hover,[style*="overflow-x:auto"]::-webkit-scrollbar-thumb:hover{background:var(--color-text-tertiary);background-clip:content-box}
 .tab{padding:6px 11px;font-size:12.0px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-.5px;white-space:nowrap;border-radius:6px 6px 0 0;transition:color .12s,background .12s}
 .tab:hover{color:var(--color-text-primary);background:var(--color-background-secondary)}
 .tab.on{color:var(--color-text-primary);border-bottom-color:var(--accent);font-weight:600}
@@ -103,7 +121,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 
 /* ── Matrix ── */
 .mxs{overflow-x:auto}
-.mch{border-radius:3px 3px 0 0;padding:3px 2px;text-align:center;font-size:10.0px;font-weight:500;line-height:1.2;cursor:pointer;transition:filter .12s}
+.mch{filter:brightness(var(--lift));border-radius:3px 3px 0 0;padding:3px 2px;text-align:center;font-size:10.0px;font-weight:500;line-height:1.2;cursor:pointer;transition:filter .12s}
 .mch:hover{filter:brightness(.92)}
 .mrl{font-size:10.0px;font-weight:500;color:var(--color-text-tertiary);display:flex;align-items:center;padding-right:3px;line-height:1.2;cursor:pointer;border-radius:4px;transition:background .12s,color .12s}
 .mrl:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
@@ -121,10 +139,10 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .mxb-act:hover{text-decoration:underline}
 .mc{border-radius:2px;padding:3px 3px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;min-height:28px;transition:all .1s;position:relative}
 .mc:hover{background:var(--color-background-primary);border-color:var(--color-border-secondary)}
-.mc.hi{border-color:#534AB7;background:#534AB70A}
-.mc.hi:hover{background:#534AB715}
+.mc.hi{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.mc.hi:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .mc *{pointer-events:none}
-.ct{display:inline-block;font-size:9.5px;font-weight:500;padding:1px 2px;border-radius:2px;margin:1px 0;line-height:1.3;white-space:nowrap}
+.ct{filter:brightness(var(--lift));display:inline-block;font-size:9.5px;font-weight:500;padding:1px 2px;border-radius:2px;margin:1px 0;line-height:1.3;white-space:nowrap}
 .v0{background:#4F46E522;color:#4F46E5}.v1{background:#0EA5E922;color:#0369A1}.v2{background:#2563EB22;color:#2563EB}
 .v3{background:#7C3AED22;color:#7C3AED}.v4{background:#0891B222;color:#0891B2}.v5{background:#16A34A22;color:#15803D}
 .v6{background:#05966922;color:#059669}.v7{background:#65A30D22;color:#4D7C0F}.v8{background:#D9770622;color:#B45309}
@@ -134,7 +152,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .det-box.on{display:block}
 .det-title{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px}
 .sf{font-size:9.5px;font-weight:500;padding:1px 3px;border-radius:2px;display:inline-block;margin-right:2px}
-.fch{background:#FCEBEB;color:#791F1F}.fgp{background:#FAEEDA;color:#633806}
+.fch{background:var(--fl-red-bg);color:var(--fl-red-fg)}.fgp{background:var(--fl-amber-bg);color:var(--fl-amber-fg)}
 .fgeo{background:#E24B4A18;color:#A32D2D;border:.5px solid #E24B4A44}
 .bband{border-radius:4px;margin:4px 0;border:.5px solid var(--color-border-info);background:var(--color-background-info);overflow-x:auto}
 .binner{padding:3px 5px;min-width:1050px}
@@ -172,12 +190,12 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .sch{font-size:9.0px;color:var(--color-text-tertiary);transition:transform .12s;pointer-events:none}
 .sc.ex .sch{transform:rotate(180deg)}
 .sfl{font-size:9.5px;font-weight:500;padding:1px 3px;border-radius:2px;display:inline-block;margin-right:2px;margin-top:1px}
-.fc{background:#FCEBEB;color:#791F1F}
-.fg{background:#FAEEDA;color:#633806}
-.fge{background:#E24B4A18;color:#A32D2D;border:.5px solid #E24B4A44}
-.fx{background:#E1F5EE;color:#085041;cursor:pointer!important;pointer-events:all!important}
+.fc{background:var(--fl-red-bg);color:var(--fl-red-fg)}
+.fg{background:var(--fl-amber-bg);color:var(--fl-amber-fg)}
+.fge{background:var(--fl-red-bg);color:var(--fl-red-fg);border:.5px solid #E24B4A44}
+.fx{background:var(--fl-green-bg);color:var(--fl-green-fg);cursor:pointer!important;pointer-events:all!important}
 .fx:hover{background:#1D9E75;color:#fff}
-.fn{background:#EEEDFE;color:#3C3489}
+.fn{background:var(--fl-indigo-bg);color:var(--fl-indigo-fg)}
 
 /* ── Explainers ── */
 .exg{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:5px}
@@ -507,6 +525,7 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .tn{border:.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 8px;cursor:pointer;transition:all .12s;background:var(--color-background-primary)}
 .tn.on{color:#fff;border-color:transparent}
 .tn-name{font-size:12.0px;font-weight:500;line-height:1.3}
+.tn:not(.on) .tn-name{filter:brightness(var(--lift))}
 .tn-sub{font-size:10.0px;opacity:.85;line-height:1.3;margin-top:1px}
 .th-detail{display:none}.th-detail.on{display:block}
 .th-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -762,7 +781,7 @@ let VC_COLS,ROWS,MXC,DET,VORDER,CROSS_V,GEO,ACTORS,CYD,VC,EXPLS,FROTH;
 let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
-let TICKER_RE,TICKER_MAP;
+let TICKER_RE,TICKER_MAP,NAME_MAP;
 let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
@@ -788,8 +807,10 @@ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'
 function linkifyTickers(s){
   if(!s||!TICKER_RE) return s||'';
   return String(s).replace(TICKER_RE, m=>{
-    const nm=(TICKER_MAP&&TICKER_MAP[m])?` — ${TICKER_MAP[m]}`:'';
-    return `<span class="ticklink" data-tk="${m}" title="Filter Companies by ${m}${nm}">${m}</span>`;
+    const tk=(TICKER_MAP&&TICKER_MAP[m])?m:(NAME_MAP&&NAME_MAP[m]);
+    if(!tk) return m;
+    const nm=TICKER_MAP[tk]?` — ${TICKER_MAP[tk]}`:'';
+    return `<span class="ticklink" data-tk="${tk}" title="Open ${tk}${nm}">${m}</span>`;
   });
 }
 function jumpToCompanies(tk){
@@ -1060,12 +1081,18 @@ function loadV(id,ctx){
   /* Matrix-cell context: banner + highlight the stages the cell relates to. */
   let relIdx=[];
   if(ctx&&ctx.cellText){
-    const stop=new Set(['china','with','from','that','this','into','standard']);
-    const toks=(ctx.cellText.toLowerCase().match(/[a-z]{4,}/g)||[]).filter(t=>!stop.has(t));
+    const STOP=new Set(['china','with','from','that','this','into','standard','other','than','more','most','their','which','also','have','been','over','under','plus','both','each','some','every','into','they','when','where','while']);
+    const toks=[...new Set((ctx.cellText.toLowerCase().match(/[a-z]{4,}/g)||[]).filter(t=>!STOP.has(t)))];
+    /* Score every stage; only highlight when confident (a label hit, or 3+ detail hits).
+       A wrong highlight is worse than none — silence is the safe default. */
+    let best=-1,bestScore=0;
     v.chain.forEach((s,i)=>{
-      const hay=(s.l+' '+s.r+' '+s.d).toLowerCase();
-      if(toks.some(t=>hay.includes(t))) relIdx.push(i);
+      const label=(s.l+' '+s.r).toLowerCase(), detail=(s.d+' '+(s.p||'')).toLowerCase();
+      let sc=0;
+      toks.forEach(t=>{ if(label.includes(t)) sc+=3; else if(detail.includes(t)) sc+=1; });
+      if(sc>bestScore){bestScore=sc;best=i;}
     });
+    if(bestScore>=3&&best>=0) relIdx=[best];
     h+=`<div class="mx-ctx"><b>From the Universe matrix</b> — you clicked <b>${v.n}</b> × <b>${ctx.row}</b> (“${ctx.cellText}”). ${relIdx.length?`The highlighted stage${relIdx.length>1?'s':''} below cover${relIdx.length>1?'':'s'} that intersection.`:`This vertical's full chain is below; that cell describes where the <b>${ctx.row}</b> layer touches it.`}</div>`;
   }
   v.chain.forEach((s,i)=>{
@@ -1914,12 +1941,20 @@ async function loadData(){
 
   /* Build ticker regex + map for cross-link clickability across all prose.
      Skip 2-char alpha-only tickers (ON, MU, GM) to avoid English false positives. */
-  TICKER_MAP={}; COMPANIES.forEach(c=>{TICKER_MAP[c.ticker]=c.name;});
-  const escaped=COMPANIES
+  TICKER_MAP={}; NAME_MAP={}; COMPANIES.forEach(c=>{TICKER_MAP[c.ticker]=c.name;});
+  const esc1=x=>x.replace(/[.\\$+?^()|[\]{}*]/g,'\\$&');
+  const tickPat=COMPANIES
     .filter(c=>c.ticker.length>=3 || /\./.test(c.ticker))
-    .map(c=>c.ticker.replace(/[.\\$+?^()|[\]{}]/g,'\\$&'))
-    .sort((a,b)=>b.length-a.length);
-  TICKER_RE=new RegExp('\\b('+escaped.join('|')+')(?![\\w.-])','g');
+    .map(c=>esc1(c.ticker));
+  /* Company names are linkified too — full names only (>=5 chars, proper-noun
+     case-sensitive) so ordinary prose can't false-positive. */
+  const namePat=[];
+  COMPANIES.forEach(c=>{
+    const n=(c.name||'').trim();
+    if(n.length>=5 && /^[A-Z]/.test(n) && !NAME_MAP[n]){ NAME_MAP[n]=c.ticker; namePat.push(esc1(n)); }
+  });
+  const all=[...tickPat,...namePat].sort((a,b)=>b.length-a.length);
+  TICKER_RE=new RegExp('\\b('+all.join('|')+')(?![\\w.-])','g');
 
   /* One-time delegated click handler for .ticklink */
   document.addEventListener('click',e=>{
