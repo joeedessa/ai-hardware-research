@@ -547,6 +547,9 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .tn-name{font-size:12.0px;font-weight:500;line-height:1.3}
 .tn:not(.on) .tn-name{filter:brightness(var(--lift))}
 .tn-sub{font-size:10.0px;opacity:.85;line-height:1.3;margin-top:1px}
+.tn-cnt{font-size:8.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-tertiary);margin-top:2px}
+.tn.on .tn-cnt{color:rgba(255,255,255,.8)}
+.th-reg{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
 .th-detail{display:none}.th-detail.on{display:block}
 .th-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .th-chain{display:flex;flex-direction:column;gap:3px}
@@ -771,6 +774,7 @@ function toggleTheme(){
 <div class="view" id="view-th">
   <div class="note"><b>Demand themes</b> — 8 cross-vertical investment themes. Click a theme to explore its supply chain position map, thesis, and portfolio positioning.</div>
   <div class="th-nav" id="th-nav"></div>
+  <div class="th-reg" id="th-reg-row"></div>
   <div id="th-detail"></div>
 </div>
 
@@ -1406,7 +1410,7 @@ function buildThemes(){
   const nav=document.getElementById('th-nav');
   THEMES.forEach(t=>{
     const btn=mk('div','tn');btn.dataset.id=t.id;
-    btn.innerHTML=`<div class="tn-name" style="color:${t.c}">${t.n}</div><div class="tn-sub">${t.sub}</div>`;
+    btn.innerHTML=`<div class="tn-name" style="color:${t.c}">${t.n}</div><div class="tn-sub">${t.sub}</div>${t.tagged_names?`<div class="tn-cnt">${t.tagged_names} tagged names</div>`:''}`;
     btn.addEventListener('click',()=>loadTheme(t.id));
     nav.appendChild(btn);
   });
@@ -1419,6 +1423,15 @@ function loadTheme(id){
   const t=THEMES.find(x=>x.id===id);
   if(btn){btn.classList.add('on');btn.style.background=t.c;btn.style.borderColor=t.c;}
   const cont=document.getElementById('th-detail');
+  /* Narrative themes are views over the per-record tag registry — offer the jump. */
+  const regRow=document.getElementById('th-reg-row');
+  if(regRow){
+    const rt=(t.registry_themes||[]).map(r=>{
+      const m=(THEMES_REG||[]).find(x=>x.id===r); if(!m)return '';
+      return `<span class="dw-chip" onclick="openThemeDrawer('${r}')">${m.label}</span>`;
+    }).join('');
+    regRow.innerHTML=rt?`<span style="font-size:9.5px;color:var(--color-text-tertiary);align-self:center;margin-right:2px">Tagged records in this theme:</span>${rt}`:'';
+  }
   let det=document.getElementById('thd-'+id);
   if(!det){
     det=mk('div','th-detail');det.id='thd-'+id;

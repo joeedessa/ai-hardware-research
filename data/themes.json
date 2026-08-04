@@ -1,8 +1,9 @@
 {
   "_meta": {
     "description": "Demand themes — the structural narratives driving the AI hardware supply chain. Each maps a supply-chain position list, an investment thesis, structure-vs-cycle scores (0-100), portfolio positioning tiers, and watch/risk.",
-    "as_of": "2026-05-28",
-    "review_note": "Content unchanged since May 2026 and NOT yet re-reviewed against the July shakeout, the CPO volume ramp, HBM4 triple-qualification or the August policy developments. Treat as historical framing rather than current judgment."
+    "as_of": "2026-08-05",
+    "review_note": "Content unchanged since May 2026 and NOT yet re-reviewed against the July shakeout, the CPO volume ramp, HBM4 triple-qualification or the August policy developments. Treat as historical framing rather than current judgment.",
+    "taxonomy_note": "These eight demand themes are narrative views; the per-record tags in companies.json _meta.themes_registry are the machine-readable taxonomy. Each theme now declares which registry tags compose it (registry_themes), so the two systems reconcile instead of running in parallel. Content of the narratives themselves has not been re-reviewed since May 2026."
   },
   "themes": [
     {
@@ -46,7 +47,14 @@
       "struct": 95,
       "near": 85,
       "bc": 55,
-      "risk": "Capex digestion / ROI doubt is the key cycle risk — if hyperscaler returns disappoint, the whole stack de-rates. Watch hyperscaler capex guidance, inference-vs-training mix, and any pause in frontier-model spend."
+      "risk": "Capex digestion / ROI doubt is the key cycle risk — if hyperscaler returns disappoint, the whole stack de-rates. Watch hyperscaler capex guidance, inference-vs-training mix, and any pause in frontier-model spend.",
+      "registry_themes": [
+        "cowos",
+        "hbm",
+        "edge-ai",
+        "token-panic"
+      ],
+      "tagged_names": 49
     },
     {
       "id": "memwall",
@@ -84,7 +92,12 @@
       "struct": 92,
       "near": 88,
       "bc": 50,
-      "risk": "Memory is historically the most cyclical semi segment. A demand air-pocket or Samsung/CXMT supply surge could break HBM pricing. Watch HBM4 qualification timing and any conventional-DRAM glut bleeding into sentiment."
+      "risk": "Memory is historically the most cyclical semi segment. A demand air-pocket or Samsung/CXMT supply surge could break HBM pricing. Watch HBM4 qualification timing and any conventional-DRAM glut bleeding into sentiment.",
+      "registry_themes": [
+        "hbm",
+        "flash-hbf"
+      ],
+      "tagged_names": 23
     },
     {
       "id": "packaging",
@@ -122,7 +135,11 @@
       "struct": 88,
       "near": 80,
       "bc": 45,
-      "risk": "CoWoS capacity is being added aggressively — a swing from shortage to balance would compress the scarcity premium. Watch TSMC packaging capacity adds, FOPLP (panel-level) disruption, and substrate supply normalization."
+      "risk": "CoWoS capacity is being added aggressively — a swing from shortage to balance would compress the scarcity premium. Watch TSMC packaging capacity adds, FOPLP (panel-level) disruption, and substrate supply normalization.",
+      "registry_themes": [
+        "cowos"
+      ],
+      "tagged_names": 22
     },
     {
       "id": "optics",
@@ -160,7 +177,13 @@
       "struct": 85,
       "near": 82,
       "bc": 48,
-      "risk": "CPO timing/adoption is uncertain and could disrupt the pluggable-transceiver model. LPO (linear-drive) could bypass DSPs. Watch CPO ramp at Nvidia/Broadcom and any laser-capacity catch-up easing the EML squeeze."
+      "risk": "CPO timing/adoption is uncertain and could disrupt the pluggable-transceiver model. LPO (linear-drive) could bypass DSPs. Watch CPO ramp at Nvidia/Broadcom and any laser-capacity catch-up easing the EML squeeze.",
+      "registry_themes": [
+        "cpo",
+        "1.6t-optics",
+        "pic-enablers"
+      ],
+      "tagged_names": 29
     },
     {
       "id": "powercool",
@@ -198,7 +221,11 @@
       "struct": 90,
       "near": 83,
       "bc": 50,
-      "risk": "A datacenter capex slowdown hits this directly. Cooling tech is fragmenting (cold plate vs immersion) — backing the wrong standard is a risk. Watch power-availability headlines, transformer lead times, and liquid-cooling attach rates."
+      "risk": "A datacenter capex slowdown hits this directly. Cooling tech is fragmenting (cold plate vs immersion) — backing the wrong standard is a risk. Watch power-availability headlines, transformer lead times, and liquid-cooling attach rates.",
+      "registry_themes": [
+        "800v-hvdc"
+      ],
+      "tagged_names": 21
     },
     {
       "id": "humanoid",
@@ -241,7 +268,14 @@
       "struct": 80,
       "near": 55,
       "bc": 60,
-      "risk": "Timeline + unit-volume risk is high — humanoid deployment forecasts are speculative and could slip years. China cost-down could crush component margins. Watch Optimus/Figure production numbers and actual reducer/screw order flow vs hype."
+      "risk": "Timeline + unit-volume risk is high — humanoid deployment forecasts are speculative and could slip years. China cost-down could crush component margins. Watch Optimus/Figure production numbers and actual reducer/screw order flow vs hype.",
+      "registry_themes": [
+        "humanoid",
+        "humanoid-actuator",
+        "industrial-robotics",
+        "sensing"
+      ],
+      "tagged_names": 67
     },
     {
       "id": "glasses",
@@ -284,7 +318,11 @@
       "struct": 70,
       "near": 50,
       "bc": 55,
-      "risk": "Earliest-stage theme here — full AR remains years out and display/waveguide tech is unsettled (cost, yield, FOV). Most pure-plays are private (Lumus, JBD). Watch Meta/Apple device unit sales and any display-tech standardization."
+      "risk": "Earliest-stage theme here — full AR remains years out and display/waveguide tech is unsettled (cost, yield, FOV). Most pure-plays are private (Lumus, JBD). Watch Meta/Apple device unit sales and any display-tech standardization.",
+      "registry_themes": [
+        "ar-glasses"
+      ],
+      "tagged_names": 14
     },
     {
       "id": "sovereign",
@@ -322,7 +360,14 @@
       "struct": 78,
       "near": 65,
       "bc": 45,
-      "risk": "Subsidy-driven capacity can become overcapacity (esp. mature nodes); reshored fabs face cost/yield disadvantages. Policy can reverse (the May→July 2025 EDA on/off). Watch CHIPS disbursements, China curbs, and mature-node price wars."
+      "risk": "Subsidy-driven capacity can become overcapacity (esp. mature nodes); reshored fabs face cost/yield disadvantages. Policy can reverse (the May→July 2025 EDA on/off). Watch CHIPS disbursements, China curbs, and mature-node price wars.",
+      "registry_themes": [
+        "china-localization",
+        "japan-chokepoint",
+        "eu-chips-act",
+        "policy-lever"
+      ],
+      "tagged_names": 93
     }
   ]
 }
