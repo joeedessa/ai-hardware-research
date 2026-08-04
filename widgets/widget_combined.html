@@ -775,6 +775,13 @@ let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,hm:fa
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
 const scolor=s=>['#E24B4A','#D85A30','#EF9F27','#639922','#1D9E75'][s-1];
 const slabel=s=>['Very low','Low','Moderate','High','Very high'][s-1];
+/* Render a machine timestamp (ISO, UTC) in the viewer's local time. Date-only strings pass through. */
+function fmtTS(iso){
+  if(!iso)return '';
+  const d=new Date(iso);
+  if(isNaN(d)||iso.length<=10)return String(iso).slice(0,10);
+  return d.toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+}
 /* Escape external (RSS-sourced) strings before innerHTML injection. */
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 /* Linkify ticker mentions in prose so they open the Companies tab filtered. */
@@ -882,7 +889,7 @@ function buildNews(){
       ${v.sum?`<div class="nw-voice-sum">${esc(v.sum)}…</div>`:''}
     </div>`).join('');
   cont.innerHTML=`
-    <div class="note"><b>Refreshed nightly</b> (weekdays ~21:30 UTC by the repo's data robot; last pull ${asof.slice(0,10)||'—'}). <b>Headlines</b> come from ticker- and theme-targeted news searches; <b>Leading voices</b> are the long-form feeds of the independent analysts driving the AI-hardware conversation (the free stand-in for X — most key accounts publish here). Tickers open the detail panel.</div>
+    <div class="note"><b>Refreshed nightly</b> (weekdays ~21:30 UTC by the repo's data robot; last pull ${fmtTS(asof)||'—'}). <b>Headlines</b> come from ticker- and theme-targeted news searches; <b>Leading voices</b> are the long-form feeds of the independent analysts driving the AI-hardware conversation (the free stand-in for X — most key accounts publish here). Tickers open the detail panel.</div>
     ${voices?`<div class="ew-title" style="font-size:15px;margin-bottom:6px">Leading voices</div><div class="nw-voice-grid">${voices}</div>`:''}
     <div class="ew-title" style="font-size:15px;margin:12px 0 4px">Headlines</div>
     <div class="pills">${pillHtml}</div>
@@ -1393,7 +1400,7 @@ function buildPortfolio(){
       }).join('');
       return `<tr class="${isB?'sb-bench':''}"><td>${name}${b.n>1?` <span class="sb-n">${b.n}</span>`:''}</td>${cells}</tr>`;
     }).join('');
-    sb.innerHTML=`<div class="ew-title" style="font-size:15px;margin:14px 0 2px">Scoreboard <span class="ew-asof">nightly · ${(PERF._meta.as_of||'').slice(0,10)}</span></div>
+    sb.innerHTML=`<div class="ew-title" style="font-size:15px;margin:14px 0 2px">Scoreboard <span class="ew-asof">nightly · ${fmtTS(PERF._meta.as_of)}</span></div>
       <div class="ew-intro">Does the framework's ranking actually work? Equal-weight, price-only returns of the dashboard's own baskets against the benchmarks. ${esc(PERF._meta.note||'')}</div>
       <div style="overflow-x:auto"><table class="rt sb"><thead><tr><th>Basket</th>${cols.map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
     cont.appendChild(sb);
@@ -1933,14 +1940,14 @@ async function loadData(){
     if(tnx)h+=chip('US 10Y',(tnx.p>20?tnx.p/10:tnx.p).toFixed(2)+'%',tnx.d1);
     if(krw)h+=chip('USD/KRW',Math.round(krw.p).toLocaleString(),krw.d1);
     if(h){const el=document.getElementById('mast-mkt');el.innerHTML=h;el.style.display='flex';
-      el.title='SMH/SPY chip = 1-month relative move of semis vs S&P — the froth thermometer. As of '+((quotesJ&&quotesJ._meta&&quotesJ._meta.as_of)||'').slice(0,10);}
+      el.title='SMH/SPY chip = 1-month relative move of semis vs S&P — the froth thermometer. As of '+fmtTS((quotesJ&&quotesJ._meta&&quotesJ._meta.as_of)||'');}
   }
 
   /* Alert strip — live data checked nightly against the dashboard's own judgments */
   if(ALERTS&&ALERTS.alerts&&ALERTS.alerts.length){
     const AS={window:{c:'#16A34A',l:'ENTRY'},move:{c:'#EF9F27',l:'MOVE'},froth:{c:'#E24B4A',l:'FROTH'}};
     const el=document.getElementById('alert-strip');
-    el.innerHTML=`<span class="al-lbl" title="Computed nightly: insulated names past the −15% entry threshold, big single-day moves in conviction-3 names, high-froth names back near their highs">⚡ ${ALERTS.alerts.length} signal${ALERTS.alerts.length===1?'':'s'} · ${(ALERTS._meta.as_of||'').slice(0,10)}</span>`+
+    el.innerHTML=`<span class="al-lbl" title="Computed nightly: insulated names past the −15% entry threshold, big single-day moves in conviction-3 names, high-froth names back near their highs">⚡ ${ALERTS.alerts.length} signal${ALERTS.alerts.length===1?'':'s'} · ${fmtTS(ALERTS._meta.as_of)}</span>`+
       ALERTS.alerts.map(a=>{const s=AS[a.type]||AS.move;
         return `<span class="al-chip" style="color:${s.c};border-color:${s.c}44;background:${s.c}0D" title="${a.msg.replace(/"/g,'&quot;')}" onclick="openCompanyDrawer('${a.tk}')"><b>${s.l}</b> ${a.tk} <span style="font-variant-numeric:tabular-nums">${a.val>0?'+':''}${a.val}%</span></span>`;}).join('');
     el.style.display='flex';
@@ -2056,7 +2063,7 @@ function drawerMarket(tk){
   const tile=(l,v,c)=>v==null?'':`<div class="dw-tile"><div class="dw-tile-l">${l}</div><div class="dw-tile-v" style="${c?`color:${c}`:''}">${v}</div></div>`;
   const mc=q.mc?(q.mc>=1e12?(q.mc/1e12).toFixed(1)+'T':q.mc>=1e9?(q.mc/1e9).toFixed(0)+'B':(q.mc/1e6).toFixed(0)+'M'):null;
   const v200=q.a200?+((q.p/q.a200-1)*100).toFixed(1):null;
-  const asof=QUOTES_META?` <span style="font-weight:400;text-transform:none;letter-spacing:0">· ${(QUOTES_META.as_of||'').slice(0,10)}, local currency</span>`:'';
+  const asof=QUOTES_META?` <span style="font-weight:400;text-transform:none;letter-spacing:0">· ${fmtTS(QUOTES_META.as_of)}, local currency</span>`:'';
   return `<div class="dw-sect">Market${asof}</div><div class="dw-mkt">`
     +tile('Price',q.p.toLocaleString())
     +tile('1 day',(q.d1>=0?'+':'')+q.d1+'%',pc(q.d1))
