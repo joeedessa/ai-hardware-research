@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Universe matrix — 13 verticals × 10 universal hardware supply-chain stages. Each cell has entries (label + style class) and optional highlighted analytical detail. Ex-materials. As of June 2026 includes 'ais' (Agentic Infra Software) — added per Citrini SOTT scope expansion.",
-    "as_of": "2026-05-28",
+    "as_of": "2026-08-03",
     "style_classes": {
       "v0": "EDA & IP — indigo",
       "v1": "WFE — sky",
@@ -17,7 +17,8 @@
       "vb": "Micro-displays — pink",
       "vc": "AR Optics — purple",
       "vd": "Agentic Infra SW — slate"
-    }
+    },
+    "review_note": "as_of reflects the last real content change to this file, not the last time the dashboard was opened."
   },
   "verticals": [
     {

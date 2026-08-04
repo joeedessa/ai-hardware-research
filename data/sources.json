@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Source registry for thesis claims and additions to the dashboard. Each entry has a stable id referenced from companies.json records' `sources` field (and eventually explorer/matrix prose). The 2026-05-29/30 session attached sources to ~60 records added/enriched from the 7 Citrini Research memos in `memos/` plus web verifications.",
-    "as_of": "2026-05-30",
+    "as_of": "2026-08-04",
     "schema": {
       "id": "stable kebab-case identifier referenced from data records",
       "title": "human title",
@@ -10,7 +10,8 @@
       "type": "memo | press | web | xlsx | repo",
       "url": "canonical URL (empty for private/local sources)",
       "notes": "what the source covers / why it's cited"
-    }
+    },
+    "review_note": "as_of reflects the last real content change to this file, not the last time the dashboard was opened."
   },
   "sources": [
     {"id": "citrini-primer-2025-05", "title": "Thematic Primer: Humanoid Robots — A Secular Story at a Cyclical Price", "author": "Citrini Research", "date": "2025-05-16", "type": "memo", "url": "https://www.citriniresearch.com/p/humanoid-robots", "notes": "Full humanoid teardown — Unitree BOM, actuation, sensing/perception, compute, motion control, power & energy, tele-op, autonomy SW, industrial + humanoid OEMs. Source for component-supplier additions and humanoid-OEM gap-fill."},

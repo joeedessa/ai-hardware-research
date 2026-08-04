@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Vertical explorer — all 13 AI/semiconductor/robotics/optical sub-chains with full step-by-step detail, chokepoint flags, and cross-chain links. Ex-materials (raw materials covered by the Hard Assets map). Fast-moving — enrich over time.",
-    "as_of": "2026-05-28",
+    "as_of": "2026-08-02",
     "flags": {
       "choke": "supply chokepoint — concentrated control of a stage",
       "gap": "capacity bottleneck / under-investment vs demand",
@@ -15,7 +15,8 @@
       "Optical & Photonics",
       "Robotics",
       "Smart Glasses & AR"
-    ]
+    ],
+    "review_note": "as_of reflects the last real content change to this file, not the last time the dashboard was opened."
   },
   "verticals": {
     "eda": {

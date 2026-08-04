@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Names that came up in source memos but were deliberately NOT added to the dashboard, with the reason. Scope discipline is value: this list documents the curation rules so the 'why isn't X here?' question is answered. Categories: software-saas, payments-fintech, cybersecurity, auto-oem, av-services, defense-pure, service-robots, raw-materials (→ Hard Assets sibling), bitcoin-infra, speculative, lagging-edge-memory, ticker-conflict, end-customer.",
-    "as_of": "2026-05-30",
+    "as_of": "2026-08-03",
     "categories": {
       "software-saas": "Software / SaaS layer — out of scope for a hardware dashboard",
       "payments-fintech": "Payments rails / stablecoin / fintech — out of scope",
@@ -16,7 +16,8 @@
       "lagging-edge-memory": "Legacy DDR3/DDR4/NOR squeeze — deferred (could be added later)",
       "ticker-conflict": "Source had a likely-wrong ticker; deferred until verified",
       "end-customer": "Pure end-customer (hyperscaler / brand) — not a supply chain layer"
-    }
+    },
+    "review_note": "as_of reflects the last real content change to this file, not the last time the dashboard was opened."
   },
   "excluded": [
     {"ticker": "FFIV", "name": "F5", "reason": "Load balancer / API gateway software", "category": "software-saas", "source_ref": ["citrini-agentic-2026-03"]},

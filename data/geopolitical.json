@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Geopolitical lens. heatmap: chokepoint scored 1-5 on [supply concentration, chokepoint severity, Western policy response, AI-race relevance]. actor_map: who controls each broad stage by country (Design/IP, Equipment, Fabrication, Packaging/System).",
-    "as_of": "2026-05-28",
+    "as_of": "2026-08-03",
     "score_scale": "1=Very low, 2=Low, 3=Moderate, 4=High, 5=Very high",
     "actor_classes": {
       "a-us": "US",
@@ -10,7 +10,8 @@
       "a-jp": "Japan",
       "a-cn": "China",
       "a-eu": "Europe/other"
-    }
+    },
+    "review_note": "as_of reflects the last real content change to this file, not the last time the dashboard was opened."
   },
   "heatmap": [
     {
