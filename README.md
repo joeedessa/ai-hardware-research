@@ -9,3 +9,7 @@ Investment-research dashboard: the AI / semiconductor / robotics / optical & AR 
 - `scripts/fetch_market.py` + `.github/workflows/refresh-data.yml` — the zero-cost nightly data robot
 - `.github/workflows/ci.yml` — push-time validation (data JSON + app JS)
 - `archive/` — frozen historical snapshots
+
+## License & disclaimer
+
+© 2026 Joe Edessa. All rights reserved. This repository is public for personal-hosting convenience — **no license is granted** for republication or commercial reuse of the research content or code. Personal investment research, **not investment advice**. Referenced analyst materials are cited in `data/sources.json` and remain the property of their authors (and are not stored in this repo). Market data comes from free public feeds and is not guaranteed accurate.
