@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Names that came up in source memos but were deliberately NOT added to the dashboard, with the reason. Scope discipline is value: this list documents the curation rules so the 'why isn't X here?' question is answered. Categories: software-saas, payments-fintech, cybersecurity, auto-oem, av-services, defense-pure, service-robots, raw-materials (→ Hard Assets sibling), bitcoin-infra, speculative, lagging-edge-memory, ticker-conflict, end-customer.",
-    "as_of": "2026-08-03",
+    "as_of": "2026-08-05",
     "categories": {
       "software-saas": "Software / SaaS layer — out of scope for a hardware dashboard",
       "payments-fintech": "Payments rails / stablecoin / fintech — out of scope",
@@ -96,6 +96,24 @@
     {"ticker": "IBM", "name": "IBM", "reason": "Enterprise/tier-2 cloud layer of the MS map; no hardware chokepoint", "category": "software-saas", "source_ref": ["ms-value-chain-2026-07"]},
     {"ticker": "KEYS", "name": "Keysight", "reason": "Test & measurement instruments — R&D/lab layer, not a production chokepoint; production test covered via Advantest/Teradyne/Cohu/Aehr", "category": "diversified-industrial", "source_ref": ["gap-audit-2026-08"]},
     {"ticker": "TXN", "name": "Texas Instruments", "reason": "Broad analog — huge but diffuse AI exposure; the specific AI power-stage story is covered via MPWR/onsemi/Infineon/STM", "category": "diversified-industrial", "source_ref": ["gap-audit-2026-08"]},
-    {"ticker": "AWE.L", "name": "Alphawave Semi", "reason": "Acquired by Qualcomm (deal closed 2026) — delisted; its SerDes/UCIe IP now sits inside QCOM (already a record). Was eda conviction-2.", "category": "ticker-conflict", "source_ref": ["gap-audit-2026-08"]}
+    {"ticker": "AWE.L", "name": "Alphawave Semi", "reason": "Acquired by Qualcomm (deal closed 2026) — delisted; its SerDes/UCIe IP now sits inside QCOM (already a record). Was eda conviction-2.", "category": "ticker-conflict", "source_ref": ["gap-audit-2026-08"]},
+    {"ticker": "NXPI", "name": "NXP Semiconductors", "reason": "Auto/industrial analog and MCU — AI datacenter exposure too diffuse to carry a thesis; consistent with the TXN ruling", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "MCHP", "name": "Microchip Technology", "reason": "Broad MCU/analog; cyclical auto-industrial recovery story rather than an AI supply-chain position", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "LSCC", "name": "Lattice Semiconductor", "reason": "Low-power FPGA — server management content is real but small; ASPEED already covers the BMC chokepoint", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "ACMR", "name": "ACM Research", "reason": "China wafer-cleaning tools — the localization thesis is already carried by NAURA and AMEC", "category": "china-localization-covered", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "AZTA", "name": "Azenta Life Sciences", "reason": "Post-divestiture the semiconductor automation business is gone; life-sciences sample management is out of scope", "category": "out-of-scope", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "NDSN", "name": "Nordson", "reason": "Dispensing equipment with a small electronics segment; AI exposure marginal", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "JNPR", "name": "Juniper Networks", "reason": "In-flight HPE acquisition; enterprise networking rather than an AI-cluster fabric position", "category": "end-customer", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "EXTR", "name": "Extreme Networks", "reason": "Enterprise campus networking — no AI datacenter fabric role", "category": "end-customer", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "GNRC", "name": "Generac", "reason": "Residential and light-commercial generators; datacenter backup is Cummins' and Caterpillar's ground", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "JCI", "name": "Johnson Controls", "reason": "Building HVAC conglomerate; datacenter cooling is a slice and the direct plays are already held", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "PH", "name": "Parker Hannifin", "reason": "Diversified motion and flow control — long-deferred borderline name, formally excluded: no chokepoint, diffuse exposure", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "AAON", "name": "AAON", "reason": "Commercial HVAC with a growing datacenter line; sub-scale versus Vertiv/Munters for this map", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "SPXC", "name": "SPX Technologies", "reason": "Cooling and infrastructure conglomerate; datacenter exposure indirect", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "MOD", "name": "Modine Manufacturing", "reason": "Thermal management with a real datacenter segment inside a vehicle-thermal base; revisit if the DC mix keeps compounding", "category": "diversified-industrial", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "2379.TW", "name": "Realtek", "reason": "Consumer and PC connectivity silicon; no AI datacenter chokepoint", "category": "end-customer", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "5347.TWO", "name": "Vanguard International Semiconductor", "reason": "Mature-node foundry — the layer is covered by UMC and GlobalFoundries", "category": "lagging-edge", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "1590.TW", "name": "Airtac International", "reason": "Pneumatic automation components — industrial automation rather than AI or humanoid actuation", "category": "out-of-scope", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "6146.TW", "name": "Flytech Technology", "reason": "Industrial and retail computing systems; not an AI-server supplier", "category": "out-of-scope", "source_ref": ["review-gap-2026-08"]}
   ]
 }
