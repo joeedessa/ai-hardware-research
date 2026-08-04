@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "description": "Picks & shovels — the arms-dealers of the AI hardware buildout: companies that sell into the chain regardless of which end-product or brand wins. badge: hot / structural / moderate. hi = chokepoint owner highlight.",
+    "as_of": "2026-05-28"
+  },
+  "categories": [
+    {
+      "id":"1","title":"Capital equipment — the toll booths","sub":"Sell to every fab and packaging house","c":"#0EA5E9",
+      "why":"Whoever wins in chips, they all buy the same tools. Equipment makers monetize the entire industry's capex and own the deepest single-source chokepoints in the stack.",
+      "cards":[
+        {"n":"ASML","r":"EUV lithography monopoly","t":"Sole EUV maker; High-NA ramping. No leading-edge AI silicon exists without it. The ultimate toll booth.","badge":"structural","hi":true,"srv":["ASML","Zeiss optics","Cymer source"]},
+        {"n":"Applied Materials / Lam / KLA","r":"Deposition, etch, process control","t":"US WFE trio covering most non-litho steps; KLA's metrology near-monopoly ties to yield. Recurring service base.","badge":"structural","hi":false,"srv":["AMAT","LRCX","KLAC"]},
+        {"n":"Tokyo Electron","r":"Coat/develop, etch, deposition","t":"Japan's WFE champion, paired with ASML litho on every line. Core to every fab.","badge":"moderate","hi":false,"srv":["8035.T"]},
+        {"n":"Advantest","r":"Automated test (ATE)","t":"ATE duopoly with Teradyne; HBM + AI complexity lengthens test time = direct AI test-demand leverage.","badge":"hot","hi":false,"srv":["6857.T","TER"]},
+        {"n":"BE Semiconductor","r":"Hybrid bonding tools","t":"The equipment chokepoint of advanced packaging; enables sub-10µm 3D stacking for HBM and chiplets.","badge":"hot","hi":true,"srv":["BESI.AS"]},
+        {"n":"VAT Group","r":"Vacuum valves","t":"Near-monopoly subsystem inside every deposition/etch tool — a hidden single-source pick-and-shovel.","badge":"moderate","hi":false,"srv":["VACN.SW"]}
+      ]
+    },
+    {
+      "id":"2","title":"Materials & substrate handoff","sub":"Where materials become silicon","c":"#854F0B",
+      "why":"The unglamorous inputs that gate everything: wafers, resist, substrates, glass. Often Japanese-controlled, low-profile, and surprisingly hard to substitute.",
+      "cards":[
+        {"n":"Shin-Etsu / SUMCO","r":"300mm silicon wafers","t":"Japan supplies ~50%+ of wafers — upstream of even TSMC. AI ramp tightens wafer supply.","badge":"structural","hi":true,"srv":["4063.T","3436.T"]},
+        {"n":"JSR / Tokyo Ohka","r":"Photoresist","t":"Japan controls ~80-90% of advanced resist — a deliberate strategic chokepoint demonstrated vs Korea in 2019.","badge":"moderate","hi":true,"srv":["4185.T","4186.T"]},
+        {"n":"Ibiden / Unimicron","r":"ABF IC substrates","t":"High-layer-count ABF substrates for big AI dies are supply-constrained; substrate is the second packaging squeeze.","badge":"hot","hi":false,"srv":["4062.T","3037.TW"]},
+        {"n":"Ajinomoto","r":"ABF insulating film","t":"Makes the film inside every IC substrate — a hidden near-monopoly with food-company optionality.","badge":"moderate","hi":true,"srv":["2802.T"]},
+        {"n":"Corning / Schott","r":"High-index glass + fiber","t":"AR waveguide glass + AI-cluster optical fiber. Materials chokepoint bordering the hard-assets map.","badge":"moderate","hi":false,"srv":["GLW","Schott"]}
+      ]
+    },
+    {
+      "id":"3","title":"Connectivity & test silicon","sub":"Plumbing for the AI cluster","c":"#059669",
+      "why":"As clusters scale to 100k+ GPUs, the value of moving and verifying data rises. These names sell into every accelerator and every server, agnostic to which GPU wins.",
+      "cards":[
+        {"n":"Astera Labs","r":"PCIe/CXL retimers, fabric","t":"The AI-connectivity pure-play; content scales with every GPU and rack. UALink optionality. Premium multiple.","badge":"hot","hi":false,"srv":["ALAB"]},
+        {"n":"Credo Technology","r":"Active electrical cables","t":"ZeroFlap AECs dominant top-of-rack; signal integrity at 224G. High-growth connectivity niche.","badge":"hot","hi":false,"srv":["CRDO"]},
+        {"n":"Marvell / Broadcom","r":"Optical DSP + switch silicon","t":"The brains of transceivers + dominant switch silicon; capture the value inside China-assembled optical modules.","badge":"structural","hi":true,"srv":["MRVL","AVGO"]},
+        {"n":"Advantest / Teradyne","r":"Test (ATE)","t":"Every chip is tested; HBM/AI complexity lengthens test time. The duopoly monetizes complexity itself.","badge":"hot","hi":false,"srv":["6857.T","TER"]},
+        {"n":"Monolithic Power","r":"Power management ICs","t":"Power-management content per GPU rising with 1kW+ accelerators. High-quality analog compounder.","badge":"structural","hi":false,"srv":["MPWR"]}
+      ]
+    },
+    {
+      "id":"4","title":"Power & cooling — the physical wall","sub":"The binding constraint on deployment","c":"#65A30D",
+      "why":"AI is now gated by power and heat, not chips. These names sell the electrons and the cooling into every rack — and increasingly into the grid behind it.",
+      "cards":[
+        {"n":"Vertiv","r":"Power + liquid cooling","t":"Datacenter power + thermal leader at the liquid-cooling inflection (GB200 mandates it). The cleanest power/cooling pick.","badge":"hot","hi":true,"srv":["VRT"]},
+        {"n":"Delta Electronics","r":"Power supplies / PSU","t":"World-leading DC power supplies; 48V-to-chip transition. Quiet Taiwan AI-power compounder.","badge":"structural","hi":false,"srv":["2308.TW"]},
+        {"n":"AVC / Auras","r":"Cold plates, thermal","t":"Taiwan cooling component makers riding the liquid-cooling ramp; cold plates + modules for AI servers.","badge":"hot","hi":false,"srv":["3017.TW","3324.TWO"]},
+        {"n":"Eaton","r":"Electrical distribution","t":"Switchgear, busways, PDUs for 100kW+ racks; cross-link to grid hardening. Multi-year backlog.","badge":"structural","hi":false,"srv":["ETN"]},
+        {"n":"GE Vernova","r":"Onsite power (gas turbines)","t":"Behind-the-meter gas + grid for AI power; the cross-link into the energy supply chain (see Hard Assets).","badge":"structural","hi":false,"srv":["GEV"]}
+      ]
+    },
+    {
+      "id":"5","title":"Robotics motion components","sub":"Arms-dealers of the humanoid wave","c":"#DC2626",
+      "why":"If humanoids scale, the value is in the actuator BOM — reducers, screws, motors — not the robot brands. These are the component chokepoints (and the China localization targets).",
+      "cards":[
+        {"n":"Harmonic Drive","r":"Strain-wave reducers","t":"Historic near-monopoly in harmonic reducers for robot joints; designed into Western humanoids. China localization is the risk.","badge":"structural","hi":true,"srv":["6324.T"]},
+        {"n":"Nabtesco","r":"Cycloidal/RV reducers","t":"~60% of precision RV reducers for heavy joints. The high-torque reduction-gear chokepoint.","badge":"structural","hi":true,"srv":["6268.T"]},
+        {"n":"THK / NSK","r":"Ball & roller screws","t":"Planetary roller screws are a humanoid linear-actuation bottleneck (with Germany's GSA). Motion-component leaders.","badge":"moderate","hi":false,"srv":["6481.T","6471.T"]},
+        {"n":"Inovance","r":"Motors + drives (China)","t":"China's motion-control champion vertically integrating into humanoids. The clearest China-localization core.","badge":"hot","hi":false,"srv":["300124.SZ"]},
+        {"n":"Sanhua Intelligent","r":"Actuator assembly","t":"Exclusive Tier-1 Tesla Optimus actuator assembler ($685M order). The clearest listed Optimus supply-chain proxy.","badge":"hot","hi":false,"srv":["002050.SZ"]}
+      ]
+    }
+  ]
+}

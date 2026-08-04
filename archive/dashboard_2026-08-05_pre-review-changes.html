@@ -442,13 +442,6 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .sb-d{display:block;font-size:8.5px;font-weight:500}
 .sb-bench td{color:var(--color-text-tertiary)!important;background:var(--color-background-secondary)}
 .sb-bench td:first-child{font-weight:400;font-style:italic}
-.sb-tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px}
-.sb-track{border:.5px solid var(--color-border-tertiary);border-radius:9px;padding:10px 12px;background:var(--color-background-primary);box-shadow:var(--shadow-1)}
-.sb-track-h{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-bottom:4px}
-.sb-track-n{font-family:var(--font-display);font-size:13.5px;font-weight:600;color:var(--color-text-primary)}
-.sb-track-d{font-size:9.5px;color:var(--color-text-tertiary)}
-.sb-verdict{font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:20px;margin-left:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
-.sb-note{font-size:9.5px;line-height:1.5;color:var(--color-text-tertiary);margin-top:5px}
 /* ── Start Here ── */
 .sh-hero{max-width:680px;padding:6px 2px 2px}
 .sh-hero-t{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em;color:var(--color-text-primary);line-height:1.2}
@@ -1447,30 +1440,7 @@ function buildPortfolio(){
       <div class="ew-avoid"><b>${ew.avoid.title}.</b> ${linkifyTickers(ew.avoid.body)}</div>`;
     cont.appendChild(box);
   }
-  /* Scoreboard — forward record first (the only honest test), retrospective second. */
-  if(PERF&&PERF.tracks){
-    const sb=mk('div','');
-    const tracks=PERF.tracks.map(tr=>{
-      const lead=tr.rows.find(r=>!r.bench);
-      const bench=tr.rows.find(r=>r.bench&&/SMH/.test(r.label));
-      const diff=(lead&&bench&&lead.si!=null&&bench.si!=null)?+(lead.si-bench.si).toFixed(1):null;
-      const rows=tr.rows.map(r=>{
-        const v=r.si;
-        return `<tr class="${r.bench?'sb-bench':''}"><td>${r.label}${r.n>1?` <span class="sb-n">${r.n}</span>`:''}</td>
-          <td style="text-align:right;color:${v==null?'var(--color-text-tertiary)':v>=0?'#15803D':'#B32B2A'}">${v==null?'—':(v>0?'+':'')+v+'%'}</td></tr>`;
-      }).join('');
-      return `<div class="sb-track">
-        <div class="sb-track-h"><span class="sb-track-n">${tr.name}</span><span class="sb-track-d">forward record since ${tr.inception}</span>
-          ${diff!=null?`<span class="sb-verdict" style="background:${diff>=0?'#16A34A14':'#E24B4A14'};color:${diff>=0?'#15803D':'#B32B2A'}">${diff>=0?'+':''}${diff} pts vs SMH</span>`:''}</div>
-        <div style="overflow-x:auto"><table class="rt sb"><tbody>${rows}</tbody></table></div>
-        <div class="sb-note">${tr.note}</div></div>`;
-    }).join('');
-    sb.innerHTML=`<div class="ew-title" style="font-size:15px;margin:14px 0 2px">Scoreboard <span class="ew-asof">nightly · ${fmtTS(PERF._meta.as_of)}</span></div>
-      <div class="ew-intro">A judgment can only be scored from the date it was made. These are forward returns since each ranking was written — equal-weight, price-only, no dividends or FX.</div>
-      <div class="sb-tracks">${tracks}</div>`;
-    cont.appendChild(sb);
-  }
-  /* Retrospective trailing table — kept, but explicitly labelled as composition. */
+  /* Scoreboard — does the framework's ranking actually work? Computed nightly. */
   if(PERF&&PERF.baskets){
     const sb=mk('div','');
     const cols=[['r1m','1 mo'],['r3m','3 mo'],['r6m','6 mo'],['r1y','1 yr']];
@@ -1484,8 +1454,8 @@ function buildPortfolio(){
       }).join('');
       return `<tr class="${isB?'sb-bench':''}"><td>${name}${b.n>1?` <span class="sb-n">${b.n}</span>`:''}</td>${cells}</tr>`;
     }).join('');
-    sb.innerHTML=`<div class="dw-sect" style="margin:16px 0 4px">Trailing returns — retrospective composition, not a test</div>
-      <div class="ew-intro" style="color:#B45309">${esc((PERF._meta&&PERF._meta.retrospective_warning)||'')}</div>
+    sb.innerHTML=`<div class="ew-title" style="font-size:15px;margin:14px 0 2px">Scoreboard <span class="ew-asof">nightly · ${fmtTS(PERF._meta.as_of)}</span></div>
+      <div class="ew-intro">Does the framework's ranking actually work? Equal-weight, price-only returns of the dashboard's own baskets against the benchmarks. ${esc(PERF._meta.note||'')}</div>
       <div style="overflow-x:auto"><table class="rt sb"><thead><tr><th>Basket</th>${cols.map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
     cont.appendChild(sb);
   }

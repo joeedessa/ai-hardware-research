@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "description": "Datacenter Power & Cooling deep-dive (this is the 'Power & Cooling' tab). The physical layer that has become the binding constraint on AI deployment, and its cross-links into the energy supply chain (Hard Assets map).",
+    "as_of": "2026-05-28"
+  },
+  "bottleneck": {
+    "title": "Power & cooling — not chips — now gate the AI buildout",
+    "body": "By 2026 datacenters are ~4% of US electricity and rising. The binding constraints have moved downstream of silicon: grid interconnect queues and multi-year transformer lead times gate where sites can be built, while rack densities of 100-130kW+ force a jump to liquid cooling (~15% of the mix in 2024 to ~76% by 2026, mandated by GB200). The coolant-distribution-unit (CDU) is the specific cooling bottleneck, with the market scaling ~$1B → ~$7.7B. This is where the AI hardware chain meets the energy supply chain."
+  },
+  "chain": [
+    {"n":"Grid interconnect & transformers","c":"#854F0B","role":"Connecting the datacenter to power","tick":"ETN, GEV, Hitachi Energy, Siemens Energy ENR.DE","det":"Large power transformers and switchgear have 2-4yr lead times and are the gating item for new sites. Grid interconnect queues now stretch years in key US/EU markets. Cross-link to the copper/grid chain in the Hard Assets map.","hi":true},
+    {"n":"Onsite generation","c":"#EF9F27","role":"Behind-the-meter power for speed","tick":"GEV (gas turbines), CMI, CAT; nuclear PPAs CEG","det":"With grid access scarce, hyperscalers turn to behind-the-meter gas turbines and nuclear PPAs/SMRs. Gas turbine slots are now booked years out. This is the deepest cross-link into the energy supply chain (gas + nuclear).","hi":false},
+    {"n":"UPS & backup","c":"#534AB7","role":"Ride-through and resilience","tick":"VRT, ETN, Schneider SU.PA","det":"Uninterruptible power supplies + battery backup sized for GPU-density loads. Lithium BESS increasingly used for ride-through and grid services.","hi":false},
+    {"n":"Rack power distribution","c":"#185FA5","role":"Busways, PDUs, switchgear in the hall","tick":"VRT, ETN, Legrand, nVent NVT","det":"Distributing 100-130kW+ per rack reshapes busways and PDUs. Higher-voltage DC distribution (800VDC) is emerging to cut conversion losses at the rack.","hi":false},
+    {"n":"Power supplies (PSU)","c":"#1D9E75","role":"AC→DC conversion for the rack","tick":"2308.TW (Delta), 2301.TW (Lite-On)","det":"Delta Electronics leads high-efficiency DC power supplies; AI racks drive demand for higher-density, higher-efficiency PSUs. PSU lead times stretched.","hi":false},
+    {"n":"Board power delivery (VRM)","c":"#16A34A","role":"48V→chip for 1kW+ GPUs","tick":"MPWR, Vicor VICR, Infineon","det":"Vertical power delivery and 48V-to-point-of-load conversion for 1kW+ accelerators is a fast-evolving silicon bottleneck. Content-per-GPU rising.","hi":false},
+    {"n":"Liquid cooling — cold plate & CDU","c":"#0EA5E9","role":"Removing heat from the GPU","tick":"VRT, Boyd, 3017.TW (AVC), 3324.TWO (Auras)","det":"Direct-to-chip liquid cooling jumps to ~76% of the mix by 2026. The CDU (coolant distribution unit) is the specific capacity bottleneck; quick-disconnects and cold plates are the high-growth components.","hi":true},
+    {"n":"Heat rejection & facility cooling","c":"#3B6D11","role":"Rejecting heat to the environment","tick":"Modine MOD, Johnson Controls JCI, Trane TT","det":"Chillers, dry coolers and (where water allows) evaporative systems reject the heat. Water availability is becoming a siting constraint — cross-link to the water chain in the Hard Assets map.","hi":false}
+  ],
+  "intersections": [
+    {"n":"Nuclear for AI","c":"#534AB7","body":"24/7 carbon-free baseload via PPAs and SMRs is the premium AI power solution; the CEG-Microsoft Three Mile Island restart is the template. Cross-link to the nuclear chain in the Hard Assets map.","tick":"CEG, GEV, BWXT, Oklo","demand":"Hyperscalers contracting 20yr PPAs; SMR pipeline building"},
+    {"n":"Natural gas for AI","c":"#EF9F27","body":"Gas-fired CCGT and behind-the-meter turbines are the default fast, dispatchable solution where the grid can't deliver. Cross-link to the gas/LNG chain.","tick":"GEV, ET, KMI, VST","demand":"Gas turbine order books booked years out"},
+    {"n":"Copper & grid hardening","c":"#D85A30","body":"Every MW of AI load needs transformers, switchgear and copper. Simultaneous demand from AI + EVs + grid hardening. Cross-link to the copper chain.","tick":"ETN, Hitachi Energy, Prysmian PRY.MI","demand":"Transformer lead times 2-4yr"},
+    {"n":"Water for cooling","c":"#3B6D11","body":"Evaporative cooling and chip cooling raise water demand; arid-region siting (AZ/TX) is increasingly water-constrained. Cross-link to the water chain.","tick":"ERII, XYL, Veolia","demand":"Water availability now a siting filter"}
+  ],
+  "ai_themes": [
+    {"n":"Rack density 100-130kW+","body":"GB200 NVL72 and successors push rack power an order of magnitude above legacy ~10-15kW racks, breaking air cooling and conventional distribution.","tick":"VRT, ETN, Delta 2308.TW"},
+    {"n":"Liquid cooling inflection","body":"Direct-to-chip liquid cooling goes from niche (~15% in 2024) to majority (~76% by 2026). Cold plates, CDUs and quick-disconnects are the highest-growth components.","tick":"VRT, AVC 3017.TW, Auras 3324.TWO"},
+    {"n":"800VDC power architecture","body":"Higher-voltage DC distribution to cut conversion losses and copper at extreme rack densities — Nvidia is pushing the ecosystem toward 800VDC.","tick":"MPWR, Vicor VICR, Infineon"},
+    {"n":"Power availability as the limiter","body":"The scarcest input is now interconnected power, not chips or capital — driving onsite generation, nuclear PPAs and grid-edge investment.","tick":"GEV, CEG, CAT, CMI"}
+  ],
+  "cycle": [
+    {"n":"Liquid cooling","c":"#0EA5E9","inn":3,"struct":92,"capex":80,"bc":50,"vc":"#16A34A","verdict":"Early innings","body":"At the inflection from niche to standard; cold plates and CDUs are badly under-built vs the GB200-era ramp. Highest-torque sub-theme, with cooling-standard fragmentation as the main risk."},
+    {"n":"Power supplies / delivery","c":"#16A34A","inn":4,"struct":88,"capex":65,"bc":50,"vc":"#16A34A","verdict":"Early-mid","body":"Content-per-GPU rising with 1kW+ accelerators and 48V/800VDC transitions. Delta and the VRM names ride density up; tied to the broader capex cycle."},
+    {"n":"Onsite power & turbines","c":"#EF9F27","inn":3,"struct":85,"capex":75,"bc":45,"vc":"#16A34A","verdict":"Early innings","body":"Gas turbine and nuclear PPA demand is structural and supply-constrained (order books booked out). Cross-link to the energy supply chain; the deepest non-semis exposure."},
+    {"n":"Grid & transformers","c":"#854F0B","inn":3,"struct":82,"capex":85,"bc":45,"vc":"#16A34A","verdict":"Early innings","body":"Transformers and switchgear are the gating item with multi-year lead times and simultaneous AI/EV/grid demand. Long structural runway; see the copper/grid chain in Hard Assets."}
+  ]
+}

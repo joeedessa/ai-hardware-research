@@ -200,36 +200,91 @@ def main():
         json.dump({'_meta': {'as_of': now}, 'alerts': alerts}, f, separators=(',', ':'))
     print(f'alerts.json: {len(alerts)} alerts')
 
-    # ── Performance scoreboard: does the framework's ranking actually work? ──
+    # ── Performance scoreboard ──
+    # Honesty rule: a judgment can only be scored from the date it was MADE.
+    # Trailing returns of a basket picked today describe the past, they do not
+    # test the framework — so they are reported separately and labelled.
+    INCEPTION = {'conviction': '2026-05-30', 'froth': '2026-08-01'}
+
     def closes_of(sym):
         try:
             return [float(x) for x in hist[sym].dropna(subset=['Close'])['Close']]
         except Exception:
             return []
 
+    def series_of(sym):
+        try:
+            df = hist[sym].dropna(subset=['Close'])
+            return df.index, [float(x) for x in df['Close']]
+        except Exception:
+            return None, []
+
     def ret(cl, nd):
         return (cl[-1] / cl[-(nd + 1)] - 1) * 100 if len(cl) > nd else None
 
-    def basket(tks):
+    def ret_since(sym, date_str):
+        """Return % from the first trading day on/after date_str to the latest close."""
+        idx, cl = series_of(sym)
+        if idx is None or len(cl) < 2:
+            return None
+        try:
+            start = pd.Timestamp(date_str)
+            pos = idx.searchsorted(start)
+            if pos >= len(cl) - 1:
+                return None
+            return (cl[-1] / cl[pos] - 1) * 100
+        except Exception:
+            return None
+
+    def avg(vals):
+        vals = [v for v in vals if v is not None]
+        return round(sum(vals) / len(vals), 1) if vals else None
+
+    def basket_trailing(tks):
         out = {}
         for label, nd in [('r1m', 21), ('r3m', 63), ('r6m', 126), ('r1y', 250)]:
-            rs = [r for r in (ret(closes_of(ymap.get(t, t)), nd) for t in tks) if r is not None]
-            out[label] = round(sum(rs) / len(rs), 1) if rs else None
+            out[label] = avg([ret(closes_of(ymap.get(t, t)), nd) for t in tks])
         out['n'] = len(tks)
         return out
 
+    def si(tks, date_str):
+        return avg([ret_since(ymap.get(t, t), date_str) for t in tks])
+
+    c3 = [t for t, v in conv.items() if v == 3]
+    ins = [t for t, v in froth.items() if v == 1]
+    hot = [t for t, v in froth.items() if v == 3]
+
+    tracks = [
+        {'name': 'Conviction ranking', 'inception': INCEPTION['conviction'],
+         'note': 'Conviction scores were systematically re-ranked on 2026-05-30 (3 records revised 2026-08-04). Everything below is forward performance from that date.',
+         'rows': [
+             {'label': 'Conviction-3 chokepoints', 'n': len(c3), 'si': si(c3, INCEPTION['conviction'])},
+             {'label': 'SMH — semis benchmark', 'n': 1, 'si': si(['SMH'], INCEPTION['conviction']), 'bench': True},
+             {'label': 'SPY — market benchmark', 'n': 1, 'si': si(['SPY'], INCEPTION['conviction']), 'bench': True},
+         ]},
+        {'name': 'Froth lens', 'inception': INCEPTION['froth'],
+         'note': 'Froth tags were written on 2026-08-01. This window is far too short to judge them — it is published so the record accumulates in the open rather than being claimed later.',
+         'rows': [
+             {'label': 'Insulated (froth 1)', 'n': len(ins), 'si': si(ins, INCEPTION['froth'])},
+             {'label': 'High froth (froth 3)', 'n': len(hot), 'si': si(hot, INCEPTION['froth'])},
+             {'label': 'SMH — semis benchmark', 'n': 1, 'si': si(['SMH'], INCEPTION['froth']), 'bench': True},
+             {'label': 'SPY — market benchmark', 'n': 1, 'si': si(['SPY'], INCEPTION['froth']), 'bench': True},
+         ]},
+    ]
+
     baskets = {
-        'Conviction-3 chokepoints': basket([t for t, v in conv.items() if v == 3]),
-        'Froth lens: insulated': basket([t for t, v in froth.items() if v == 1]),
-        'Froth lens: high-froth': basket([t for t, v in froth.items() if v == 3]),
-        'SMH (semis benchmark)': basket(['SMH']),
-        'SPY (market benchmark)': basket(['SPY']),
+        'Conviction-3 chokepoints': basket_trailing(c3),
+        'Froth lens: insulated': basket_trailing(ins),
+        'Froth lens: high-froth': basket_trailing(hot),
+        'SMH (semis benchmark)': basket_trailing(['SMH']),
+        'SPY (market benchmark)': basket_trailing(['SPY']),
     }
     with open(os.path.join(ROOT, 'performance.json'), 'w') as f:
         json.dump({'_meta': {'as_of': now,
-                             'note': 'Equal-weight, price-only, local-currency returns; no rebalancing, dividends or FX. A sanity check on the framework, not a track record.'},
-                   'baskets': baskets}, f, separators=(',', ':'))
-    print('performance.json:', {k: v['r1m'] for k, v in baskets.items()})
+                             'note': 'Equal-weight, price-only, local-currency; no rebalancing, dividends or FX.',
+                             'retrospective_warning': 'The trailing table measures how TODAY\'S basket members performed in the past — it describes composition, not forecasting skill, because the tags did not exist for most of that window. Only the since-inception tracks test the framework.'},
+                   'tracks': tracks, 'baskets': baskets}, f, separators=(',', ':'))
+    print('performance.json tracks:', [(t['name'], t['inception'], t['rows'][0]['si']) for t in tracks])
 
     # ── News via Google News RSS ──
     try:
