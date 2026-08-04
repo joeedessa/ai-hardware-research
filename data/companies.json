@@ -135,7 +135,114 @@
         "blurb": "Names whose earnings can swing on a single rule change — export controls, tariffs, subsidies, antitrust. See the Policy & Fiscal section of the Geopolitical tab."
       }
     ],
-    "froth_scale": "Qualitative valuation-froth lens, tagged 2026-08-01 on the July-2026 shakeout evidence: 1=insulated (moat priced reasonably; drawdowns are entry windows), 2=exposed (real earnings but AI premium in the multiple), 3=high froth (narrative-driven / priced for perfection; froth stress lands here first). Tagged: conviction-3 tier + high-beta power/neocloud batch. Untagged = not yet assessed."
+    "froth_scale": "Qualitative valuation-froth lens, tagged 2026-08-01 on the July-2026 shakeout evidence: 1=insulated (moat priced reasonably; drawdowns are entry windows), 2=exposed (real earnings but AI premium in the multiple), 3=high froth (narrative-driven / priced for perfection; froth stress lands here first). Tagged: conviction-3 tier + high-beta power/neocloud batch. Untagged = not yet assessed.",
+    "private_companies": [
+      {
+        "n": "Carl Zeiss",
+        "note": "Private (Carl Zeiss SMT, Germany) — sole source of EUV optics inside every ASML scanner"
+      },
+      {
+        "n": "Zeiss",
+        "note": "Private (Carl Zeiss SMT, Germany) — sole source of EUV optics inside every ASML scanner"
+      },
+      {
+        "n": "Cymer",
+        "note": "ASML subsidiary — EUV light sources (not separately listed)"
+      },
+      {
+        "n": "Trumpf",
+        "note": "Private (Germany) — CO2 drive lasers for EUV light sources"
+      },
+      {
+        "n": "Shinko",
+        "note": "Private since the JIC-consortium buyout — ABF/IC substrates (was 6967.T)"
+      },
+      {
+        "n": "CXMT",
+        "note": "Private, China state-backed — domestic DRAM and HBM challenger"
+      },
+      {
+        "n": "YMTC",
+        "note": "Private, China state-backed — domestic 3D NAND"
+      },
+      {
+        "n": "Huawei",
+        "note": "Private/employee-owned, China — HiSilicon Ascend AI silicon (sanctioned)"
+      },
+      {
+        "n": "OpenAI",
+        "note": "Private — custom-ASIC partner to Broadcom, major compute buyer"
+      },
+      {
+        "n": "Anthropic",
+        "note": "Private — large TPU/accelerator capacity buyer"
+      },
+      {
+        "n": "Fluidstack",
+        "note": "Private neocloud — Google's TPU franchise partner"
+      },
+      {
+        "n": "SambaNova",
+        "note": "Private — AI accelerator challenger"
+      },
+      {
+        "n": "Jane Street",
+        "note": "Private — $6B cloud commitment counterparty to CoreWeave"
+      },
+      {
+        "n": "Rapidus",
+        "note": "Private consortium (Japan, METI-backed) — 2nm foundry ambition"
+      },
+      {
+        "n": "Unitree",
+        "note": "Private, China — humanoid/quadruped; STAR-board IPO filed 2026"
+      },
+      {
+        "n": "Figure AI",
+        "note": "Private, US — humanoid developer"
+      },
+      {
+        "n": "Figure",
+        "note": "Private, US — humanoid developer"
+      },
+      {
+        "n": "Apptronik",
+        "note": "Private, US — humanoid developer (Apollo)"
+      },
+      {
+        "n": "Agility Robotics",
+        "note": "Private, US — humanoid developer (Digit)"
+      },
+      {
+        "n": "Agility",
+        "note": "Private, US — Agility Robotics, humanoid developer (Digit)"
+      },
+      {
+        "n": "Physical Intelligence",
+        "note": "Private, US — robot foundation models"
+      },
+      {
+        "n": "AgiBot",
+        "note": "Private, China — humanoid developer (Zhiyuan)"
+      },
+      {
+        "n": "Fourier",
+        "note": "Private, China — humanoid/rehab robotics"
+      },
+      {
+        "n": "1X",
+        "note": "Private, Norway/US — humanoid developer (NEO)"
+      },
+      {
+        "n": "JBD",
+        "note": "Private, China — Jade Bird Display, microLED micro-displays"
+      },
+      {
+        "n": "Lumus",
+        "note": "Private, Israel — reflective AR waveguides"
+      }
+    ],
+    "private_note": "Privately held names that appear in the research prose but cannot be owned directly. Rendered as 'Name (private)' so the absence of a ticker is explicit rather than an oversight."
   },
   "companies": [
     {"ticker": "SNPS", "name": "Synopsys", "vertical": "eda", "chain_layer": "EDA software + IP", "geo": "US", "structure": "eda", "thesis_note": "Half of the EDA duopoly; broadest design+IP flow. Gates all advanced design. Export-control on/off lever to China.", "conviction": 3, "themes": ["eda-ip", "policy-lever"], "froth": 1, "froth_note": "Duopoly royalty model, no AI capex sensitivity in earnings; July selloff barely touched it.", "last_touched": "2026-08-03"},
