@@ -284,6 +284,11 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .dw-head{display:flex;align-items:center;gap:8px;padding:12px 16px 10px;border-bottom:.5px solid var(--color-border-tertiary);flex-shrink:0}
 .dw-back{font-size:16px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 6px;border-radius:5px;line-height:1}
 .dw-back:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.dw-chart-btn{margin-left:auto;font-size:10.5px;font-weight:600;text-decoration:none;color:var(--color-text-info);
+  border:.5px solid var(--color-border-info);background:var(--color-background-info);border-radius:20px;
+  padding:3px 10px;white-space:nowrap;flex-shrink:0;transition:box-shadow .12s,border-color .12s}
+.dw-chart-btn:hover{border-color:var(--accent);box-shadow:var(--shadow-1)}
+.dw-chart-btn+.dw-close{margin-left:2px}
 .dw-close{margin-left:auto;font-size:15px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 7px;border-radius:5px;line-height:1}
 .dw-close:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
 .dw-tick{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--color-text-primary)}
@@ -2296,7 +2301,8 @@ function openCompanyDrawer(tk,push=true){
        <a class="dw-btn" href="${yahooQuote(c.ticker)}" target="_blank" rel="noopener" title="Quote, financials and news (symbol ${ysym})">Quote &amp; financials ↗</a>
        <span class="dw-btn" onclick="closeDrawer();jumpToCompanies('${c.ticker.replace(/'/g,"\\'")}')">Open in Companies tab</span>
      </div>
-     ${ysym!==c.ticker?`<div class="dw-symnote">Yahoo lists this as <span class="mono-sym">${ysym}</span> — our records use the local convention <span class="mono-sym">${c.ticker}</span>.</div>`:''}`);
+     ${ysym!==c.ticker?`<div class="dw-symnote">Yahoo lists this as <span class="mono-sym">${ysym}</span> — our records use the local convention <span class="mono-sym">${c.ticker}</span>.</div>`:''}`,
+    c.ticker);
 }
 function openThemeDrawer(id,push=true){
   const tm=(THEMES_REG||[]).find(x=>x.id===id)||{label:id,blurb:''};
@@ -2341,7 +2347,15 @@ function drawerNews(tk){
   return `<div class="dw-sect">Latest headlines</div>`+items.map(n=>
     `<div class="dw-newsrow"><a href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.t)}</a><span>${n.s?esc(n.s)+' · ':''}${esc(n.d)}</span></div>`).join('');
 }
-function renderDrawer(accent,head,body){
+function renderDrawer(accent,head,body,chartTk){
+  /* Chart lives in the header so it is reachable without scrolling. */
+  const cb=document.getElementById('dw-chart');
+  if(cb){
+    if(chartTk){const sym=yahooSymbol(chartTk);
+      cb.href=yahooChart(chartTk); cb.style.display='';
+      cb.title=`Open the ${sym} chart on Yahoo Finance`;}
+    else cb.style.display='none';
+  }
   document.getElementById('dw-accent').style.background=accent;
   document.getElementById('dw-title').innerHTML=head;
   document.getElementById('dw-content').innerHTML=body;
@@ -2370,6 +2384,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
   <div class="dw-head">
     <button class="dw-back" id="dw-back" onclick="drawerBack()" style="display:none" title="Back">‹</button>
     <div id="dw-title" style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0"></div>
+    <a class="dw-chart-btn" id="dw-chart" target="_blank" rel="noopener" style="display:none">📈 Chart</a>
     <button class="dw-close" onclick="closeDrawer()" title="Close (Esc)">✕</button>
   </div>
   <div class="dw-body"><div id="dw-content"></div></div>
