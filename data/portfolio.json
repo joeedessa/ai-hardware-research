@@ -99,7 +99,8 @@
           "h": "now",
           "status": "pending",
           "p": "TSMC raised its 2026 build budget to $60–64B and the stock FELL. The next quarterly report shows whether the market goes back to reading big capex as strong demand.",
-          "why": "The best sentiment gauge for the whole AI supply chain — and the catalyst on our #1 entry window."
+          "why": "The best sentiment gauge for the whole AI supply chain — and the catalyst on our #1 entry window.",
+          "date": "2026-10-15"
         },
         {
           "t": "N2 (2-nanometer) volume ramp, A16 behind it",
@@ -142,7 +143,8 @@
           "h": "now",
           "status": "pending",
           "p": "The HBM4 shipments that slipped out of Q2 get recognized in the September quarter — the print that answers July's air-pocket selloff.",
-          "why": "The catalyst on our #2 entry window: confirms or breaks the 'repriced, not broken' read."
+          "why": "The catalyst on our #2 entry window: confirms or breaks the 'repriced, not broken' read.",
+          "date": "2026-10-27"
         },
         {
           "t": "Samsung share recovery vs SK Hynix",
@@ -171,7 +173,8 @@
           "status": "landed",
           "p": "Nvidia's next flagship platform is in full production and ships in Q3 — each GPU carries 288GB of HBM4 across eight stacks.",
           "why": "Resets the content story downstream: more memory, more optics, more power per chip.",
-          "note": "full production Jun; ships Q3"
+          "note": "full production Jun; ships Q3",
+          "date": "2026-09-30"
         },
         {
           "t": "Custom-ASIC share gains go mainstream",
@@ -259,7 +262,8 @@
           "status": "pending",
           "p": "Racks are being redesigned around 800V DC power (borrowed from the EV industry) for Nvidia's next platforms; first real shipments expected imminently.",
           "why": "Opens the SiC/GaN power-chip story: Infineon, onsemi, Navitas, Delta, Lite-On.",
-          "note": "Q3 2026 expected"
+          "note": "Q3 2026 expected",
+          "date": "2026-09-30"
         },
         {
           "t": "Grid equipment lead times stay multi-year",
@@ -303,7 +307,8 @@
           "status": "pending",
           "p": "China's leading robot maker goes public (~$619M raise filed) — and its filing revealed profits HALVED.",
           "why": "The first real public-market test of humanoid-maker economics.",
-          "note": "filed; pricing pending"
+          "note": "filed; pricing pending",
+          "date": "2026-09-30"
         },
         {
           "t": "China actuator cost-down",
@@ -393,7 +398,8 @@
           "status": "pending",
           "p": "The Oct-2025 escalation of China's rare-earth controls is suspended only until Nov 10, 2026. Renewal keeps the peace; a lapse re-arms the materials weapon overnight.",
           "why": "A dated, binary event under the robotics, optics and fab-chemical chains — position sizing should know the date.",
-          "note": "dated: Nov 10, 2026"
+          "note": "dated: Nov 10, 2026",
+          "date": "2026-11-10"
         },
         {
           "t": "Export controls reach networking hardware, not just chips",
@@ -486,7 +492,7 @@
     }
   },
   "catalyst_meta": {
-    "as_of": "2026-08-04",
+    "as_of": "2026-08-05",
     "lifecycle": "Each catalyst carries status pending/landed/slipped. Landed items stay visible (checked off) for one review cycle before rotating out — a landed catalyst is thesis confirmation, not noise. Reconciling this table against the news is a standing step of every research-loop sweep; if as_of is >60 days old, treat the table as stale."
   }
 }

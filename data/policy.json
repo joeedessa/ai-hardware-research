@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Policy & fiscal forces acting on the universe — regime state (what the rules ARE right now), fiscal programs (who is paying whom), and levers to watch. Reconcile alongside the catalyst calendar; >60 days without reconciling = stale.",
-    "as_of": "2026-08-04"
+    "as_of": "2026-08-05"
   },
   "regimes": [
     {
@@ -77,12 +77,14 @@
     {
       "l": "FCC import ban on Chinese optical transceivers (drafting)",
       "hits": "opt, net",
-      "d": "Chinese vendors hold >50% of the global datacenter-transceiver market, InnoLight alone ~27% (Counterpoint). A US import ban on new models would forcibly re-route that demand to COHR, LITE, AAOI, FN, CIEN, NOK, MTSI, SMTC — but the Foundation for American Innovation notes the Western vendors lack the SCALE to replace Chinese supply quickly, so the near-term effect is pricing power and shortage, not clean substitution. Mirror-image risk for 300308.SZ and 300502.SZ. Still drafting — could be modified or shelved."
+      "d": "Chinese vendors hold >50% of the global datacenter-transceiver market, InnoLight alone ~27% (Counterpoint). A US import ban on new models would forcibly re-route that demand to COHR, LITE, AAOI, FN, CIEN, NOK, MTSI, SMTC — but the Foundation for American Innovation notes the Western vendors lack the SCALE to replace Chinese supply quickly, so the near-term effect is pricing power and shortage, not clean substitution. Mirror-image risk for 300308.SZ and 300502.SZ. Still drafting — could be modified or shelved.",
+      "date": "2026-12-31"
     },
     {
       "l": "Nov 10, 2026 — China rare-earth truce expires",
       "hits": "act, opt, wfe",
-      "d": "Renewal = status quo; lapse = magnets/Ga/Ge/chemicals shock into robotics, optics and fab chemicals. The single most dated policy risk on the board."
+      "d": "Renewal = status quo; lapse = magnets/Ga/Ge/chemicals shock into robotics, optics and fab chemicals. The single most dated policy risk on the board.",
+      "date": "2026-11-10"
     },
     {
       "l": "Blanket US WFE-ban push",

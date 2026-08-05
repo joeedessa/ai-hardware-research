@@ -286,6 +286,68 @@ def main():
                    'tracks': tracks, 'baskets': baskets}, f, separators=(',', ':'))
     print('performance.json tracks:', [(t['name'], t['inception'], t['rows'][0]['si']) for t in tracks])
 
+    # ── Calendar: real dated events, forward-looking ──
+    # Earnings dates + consensus for the names that carry a judgment (conviction 2+ or
+    # a froth tag). Fetching all 235 would double runtime for names we do not act on.
+    import datetime as _dt
+    cal_targets = sorted({c['ticker'] for c in comp
+                          if (c.get('conviction') or 0) >= 2 or c.get('froth')})
+    today = _dt.date.today()
+    events = []
+    cal_fail = 0
+    for t in cal_targets:
+        try:
+            cal = yf.Ticker(ymap[t]).calendar or {}
+            ed = cal.get('Earnings Date') or []
+            if not isinstance(ed, list):
+                ed = [ed]
+            for d in ed[:1]:
+                if not hasattr(d, 'isoformat'):
+                    continue
+                if d < today - _dt.timedelta(days=5):
+                    continue                      # nothing stale on a forward calendar
+                ev = {'d': d.isoformat(), 'type': 'earnings', 'tk': t,
+                      'n': names.get(t, t), 'conv': conv.get(t), 'froth': froth.get(t)}
+                avg, lo, hi = cal.get('Earnings Average'), cal.get('Earnings Low'), cal.get('Earnings High')
+                if avg is not None:
+                    ev['eps'] = round(float(avg), 2)
+                    if lo is not None and hi is not None:
+                        ev['eps_lo'], ev['eps_hi'] = round(float(lo), 2), round(float(hi), 2)
+                dd = quotes.get(t, {}).get('dd')
+                if dd is not None:
+                    ev['dd'] = dd
+                events.append(ev)
+            time.sleep(0.15)
+        except Exception:
+            cal_fail += 1
+
+    # Hand-dated events carried in the research files (policy cliffs, dated catalysts)
+    for src_file, key in (('policy.json', 'levers'), ('portfolio.json', 'catalyst_table')):
+        try:
+            blob = json.load(open(os.path.join(ROOT, src_file)))
+        except Exception:
+            continue
+        if key == 'levers':
+            for lv in blob.get('levers', []):
+                if lv.get('date'):
+                    events.append({'d': lv['date'], 'type': 'policy', 't': lv['l'],
+                                   'why': lv.get('d', ''), 'hits': lv.get('hits', '')})
+        else:
+            for row in blob.get('catalyst_table', []):
+                for c2 in row.get('cats', []):
+                    if isinstance(c2, dict) and c2.get('date') and c2.get('status') != 'landed':
+                        events.append({'d': c2['date'], 'type': 'catalyst', 't': c2['t'],
+                                       'why': c2.get('why', ''), 'hits': row.get('n', '')})
+
+    events.sort(key=lambda e: e['d'])
+    with open(os.path.join(ROOT, 'calendar.json'), 'w') as f:
+        json.dump({'_meta': {'as_of': now, 'coverage': f'{len(cal_targets)-cal_fail}/{len(cal_targets)}',
+                             'note': 'Earnings dates and consensus from Yahoo Finance — often estimated rather than '
+                                     'company-confirmed, so treat them as approximate until close. Policy and catalyst '
+                                     'entries are hand-dated in the research files.'},
+                   'events': events}, f, separators=(',', ':'))
+    print(f'calendar.json: {len(events)} events ({cal_fail} calendar fetch failures)')
+
     # ── Breaking: only signals at a level that would change what you do today ──
     # Design rule: this page must be SILENT most days. Every threshold below is
     # deliberately extreme, and the empty state lists the checks that ran so that

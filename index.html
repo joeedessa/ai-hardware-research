@@ -473,6 +473,31 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .ew-cand-nm{font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ew-cand-v{font-size:8.5px;font-weight:600;padding:1px 6px;border-radius:20px;text-transform:uppercase;flex-shrink:0}
 .ew-cand-l{font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38%}
+/* ── What's next (agenda) ── */
+.cal-grp{display:flex;align-items:center;gap:8px;margin:16px 0 5px;font-size:9px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.cal-grp::after{content:'';flex:1;height:1px;background:var(--color-border-tertiary)}
+.cal-grp-n{order:3;font-weight:600;color:var(--color-text-tertiary)}
+.cal-row{display:flex;gap:0;align-items:stretch;border:.5px solid var(--color-border-tertiary);border-radius:8px;
+  background:var(--color-background-primary);margin-bottom:4px;overflow:hidden;transition:box-shadow .12s,border-color .12s}
+.cal-row:hover{border-color:var(--color-border-secondary);box-shadow:var(--shadow-1)}
+.cal-past{opacity:.55}
+.cal-date{display:flex;flex-direction:column;justify-content:center;gap:0;padding:7px 10px;min-width:96px;
+  background:var(--color-background-secondary);flex-shrink:0}
+.cal-mon{font-size:11.5px;font-weight:700;color:var(--color-text-primary);font-variant-numeric:tabular-nums;line-height:1.2}
+.cal-dow{font-size:9px;color:var(--color-text-tertiary);letter-spacing:.04em}
+.cal-cd{font-size:9px;font-weight:600;color:var(--color-text-tertiary);margin-top:2px;font-variant-numeric:tabular-nums}
+.cal-cd.now{color:#B32B2A}
+.cal-stripe{width:3px;flex-shrink:0}
+.cal-main{padding:7px 11px;min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cal-h{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.cal-tk{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--color-text-primary)}
+.cal-nm{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.cal-b{font-size:8.5px;font-weight:600;letter-spacing:.03em;padding:1.5px 7px;border-radius:20px;white-space:nowrap}
+.cal-why{font-size:10.5px;color:var(--color-text-tertiary);line-height:1.5;margin-top:2px}
+.cal-past-box{margin-top:18px}
+.cal-past-box summary{cursor:pointer;font-size:10.5px;font-weight:500;color:var(--color-text-tertiary);padding:6px 0}
+@media (max-width:640px){.cal-date{min-width:74px;padding:6px 8px}}
 /* ── Act now ── */
 .bk-badge{display:inline-block;font-size:8.5px;font-weight:700;padding:0 5px;border-radius:20px;margin-left:4px;line-height:1.5;vertical-align:middle}
 .bk-head{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;padding:2px 2px 10px}
@@ -672,6 +697,7 @@ function toggleTheme(){
 
 <div class="tabs">
   <div class="tab on" onclick="ST('bk',this)" id="tab-bk">Act now</div>
+  <div class="tab" onclick="ST('cal',this)">What's next</div>
   <div class="tab" onclick="ST('sh',this)">Orientation</div>
   <div class="tab-group-sep"></div>
   <!-- Research tabs -->
@@ -771,6 +797,10 @@ function toggleTheme(){
   <div id="bk-cont"></div>
 </div>
 
+<div class="view" id="view-cal">
+  <div id="cal-cont"></div>
+</div>
+
 <div class="view" id="view-sh">
   <div id="sh-cont"></div>
 </div>
@@ -857,7 +887,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP,NAME_MAP,PRIVATE_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF,BREAKING;
+let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF,BREAKING,CALENDAR;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -997,11 +1027,84 @@ function ST(id,el){
     else if(id==='nw')buildNews();
     else if(id==='sh')buildStartHere();
     else if(id==='bk')buildBreaking();
+    else if(id==='cal')buildCalendar();
     else if(id==='mx')buildMatrix();
     built[id]=true;
   }
 }
 
+/* ── What's next — a forward agenda, not a month grid ──
+   Sparse financial events in a 42-cell grid is mostly empty space; an agenda
+   grouped by proximity carries the same dates in a fraction of the room. All
+   countdowns are computed at render, so the page cannot look frozen even if the
+   underlying pull is a few days old. */
+let CAL_F='all';
+function buildCalendar(){
+  const el=document.getElementById('cal-cont');
+  if(!CALENDAR||!CALENDAR.events){el.innerHTML='<div class="note">No calendar yet — it is written by the nightly refresh.</div>';return;}
+  const today=new Date(); today.setHours(0,0,0,0);
+  const days=d=>Math.round((new Date(d+'T00:00:00')-today)/864e5);
+  const ev=CALENDAR.events.filter(e=>{
+    if(CAL_F==='c3') return e.conv===3;
+    if(CAL_F==='win') return e.froth===1&&e.dd!=null&&e.dd<=-15;
+    if(CAL_F==='pol') return e.type!=='earnings';
+    return true;
+  }).map(e=>({...e,k:days(e.d)}));
+  const BUCKETS=[
+    ['Today',           e=>e.k===0],
+    ['This week',       e=>e.k>0&&e.k<=7],
+    ['Next three weeks',e=>e.k>7&&e.k<=30],
+    ['Next quarter',    e=>e.k>30&&e.k<=90],
+    ['Further out',     e=>e.k>90],
+  ];
+  const TYPE={earnings:{c:'#4F46E5',l:'earnings'},policy:{c:'#E24B4A',l:'policy'},catalyst:{c:'#EF9F27',l:'catalyst'}};
+  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const countdown=k=>k===0?'today':k===1?'tomorrow':k<0?`${-k}d ago`:`in ${k}d`;
+  const row=e=>{
+    const t=TYPE[e.type]||TYPE.catalyst, dt=new Date(e.d+'T00:00:00');
+    const win=e.froth===1&&e.dd!=null&&e.dd<=-15;
+    let why='',badges='';
+    if(e.type==='earnings'){
+      const v=vinfo((COMPANIES||[]).find(c=>c.ticker===e.tk)?.vertical);
+      badges=`${e.conv===3?'<span class="cal-b" style="background:#16A34A18;color:#15803D">chokepoint</span>':''}`+
+             `${win?'<span class="cal-b" style="background:#16A34A18;color:#15803D">window open</span>':''}`+
+             `${e.froth===3?'<span class="cal-b" style="background:#E24B4A18;color:#B32B2A">high froth</span>':''}`+
+             `<span class="cal-b" style="background:${v.c}18;color:${v.c}">${v.n}</span>`;
+      why=[e.eps!=null?`consensus EPS ${e.eps}${e.eps_lo!=null?` (range ${e.eps_lo}–${e.eps_hi})`:''}`:'',
+           e.dd!=null?`${e.dd}% off high`:''].filter(Boolean).join(' · ');
+    }else{
+      badges=`<span class="cal-b" style="background:${t.c}18;color:${t.c}">${t.l}</span>`+
+             (e.hits?`<span class="cal-b" style="background:var(--color-background-secondary);color:var(--color-text-tertiary)">${esc(e.hits)}</span>`:'');
+      why=e.why||'';
+    }
+    const title=e.type==='earnings'
+      ? `<span class="cal-tk">${e.tk}</span><span class="cal-nm">${esc(e.n||'')}</span>`
+      : `<span class="cal-nm">${esc(e.t||'')}</span>`;
+    const click=e.type==='earnings'?` onclick="openCompanyDrawer('${e.tk}')" style="cursor:pointer"`:'';
+    return `<div class="cal-row${e.k<0?' cal-past':''}"${click}>
+      <div class="cal-date"><span class="cal-mon">${MON[dt.getMonth()]} ${dt.getDate()}</span>
+        <span class="cal-dow">${DOW[dt.getDay()]}</span>
+        <span class="cal-cd${e.k<=1&&e.k>=0?' now':''}">${countdown(e.k)}</span></div>
+      <div class="cal-stripe" style="background:${t.c}"></div>
+      <div class="cal-main"><div class="cal-h">${title}${badges}</div>${why?`<div class="cal-why">${linkifyTickers(why)}</div>`:''}</div>
+    </div>`;
+  };
+  const groups=BUCKETS.map(([label,test])=>{
+    const rows=ev.filter(test);
+    if(!rows.length) return '';          /* never render an empty bucket */
+    return `<div class="cal-grp"><span>${label}</span><span class="cal-grp-n">${rows.length}</span></div>${rows.map(row).join('')}`;
+  }).join('');
+  const past=ev.filter(e=>e.k<0);
+  const pills=[['all','Everything'],['c3','Chokepoints'],['win','Open windows'],['pol','Policy & catalysts']]
+    .map(([id,l])=>`<button class="pill${CAL_F===id?' on':''}" onclick="CAL_F='${id}';buildCalendar();">${l}</button>`).join('');
+  el.innerHTML=`
+    <div class="note">Dated events ahead — earnings with consensus, policy cliffs and catalysts — as an agenda rather than a month grid, because a calendar of sparse events is mostly empty squares. Countdowns recompute every time you open the page; anything that has passed drops to the bottom. ${esc((CALENDAR._meta&&CALENDAR._meta.note)||'')}</div>
+    <div class="pills">${pills}</div>
+    ${groups||'<div class="bk-empty"><div class="bk-empty-t">Nothing dated in this filter.</div></div>'}
+    ${past.length?`<details class="cal-past-box"><summary>${past.length} just passed — did they land?</summary>${past.map(row).join('')}
+      <div class="bk-foot">Reconcile these against the catalyst calendar on Portfolio Summary: mark what landed, what slipped.</div></details>`:''}`;
+}
 /* ── Act now — only signals at a level that would change today's decision ── */
 const BK_SEV={critical:{c:'#E24B4A',l:'CRITICAL'},high:{c:'#EF9F27',l:'HIGH'},watch:{c:'#4F46E5',l:'WATCH'}};
 const BK_STANCE={
@@ -2165,6 +2268,7 @@ async function loadData(){
   ALERTS=await fetchJ('alerts.json').catch(()=>null);
   PERF=await fetchJ('performance.json').catch(()=>null);
   BREAKING=await fetchJ('breaking.json').catch(()=>null);
+  CALENDAR=await fetchJ('calendar.json').catch(()=>null);
 
   /* Core data */
   VC_COLS  = matrix.verticals;

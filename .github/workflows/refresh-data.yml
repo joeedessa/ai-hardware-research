@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "market-data-bot"
           git config user.email "actions@github.com"
-          git add data/quotes.json data/indices.json data/news.json data/alerts.json data/performance.json data/breaking.json
+          git add data/quotes.json data/indices.json data/news.json data/alerts.json data/performance.json data/breaking.json data/calendar.json
           git diff --cached --quiet && echo "no changes" && exit 0
           git commit -m "Nightly market data refresh"
           git pull --rebase origin main
