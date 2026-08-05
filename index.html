@@ -284,11 +284,12 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .dw-head{display:flex;align-items:center;gap:8px;padding:12px 16px 10px;border-bottom:.5px solid var(--color-border-tertiary);flex-shrink:0}
 .dw-back{font-size:16px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 6px;border-radius:5px;line-height:1}
 .dw-back:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
-.dw-chart-btn{margin-left:auto;font-size:10.5px;font-weight:600;text-decoration:none;color:var(--color-text-info);
-  border:.5px solid var(--color-border-info);background:var(--color-background-info);border-radius:20px;
-  padding:3px 10px;white-space:nowrap;flex-shrink:0;transition:box-shadow .12s,border-color .12s}
-.dw-chart-btn:hover{border-color:var(--accent);box-shadow:var(--shadow-1)}
-.dw-chart-btn+.dw-close{margin-left:2px}
+.dw-icons{display:flex;gap:4px;margin-left:auto;flex-shrink:0}
+.dw-ico{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;
+  border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);
+  color:var(--color-text-secondary);cursor:pointer;padding:0;transition:all .12s}
+.dw-ico:hover{color:var(--accent);border-color:var(--accent);background:var(--color-background-info)}
+.dw-icons+.dw-close{margin-left:2px}
 .dw-close{margin-left:auto;font-size:15px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 7px;border-radius:5px;line-height:1}
 .dw-close:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
 .dw-tick{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--color-text-primary)}
@@ -2299,11 +2300,6 @@ function openCompanyDrawer(tk,push=true){
      ${themes?`<div class="dw-sect">Themes</div><div>${themes}</div>`:''}
      ${srcs?`<div class="dw-sect">Sources</div>${srcs}`:''}
      ${peers?`<div class="dw-sect">Same vertical — ${v.n}</div>${peers}`:''}
-     <div class="dw-act">
-       <a class="dw-btn dw-btn-pri" href="${yahooChart(c.ticker)}" target="_blank" rel="noopener" title="Interactive chart on Yahoo Finance (symbol ${ysym})">📈 Chart ↗</a>
-       <a class="dw-btn" href="${yahooQuote(c.ticker)}" target="_blank" rel="noopener" title="Quote, financials and news (symbol ${ysym})">Quote &amp; financials ↗</a>
-       <span class="dw-btn" onclick="closeDrawer();jumpToCompanies('${c.ticker.replace(/'/g,"\\'")}')">Open in Companies tab</span>
-     </div>
      ${ysym!==c.ticker?`<div class="dw-symnote">Yahoo lists this as <span class="mono-sym">${ysym}</span> — our records use the local convention <span class="mono-sym">${c.ticker}</span>.</div>`:''}`,
     c.ticker);
 }
@@ -2332,8 +2328,7 @@ function drawerMarket(tk){
   const mc=q.mc?(q.mc>=1e12?(q.mc/1e12).toFixed(1)+'T':q.mc>=1e9?(q.mc/1e9).toFixed(0)+'B':(q.mc/1e6).toFixed(0)+'M'):null;
   const v200=q.a200?+((q.p/q.a200-1)*100).toFixed(1):null;
   const asof=QUOTES_META?` <span style="font-weight:400;text-transform:none;letter-spacing:0">· ${fmtTS(QUOTES_META.as_of)}, local currency</span>`:'';
-  const chartLink=` <a href="${yahooChart(tk)}" target="_blank" rel="noopener" class="dw-chartlink" title="Open the interactive chart on Yahoo Finance">chart ↗</a>`;
-  return `<div class="dw-sect">Market${asof}${chartLink}</div><div class="dw-mkt">`
+  return `<div class="dw-sect">Market${asof}</div><div class="dw-mkt">`
     +tile('Price',q.p.toLocaleString())
     +tile('1 day',(q.d1>=0?'+':'')+q.d1+'%',pc(q.d1))
     +tile('1 month',q.m1==null?null:(q.m1>=0?'+':'')+q.m1+'%',pc(q.m1))
@@ -2351,13 +2346,18 @@ function drawerNews(tk){
     `<div class="dw-newsrow"><a href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.t)}</a><span>${n.s?esc(n.s)+' · ':''}${esc(n.d)}</span></div>`).join('');
 }
 function renderDrawer(accent,head,body,chartTk){
-  /* Chart lives in the header so it is reachable without scrolling. */
-  const cb=document.getElementById('dw-chart');
-  if(cb){
-    if(chartTk){const sym=yahooSymbol(chartTk);
-      cb.href=yahooChart(chartTk); cb.style.display='';
-      cb.title=`Open the ${sym} chart on Yahoo Finance`;}
-    else cb.style.display='none';
+  /* Actions live in the header — reachable the moment the panel opens. */
+  const box=document.getElementById('dw-icons');
+  if(box){
+    if(chartTk){
+      const sym=yahooSymbol(chartTk), nm=(TICKER_MAP&&TICKER_MAP[chartTk])||chartTk;
+      const ch=document.getElementById('dw-chart'), qt=document.getElementById('dw-quote'), op=document.getElementById('dw-open');
+      ch.href=yahooChart(chartTk); ch.title=`Chart — ${nm} (${sym}) on Yahoo Finance`;
+      qt.href=yahooQuote(chartTk); qt.title=`Quote & financials — ${nm} (${sym}) on Yahoo Finance`;
+      op.title=`Open ${chartTk} in the Companies tab`;
+      op.onclick=()=>{closeDrawer();jumpToCompanies(chartTk);};
+      box.style.display='';
+    } else box.style.display='none';
   }
   document.getElementById('dw-accent').style.background=accent;
   document.getElementById('dw-title').innerHTML=head;
@@ -2387,7 +2387,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
   <div class="dw-head">
     <button class="dw-back" id="dw-back" onclick="drawerBack()" style="display:none" title="Back">‹</button>
     <div id="dw-title" style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0"></div>
-    <a class="dw-chart-btn" id="dw-chart" target="_blank" rel="noopener" style="display:none">📈 Chart</a>
+    <div class="dw-icons" id="dw-icons" style="display:none">
+      <a class="dw-ico" id="dw-chart" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 13.2V2.8"/><path d="M2.2 13.2h11"/><path d="M4.6 10.6l2.8-2.9 2.4 2.4 3.3-4"/></svg></a>
+      <a class="dw-ico" id="dw-quote" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 1.8H4.4a1 1 0 0 0-1 1v10.4a1 1 0 0 0 1 1h7.2a1 1 0 0 0 1-1V5.2z"/><path d="M9.2 1.8v3.4h3.4"/><path d="M5.7 8.6h4.6M5.7 11h3.2"/></svg></a>
+      <button class="dw-ico" id="dw-open" type="button">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="2.6" width="11.6" height="3.1" rx=".8"/><rect x="2.2" y="7.2" width="11.6" height="3.1" rx=".8"/><path d="M3 12.8h7"/></svg></button>
+    </div>
     <button class="dw-close" onclick="closeDrawer()" title="Close (Esc)">✕</button>
   </div>
   <div class="dw-body"><div id="dw-content"></div></div>
