@@ -867,6 +867,27 @@ let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,hm:fa
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
+/* Open a prompt in Claude, preferring the native app.
+   Desktop: the Claude app registers claude:// and accepts claude.ai/new?q= (verified
+   against its own deep-link allowlist). If the scheme is not handled, nothing steals
+   focus, so we fall back to the web after a short grace period.
+   Mobile: claude.ai universal links already route to the installed app, so go straight
+   there — a custom scheme would only risk an error sheet. */
+function openInClaude(prompt){
+  const web='https://claude.ai/new?q='+encodeURIComponent(prompt);
+  if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){ window.open(web,'_blank','noopener'); return; }
+  const app='claude://claude.ai/new?q='+encodeURIComponent(prompt);
+  let done=false;
+  const cancel=()=>{done=true;};
+  document.addEventListener('visibilitychange',cancel,{once:true});
+  window.addEventListener('blur',cancel,{once:true});
+  setTimeout(()=>{
+    document.removeEventListener('visibilitychange',cancel);
+    window.removeEventListener('blur',cancel);
+    if(!done&&!document.hidden){ window.open(web,'_blank','noopener'); }
+  },1500);
+  location.href=app;
+}
 /* Clipboard with a legacy fallback — the async API needs a secure context and a
    real user gesture, and quietly refuses without both. */
 async function copyText(text){
@@ -2446,12 +2467,13 @@ function renderDrawer(accent,head,body,chartTk){
       const ask=document.getElementById('dw-ask'), cp=document.getElementById('dw-copy');
       const prompt=claudePrompt(chartTk);
       const url='https://claude.ai/new?q='+encodeURIComponent(prompt);
-      if(url.length>7500){                        /* keep inside safe URL limits */
-        ask.href='https://claude.ai/new';
+      ask.href=url;                                /* real href: middle-click / copy-link still work */
+      if(url.length>7500){                         /* keep inside safe URL limits */
+        ask.onclick=null; ask.href='https://claude.ai/new';
         ask.title=`Ask Claude about ${nm} — brief is long, so use the copy button and paste it`;
       }else{
-        ask.href=url;
-        ask.title=`Ask Claude about ${nm} — opens a new chat pre-filled with this company's full brief`;
+        ask.title=`Ask Claude about ${nm} — opens the Claude app with this company's full brief (falls back to the web)`;
+        ask.onclick=e=>{ e.preventDefault(); openInClaude(prompt); };
       }
       cp.title=`Copy the ${nm} research brief (paste into Claude Code or anywhere)`;
       cp.onclick=async()=>{
