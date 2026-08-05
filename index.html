@@ -665,8 +665,8 @@ function toggleTheme(){
 <div id="alert-strip" style="display:none"></div>
 
 <div class="tabs">
-  <div class="tab on" onclick="ST('sh',this)">Start here</div>
-  <div class="tab" onclick="ST('bk',this)" id="tab-bk">Act now</div>
+  <div class="tab on" onclick="ST('bk',this)" id="tab-bk">Act now</div>
+  <div class="tab" onclick="ST('sh',this)">Orientation</div>
   <div class="tab-group-sep"></div>
   <!-- Research tabs -->
   <div class="tab" onclick="ST('mx',this)">Universe matrix</div>
@@ -761,12 +761,12 @@ function toggleTheme(){
   <div id="hm-cont"></div>
 </div>
 
-<div class="view on" id="view-sh">
-  <div id="sh-cont"></div>
+<div class="view on" id="view-bk">
+  <div id="bk-cont"></div>
 </div>
 
-<div class="view" id="view-bk">
-  <div id="bk-cont"></div>
+<div class="view" id="view-sh">
+  <div id="sh-cont"></div>
 </div>
 
 <div class="view" id="view-nw">
@@ -1011,15 +1011,17 @@ function buildStartHere(){
   const rel=(smh&&spy&&smh.m1!=null&&spy.m1!=null)?(smh.m1-spy.m1).toFixed(1):null;
   const voice=(NEWS_V||[])[0];
   const today=[
-    ALERTS&&ALERTS.alerts?{k:'Live signals',v:ALERTS.alerts.length,d:'from last night’s scan — see the strip above',go:null}:null,
+    BREAKING?{k:'Act-now signals',v:(BREAKING.signals||[]).length,d:'events at a level worth acting on today',go:'bk'}:null,
+    ALERTS&&ALERTS.alerts?{k:'Threshold alerts',v:ALERTS.alerts.length,d:'from last night’s scan — see the strip above',go:null}:null,
     openWins!=null?{k:'Entry windows open',v:openWins,d:'insulated chokepoints >15% off their highs',go:'pf'}:null,
     rel!=null?{k:'Semis vs market, 1mo',v:(rel>0?'+':'')+rel+'%',d:'SMH minus SPY — the froth thermometer',go:'cy'}:null,
     {k:'Chokepoint owners',v:conv3,d:'conviction-3 names — the spine of the universe',go:'co'},
   ].filter(Boolean).map(x=>`<div class="sh-stat"${x.go?` onclick="goTab('${x.go}')" style="cursor:pointer"`:''}><div class="sh-stat-v">${x.v}</div><div class="sh-stat-k">${x.k}</div><div class="sh-stat-d">${x.d}</div></div>`).join('');
   const paths=[
+    ['Check for signals','bk','Act now','The landing page, and the first question each day: is there anything at a level that would change a decision? Silent unless there is.'],
     ['Read the market','cy','Cycle & innings','The Froth Monitor: July’s shakeout signals, tagged froth / intact / opportunity, plus where each vertical sits in its cycle.'],
     ['Find opportunities','pf','Portfolio Summary','Entry Windows (repriced-not-broken chokepoints), the froth-concentration avoid list, and the Scoreboard grading the framework nightly.'],
-    ['Research a company','co','Companies','Search and filter all 225 names. Click any card — or any ticker anywhere — for thesis, froth tag, live price, peers and headlines.'],
+    ['Research a company','co','Companies',`Search and filter all ${(COMPANIES||[]).length} names. Click any card — or any ticker anywhere — for thesis, froth tag, live price, peers and headlines.`],
     ['Understand the machine','vx','Chain explorer','Every vertical’s supply chain in plain English, stage by stage. Or trace one product end-to-end in Walk-throughs.'],
     ['Track what’s changing','nw','News','Nightly headlines + the leading independent voices. Catalyst calendar and Policy & Fiscal forces carry the dated triggers.'],
   ].map(p=>`<div class="sh-path" onclick="goTab('${p[1]}')"><div class="sh-path-t">${p[0]}</div><div class="sh-path-tab">${p[2]} →</div><div class="sh-path-d">${p[3]}</div></div>`).join('');
@@ -1035,7 +1037,7 @@ function buildStartHere(){
       <span class="sh-conv-i"><b>Plain name</b> — context only: a customer, end-market or deliberately excluded name with no investing angle</span>
     </div>
     <div class="sh-stats">${today}</div>
-    <div class="dw-sect" style="margin:14px 0 6px">Five ways in</div>
+    <div class="dw-sect" style="margin:14px 0 6px">Ways in</div>
     <div class="sh-paths">${paths}</div>
     ${voice?`<div class="dw-sect" style="margin:14px 0 5px">Latest from the voices</div><div class="nw-voice" style="max-width:560px"><div class="nw-voice-h"><span class="nw-voice-s">${esc(voice.s)}</span><span class="nw-d">${esc(voice.d)}</span></div><a class="nw-voice-t" href="${esc(voice.u)}" target="_blank" rel="noopener">${esc(voice.t)}</a></div>`:''}`;
 }
@@ -2238,9 +2240,10 @@ async function loadData(){
   document.getElementById('loading').style.display='none';
   document.getElementById('app').style.display='';
 
-  /* Build default tab */
-  buildStartHere();
-  built.sh=true;
+  /* Default landing is the signal page — the first question is always
+     "is there anything I must act on today?" Orientation is reference. */
+  buildBreaking();
+  built.bk=true;
 }
 
 loadData().catch(err=>{
