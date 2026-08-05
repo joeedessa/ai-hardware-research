@@ -457,6 +457,36 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .ew-cand-nm{font-size:11px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ew-cand-v{font-size:8.5px;font-weight:600;padding:1px 6px;border-radius:20px;text-transform:uppercase;flex-shrink:0}
 .ew-cand-l{font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38%}
+/* ── Act now ── */
+.bk-badge{display:inline-block;font-size:8.5px;font-weight:700;padding:0 5px;border-radius:20px;margin-left:4px;line-height:1.5;vertical-align:middle}
+.bk-head{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;padding:2px 2px 10px}
+.bk-title{font-family:var(--font-display);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--color-text-primary)}
+.bk-sub{font-size:10.5px;line-height:1.55;color:var(--color-text-tertiary);max-width:72ch;margin-top:3px}
+.bk-stamp{font-size:9.5px;color:var(--color-text-tertiary);margin-left:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bk-tape{display:flex;gap:16px;flex-wrap:wrap;padding:7px 11px;border:.5px solid var(--color-border-tertiary);border-radius:8px;background:var(--color-background-secondary);font-size:10px;color:var(--color-text-tertiary);margin-bottom:10px}
+.bk-tape b{font-size:12px;color:var(--color-text-primary);font-variant-numeric:tabular-nums;font-weight:600}
+.bk-cards{display:grid;gap:9px}
+.bk-card{border:.5px solid var(--color-border-tertiary);border-left:4px solid;border-radius:4px 10px 10px 4px;padding:12px 15px;background:var(--color-background-primary);box-shadow:var(--shadow-1)}
+.bk-card-h{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+.bk-sev{font-size:8.5px;font-weight:700;letter-spacing:.09em;padding:2px 8px;border-radius:3px}
+.bk-cat{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.bk-ver{font-size:8.5px;font-weight:600;color:#15803D;background:#16A34A14;padding:2px 7px;border-radius:20px;cursor:help}
+.bk-unver{font-size:8.5px;font-weight:600;color:#B45309;background:#EF9F2714;padding:2px 7px;border-radius:20px;cursor:help}
+.bk-src{font-size:9px;color:var(--color-text-info);text-decoration:none;margin-left:auto}
+.bk-t{font-family:var(--font-display);font-size:15px;font-weight:600;line-height:1.25;color:var(--color-text-primary);margin-bottom:4px}
+.bk-ev{font-size:11px;line-height:1.55;color:var(--color-text-secondary);margin-bottom:8px}
+.bk-stance{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;padding:6px 10px;border:.5px solid;border-radius:7px;margin-bottom:7px}
+.bk-stance-l{font-size:11px;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.bk-stance-d{font-size:10px;color:var(--color-text-secondary)}
+.bk-act{font-size:11.5px;line-height:1.6;color:var(--color-text-primary)}
+.bk-tk{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.bk-empty{border:.5px dashed var(--color-border-secondary);border-radius:10px;padding:26px 20px;text-align:center;background:var(--color-background-primary)}
+.bk-empty-t{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--color-text-secondary)}
+.bk-empty-d{font-size:11px;line-height:1.6;color:var(--color-text-tertiary);max-width:60ch;margin:5px auto 0}
+.bk-checks{margin-top:12px;font-size:10.5px;color:var(--color-text-tertiary)}
+.bk-checks summary{cursor:pointer;font-weight:500;padding:5px 0}
+.bk-checks ul{margin:2px 0 0;padding-left:18px;line-height:1.65}
+.bk-foot{margin-top:8px;padding-top:7px;border-top:.5px solid var(--color-border-tertiary);font-size:9.5px;line-height:1.55}
 /* ── Start Here ── */
 .sh-hero{max-width:680px;padding:6px 2px 2px}
 .sh-hero-t{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em;color:var(--color-text-primary);line-height:1.2}
@@ -626,6 +656,7 @@ function toggleTheme(){
 
 <div class="tabs">
   <div class="tab on" onclick="ST('sh',this)">Start here</div>
+  <div class="tab" onclick="ST('bk',this)" id="tab-bk">Act now</div>
   <div class="tab-group-sep"></div>
   <!-- Research tabs -->
   <div class="tab" onclick="ST('mx',this)">Universe matrix</div>
@@ -724,6 +755,10 @@ function toggleTheme(){
   <div id="sh-cont"></div>
 </div>
 
+<div class="view" id="view-bk">
+  <div id="bk-cont"></div>
+</div>
+
 <div class="view" id="view-nw">
   <div id="nw-cont"></div>
 </div>
@@ -806,7 +841,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP,NAME_MAP,PRIVATE_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF;
+let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF,BREAKING;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -888,11 +923,61 @@ function ST(id,el){
     else if(id==='xc')buildExcluded();
     else if(id==='nw')buildNews();
     else if(id==='sh')buildStartHere();
+    else if(id==='bk')buildBreaking();
     else if(id==='mx')buildMatrix();
     built[id]=true;
   }
 }
 
+/* ── Act now — only signals at a level that would change today's decision ── */
+const BK_SEV={critical:{c:'#E24B4A',l:'CRITICAL'},high:{c:'#EF9F27',l:'HIGH'},watch:{c:'#4F46E5',l:'WATCH'}};
+const BK_STANCE={
+  BUY:{c:'#16A34A',l:'BUY THE DISLOCATION',d:'Structurally intact, sold for reasons unrelated to the thesis.'},
+  STAGE:{c:'#EF9F27',l:'STAGE — DO NOT CHASE',d:'Forced selling in progress. Prepare the list; add in tranches as it stabilises.'},
+  COOL:{c:'#4F46E5',l:'STOP ADDING',d:'Strength is closing the windows. Reprice rather than chase.'},
+  REVIEW:{c:'#E24B4A',l:'THESIS AT RISK',d:'Something may have broken. Read before you hold.'},
+  MONITOR:{c:'#888780',l:'MONITOR',d:'Notable, not yet actionable.'}};
+function buildBreaking(){
+  const el=document.getElementById('bk-cont');
+  if(!BREAKING){el.innerHTML='<div class="note">No signal file yet — it is written by the nightly refresh.</div>';return;}
+  const ctx=BREAKING.context||{}, sigs=BREAKING.signals||[];
+  const head=`<div class="bk-head">
+      <div><div class="bk-title">${sigs.length?'Signals live':'Nothing at this level'}</div>
+      <div class="bk-sub">${esc((BREAKING._meta&&BREAKING._meta.bar)||'')}</div></div>
+      <div class="bk-stamp">checked ${fmtTS(BREAKING._meta&&BREAKING._meta.as_of)}</div></div>`;
+  const tape=`<div class="bk-tape">
+      <span><b>${ctx.sox1d>=0?'+':''}${ctx.sox1d}%</b> SOX</span>
+      <span><b>${ctx.median1d>=0?'+':''}${ctx.median1d}%</b> universe median</span>
+      <span><b>${ctx.down5}</b> down 5%+</span>
+      <span><b>${ctx.up5}</b> up 5%+</span>
+      <span><b>${ctx.windows_open}</b> entry windows open</span></div>`;
+  const cards=sigs.map(s=>{
+    const sv=BK_SEV[s.sev]||BK_SEV.watch, st=BK_STANCE[s.stance]||BK_STANCE.MONITOR;
+    const tk=(s.tk||[]).map(t=>`<span class="ticklink" data-tk="${esc(t)}">${esc(t)}</span>`).join(' ');
+    const src=s.src&&s.src.u?`<a href="${esc(s.src.u)}" target="_blank" rel="noopener" class="bk-src">${esc(s.src.s||'source')} ↗</a>`:'';
+    return `<div class="bk-card" style="border-left-color:${sv.c}">
+      <div class="bk-card-h">
+        <span class="bk-sev" style="background:${sv.c}18;color:${sv.c};border:.5px solid ${sv.c}55">${sv.l}</span>
+        <span class="bk-cat">${esc(s.cat)}</span>
+        ${s.verified?'<span class="bk-ver" title="Computed from prices — a measured fact">measured</span>'
+                    :'<span class="bk-unver" title="Parsed from a headline — confirm before acting">unverified headline</span>'}
+        ${src}</div>
+      <div class="bk-t">${esc(s.t)}</div>
+      <div class="bk-ev">${esc(s.ev)}</div>
+      <div class="bk-stance" style="background:${st.c}12;border-color:${st.c}44">
+        <span class="bk-stance-l" style="color:${st.c}">${st.l}</span>
+        <span class="bk-stance-d">${st.d}</span></div>
+      <div class="bk-act">${linkifyTickers(s.action)}</div>
+      ${tk?`<div class="bk-tk">${tk}</div>`:''}</div>`;
+  }).join('');
+  const empty=`<div class="bk-empty">
+      <div class="bk-empty-t">No event today clears the bar.</div>
+      <div class="bk-empty-d">That is the intended state. This page stays silent unless something would genuinely change an allocation decision — and it shows the checks that ran so silence is evidence, not absence.</div></div>`;
+  const checks=((BREAKING._meta&&BREAKING._meta.checks)||[]).map(c=>`<li>${esc(c)}</li>`).join('');
+  el.innerHTML=head+tape+(sigs.length?`<div class="bk-cards">${cards}</div>`:empty)+
+    `<details class="bk-checks"><summary>What was checked${sigs.length?'':' and came back clean'}</summary><ul>${checks}</ul>
+     <div class="bk-foot">Market-structure signals are computed from prices. Headline signals are keyword-classified text, marked unverified — confirm the story before acting. Stances are mechanical readings of this dashboard's own conviction and froth tags, not advice.</div></details>`;
+}
 /* ── Start Here — orientation + live today panel ── */
 function goTab(id){const t=[...document.querySelectorAll('.tab')].find(x=>(x.getAttribute('onclick')||'').includes("'"+id+"'"));if(t)ST(id,t);}
 function buildStartHere(){
@@ -2004,6 +2089,7 @@ async function loadData(){
   POLICY=await fetchJ('policy.json').catch(()=>null);
   ALERTS=await fetchJ('alerts.json').catch(()=>null);
   PERF=await fetchJ('performance.json').catch(()=>null);
+  BREAKING=await fetchJ('breaking.json').catch(()=>null);
 
   /* Core data */
   VC_COLS  = matrix.verticals;
@@ -2086,13 +2172,23 @@ async function loadData(){
       el.title='SMH/SPY chip = 1-month relative move of semis vs S&P — the froth thermometer. As of '+fmtTS((quotesJ&&quotesJ._meta&&quotesJ._meta.as_of)||'');}
   }
 
+  /* Act-now tab badge — only lights up when something clears the bar */
+  if(BREAKING&&(BREAKING.signals||[]).length){
+    const crit=BREAKING.signals.filter(s=>s.sev==='critical').length;
+    const t=document.getElementById('tab-bk');
+    if(t){const c=crit?'#E24B4A':'#EF9F27';
+      t.innerHTML=`Act now <span class="bk-badge" style="background:${c};color:#fff">${BREAKING.signals.length}</span>`;
+      t.title=(crit?crit+' critical signal(s). ':'')+'Signals that would change today’s decision.';}
+  }
+
   /* Alert strip — live data checked nightly against the dashboard's own judgments */
   if(ALERTS&&ALERTS.alerts&&ALERTS.alerts.length){
     const AS={window:{c:'#16A34A',l:'ENTRY'},move:{c:'#EF9F27',l:'MOVE'},froth:{c:'#E24B4A',l:'FROTH'}};
     const el=document.getElementById('alert-strip');
     el.innerHTML=`<span class="al-lbl" title="Computed nightly: insulated names past the −15% entry threshold, big single-day moves in conviction-3 names, high-froth names back near their highs">⚡ ${ALERTS.alerts.length} signal${ALERTS.alerts.length===1?'':'s'} · ${fmtTS(ALERTS._meta.as_of)}</span>`+
-      ALERTS.alerts.map(a=>{const s=AS[a.type]||AS.move;
-        return `<span class="al-chip" style="color:${s.c};border-color:${s.c}44;background:${s.c}0D" title="${a.msg.replace(/"/g,'&quot;')}" onclick="openCompanyDrawer('${a.tk}')"><b>${s.l}</b> ${a.tk} <span style="font-variant-numeric:tabular-nums">${a.val>0?'+':''}${a.val}%</span></span>`;}).join('');
+      ALERTS.alerts.slice(0,14).map(a=>{const s=AS[a.type]||AS.move;
+        return `<span class="al-chip" style="color:${s.c};border-color:${s.c}44;background:${s.c}0D" title="${a.msg.replace(/"/g,'&quot;')}" onclick="openCompanyDrawer('${a.tk}')"><b>${s.l}</b> ${a.tk} <span style="font-variant-numeric:tabular-nums">${a.val>0?'+':''}${a.val}%</span></span>`;}).join('')+
+      (ALERTS.alerts.length>14?`<span class="al-chip" style="color:var(--color-text-tertiary);border-color:var(--color-border-tertiary)" title="Open the Companies tab and filter by froth lens to see the rest" onclick="goTab('pf')">+${ALERTS.alerts.length-14} more</span>`:'');
     el.style.display='flex';
   }
 
