@@ -309,6 +309,9 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .dw-act{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
 .dw-btn{font-size:10.5px;font-weight:500;padding:5px 11px;border-radius:7px;cursor:pointer;border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);text-decoration:none;transition:all .12s}
 .dw-btn:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--shadow-1)}
+.dw-btn-pri{border-color:var(--accent);color:var(--accent);background:var(--color-background-info);font-weight:600}
+.dw-symnote{font-size:9.5px;color:var(--color-text-tertiary);margin-top:6px;line-height:1.5}
+.mono-sym{font-family:var(--font-mono);font-size:.95em;color:var(--color-text-secondary)}
 .dw-vgroup{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;margin:10px 0 3px;color:var(--color-text-secondary)}
 .dw-hint{font-size:9.5px;color:var(--color-text-tertiary);text-align:center;padding:8px;border-top:.5px solid var(--color-border-tertiary);flex-shrink:0}
 .co-card{cursor:pointer;transition:border-color .14s,box-shadow .14s}
@@ -354,6 +357,8 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .dw-tile-l{font-size:8.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary)}
 .dw-tile-v{font-size:12px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;margin-top:1px}
 .dw-ddnote{font-size:9.5px;color:#15803D;background:#16A34A0D;border-radius:6px;padding:5px 8px;margin-top:5px;line-height:1.45}
+.dw-chartlink{font-size:9.5px;font-weight:600;color:var(--color-text-info);text-decoration:none;text-transform:none;letter-spacing:0;margin-left:6px}
+.dw-chartlink:hover{text-decoration:underline}
 .dw-newsrow{padding:4px 0;border-bottom:.5px dashed var(--color-border-tertiary)}
 .dw-newsrow:last-of-type{border-bottom:none}
 .dw-newsrow a{font-size:11px;color:var(--color-text-primary);text-decoration:none;font-weight:500;line-height:1.4;display:block}
@@ -853,6 +858,19 @@ let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,hm:fa
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
 const scolor=s=>['#E24B4A','#D85A30','#EF9F27','#639922','#1D9E75'][s-1];
 const slabel=s=>['Very low','Low','Moderate','High','Very high'][s-1];
+/* Map our ticker convention to Yahoo's — mirrors yahoo_symbol() in scripts/fetch_market.py.
+   Without this, external links break for every Shanghai, Hong Kong and TPEx name. */
+const YH_SPECIAL={'8299.TW':'8299.TWO','3324.TW':'3324.TWO','SHA.DE':'SHA0.DE'};
+function yahooSymbol(t){
+  if(!t) return '';
+  if(YH_SPECIAL[t]) return YH_SPECIAL[t];
+  const hk=/^(\d+)\.HK$/.exec(t);
+  if(hk) return hk[1].padStart(4,'0')+'.HK';
+  if(/\.SH$/.test(t)) return t.slice(0,-3)+'.SS';   /* Shanghai incl. STAR is .SS on Yahoo */
+  return t;
+}
+const yahooChart=t=>'https://finance.yahoo.com/chart/'+encodeURIComponent(yahooSymbol(t));
+const yahooQuote=t=>'https://finance.yahoo.com/quote/'+encodeURIComponent(yahooSymbol(t));
 /* Render a machine timestamp (ISO, UTC) in the viewer's local time. Date-only strings pass through. */
 function fmtTS(iso){
   if(!iso)return '';
@@ -2254,7 +2272,7 @@ function openCompanyDrawer(tk,push=true){
   const peers=(COMPANIES||[]).filter(x=>x.vertical===c.vertical&&x.ticker!==c.ticker)
     .sort((a,b)=>b.conviction-a.conviction||(a.name||'').localeCompare(b.name||'')).slice(0,8)
     .map(p=>`<div class="dw-peer" onclick="openCompanyDrawer('${p.ticker}')"><span class="dw-dot" style="background:${{1:'#9CA3AF',2:'#3B82F6',3:'#16A34A'}[p.conviction]||'#9CA3AF'}"></span><span class="tk">${p.ticker}</span><span class="nm">${p.name}</span><span class="ly">${p.chain_layer||''}</span></div>`).join('');
-  const yq='https://finance.yahoo.com/quote/'+encodeURIComponent(c.ticker);
+  const ysym=yahooSymbol(c.ticker);
   renderDrawer(v.c,
     `<span class="dw-tick">${c.ticker}</span><span class="dw-name">${c.name}</span>`,
     `<div class="dw-badges">
@@ -2274,9 +2292,11 @@ function openCompanyDrawer(tk,push=true){
      ${srcs?`<div class="dw-sect">Sources</div>${srcs}`:''}
      ${peers?`<div class="dw-sect">Same vertical — ${v.n}</div>${peers}`:''}
      <div class="dw-act">
-       <a class="dw-btn" href="${yq}" target="_blank" rel="noopener">Yahoo Finance ↗</a>
+       <a class="dw-btn dw-btn-pri" href="${yahooChart(c.ticker)}" target="_blank" rel="noopener" title="Interactive chart on Yahoo Finance (symbol ${ysym})">📈 Chart ↗</a>
+       <a class="dw-btn" href="${yahooQuote(c.ticker)}" target="_blank" rel="noopener" title="Quote, financials and news (symbol ${ysym})">Quote &amp; financials ↗</a>
        <span class="dw-btn" onclick="closeDrawer();jumpToCompanies('${c.ticker.replace(/'/g,"\\'")}')">Open in Companies tab</span>
-     </div>`);
+     </div>
+     ${ysym!==c.ticker?`<div class="dw-symnote">Yahoo lists this as <span class="mono-sym">${ysym}</span> — our records use the local convention <span class="mono-sym">${c.ticker}</span>.</div>`:''}`);
 }
 function openThemeDrawer(id,push=true){
   const tm=(THEMES_REG||[]).find(x=>x.id===id)||{label:id,blurb:''};
@@ -2303,7 +2323,8 @@ function drawerMarket(tk){
   const mc=q.mc?(q.mc>=1e12?(q.mc/1e12).toFixed(1)+'T':q.mc>=1e9?(q.mc/1e9).toFixed(0)+'B':(q.mc/1e6).toFixed(0)+'M'):null;
   const v200=q.a200?+((q.p/q.a200-1)*100).toFixed(1):null;
   const asof=QUOTES_META?` <span style="font-weight:400;text-transform:none;letter-spacing:0">· ${fmtTS(QUOTES_META.as_of)}, local currency</span>`:'';
-  return `<div class="dw-sect">Market${asof}</div><div class="dw-mkt">`
+  const chartLink=` <a href="${yahooChart(tk)}" target="_blank" rel="noopener" class="dw-chartlink" title="Open the interactive chart on Yahoo Finance">chart ↗</a>`;
+  return `<div class="dw-sect">Market${asof}${chartLink}</div><div class="dw-mkt">`
     +tile('Price',q.p.toLocaleString())
     +tile('1 day',(q.d1>=0?'+':'')+q.d1+'%',pc(q.d1))
     +tile('1 month',q.m1==null?null:(q.m1>=0?'+':'')+q.m1+'%',pc(q.m1))
