@@ -290,6 +290,11 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
   color:var(--color-text-secondary);cursor:pointer;padding:0;transition:all .12s}
 .dw-ico:hover{color:var(--accent);border-color:var(--accent);background:var(--color-background-info)}
 .dw-icons+.dw-close{margin-left:2px}
+.dw-ico-ai{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:var(--color-background-info)}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:120;opacity:0;pointer-events:none;
+  background:var(--color-text-primary);color:var(--color-background-primary);font-size:11.5px;font-weight:500;
+  padding:8px 16px;border-radius:20px;box-shadow:var(--shadow-3);transition:opacity .2s,transform .2s;white-space:nowrap}
+#toast.on{opacity:1;transform:translate(-50%,0)}
 .dw-close{margin-left:auto;font-size:15px;cursor:pointer;color:var(--color-text-tertiary);border:none;background:none;padding:2px 7px;border-radius:5px;line-height:1}
 .dw-close:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
 .dw-tick{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--color-text-primary)}
@@ -862,6 +867,29 @@ let built={mx:false,co:false,vx:false,ex:false,wt:false,gl:false,geo:false,hm:fa
 
 /* ── Utilities ── */
 function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
+/* Clipboard with a legacy fallback — the async API needs a secure context and a
+   real user gesture, and quietly refuses without both. */
+async function copyText(text){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){ await navigator.clipboard.writeText(text); return true; }
+  }catch(e){}
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.setAttribute('readonly','');
+    ta.style.cssText='position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0,text.length);
+    const ok=document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }catch(e){ return false; }
+}
+let TOAST_T;
+function toast(msg){
+  let el=document.getElementById('toast');
+  if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el);}
+  el.textContent=msg; el.classList.add('on');
+  clearTimeout(TOAST_T); TOAST_T=setTimeout(()=>el.classList.remove('on'),2600);
+}
 const scolor=s=>['#E24B4A','#D85A30','#EF9F27','#639922','#1D9E75'][s-1];
 const slabel=s=>['Very low','Low','Moderate','High','Very high'][s-1];
 /* Map our ticker convention to Yahoo's — mirrors yahoo_symbol() in scripts/fetch_market.py.
@@ -2321,6 +2349,48 @@ function openThemeDrawer(id,push=true){
      <div class="dw-sect">${members.length} name${members.length===1?'':'s'} tagged</div>${groups||'<div class="dw-thesis">No tagged records yet.</div>'}
      <div class="dw-act"><span class="dw-btn" onclick="closeDrawer();jumpToCompanies('');CO_STATE.theme='${id}';renderCoPills();renderCo();">Filter Companies tab</span></div>`);
 }
+/* Assemble a research brief for a ticker — everything the map knows, plus the ask.
+   Used both for the claude.ai deep-link and the clipboard copy. */
+function claudePrompt(tk){
+  const c=(COMPANIES||[]).find(x=>x.ticker===tk); if(!c) return '';
+  const v=vinfo(c.vertical), q=(QUOTES&&QUOTES[tk])||{};
+  const CONV={1:'monitor',2:'interested',3:'chokepoint owner — near-monopoly, sole-source, or hardest to replace'};
+  const FR={1:'insulated — moat priced sanely; drawdowns read as entry windows',
+            2:'exposed — real earnings but an AI premium in the multiple',
+            3:'high froth — narrative-priced, or sitting at highs'};
+  const themes=(c.themes||[]).map(t=>{const m=(THEMES_REG||[]).find(x=>x.id===t);return m?m.label:t;}).join(', ');
+  const srcs=(c.sources||[]).map(sid=>{const s=(SOURCES||[]).find(x=>x.id===sid);return s?`${s.title} (${s.author}, ${s.date})`:sid;}).slice(0,4).join('; ');
+  const peers=(COMPANIES||[]).filter(x=>x.vertical===c.vertical&&x.ticker!==tk)
+    .sort((a,b)=>b.conviction-a.conviction).slice(0,6).map(p=>`${p.name} (${p.ticker})`).join(', ');
+  const dma=q.p&&q.a200?` · vs 200DMA ${((q.p/q.a200-1)*100).toFixed(1)}%`:'';
+  const mkt=q.p?`Price ${q.p} · 1 day ${q.d1}% · 1 month ${q.m1}% · ${q.dd}% below its 52-week high${dma}${q.fpe?` · forward P/E ${q.fpe}`:''}`
+              :'No live quote available.';
+  const cy=(CYD||[]).find(x=>x.id===c.vertical);
+  return `I maintain a research map of the AI hardware supply chain, and I want to dig into ${c.name} (${tk}). Everything below is what my map currently claims. Challenge it — I am looking for where I am wrong or out of date, not for agreement.
+
+WHERE IT SITS
+Vertical: ${v.n}${cy?` (my read: inning ${cy.inn}/9 — ${cy.verdict})`:''}
+Chain layer: ${c.chain_layer||'—'} · HQ: ${c.geo||'—'} · Business type: ${c.structure||'—'}
+
+MY THESIS (last touched ${c.last_touched||'unknown'})
+${c.thesis_note||'—'}
+
+MY RATINGS
+Conviction ${c.conviction}/3 — ${CONV[c.conviction]||''}. This measures how hard the company is to replace, NOT whether the stock is cheap.
+${c.froth?`Froth ${c.froth}/3 — ${FR[c.froth]}.${c.froth_note?`\nMy reasoning: ${c.froth_note}`:''}`:'Froth: not yet assessed.'}
+
+MARKET DATA (${((QUOTES_META&&QUOTES_META.as_of)||'').slice(0,10)}, local currency)
+${mkt}
+${themes?`\nTHEMES I HAVE TAGGED: ${themes}`:''}${srcs?`\nSOURCES I HAVE CITED: ${srcs}`:''}${peers?`\nPEERS I TRACK IN THIS VERTICAL: ${peers}`:''}
+
+WHAT I WANT FROM YOU
+1. Where is my thesis weakest, wrong, or stale? Search for material developments I have missed.
+2. Is the chokepoint claim actually true — who could replace them, how quickly, and at what cost? If it is contestable, say by what mechanism (customer qualification, policy, new entrant).
+3. Is my froth read defensible at today's price? Make the bear case properly.
+4. What single development would most cleanly falsify this thesis, and what should I watch to catch it early?
+
+Be direct and specific, and cite sources where it matters. Tell me plainly if my rating is wrong.`;
+}
 function drawerMarket(tk){
   const q=QUOTES&&QUOTES[tk]; if(!q)return '';
   const pc=v=>v==null?null:(v>=0?'#16A34A':'#E24B4A');
@@ -2356,6 +2426,23 @@ function renderDrawer(accent,head,body,chartTk){
       qt.href=yahooQuote(chartTk); qt.title=`Quote & financials — ${nm} (${sym}) on Yahoo Finance`;
       op.title=`Open ${chartTk} in the Companies tab`;
       op.onclick=()=>{closeDrawer();jumpToCompanies(chartTk);};
+      /* Research brief -> Claude. The web chat accepts a ?q= prefill; Claude Code has
+         no public URL scheme, so the copy button covers that path. */
+      const ask=document.getElementById('dw-ask'), cp=document.getElementById('dw-copy');
+      const prompt=claudePrompt(chartTk);
+      const url='https://claude.ai/new?q='+encodeURIComponent(prompt);
+      if(url.length>7500){                        /* keep inside safe URL limits */
+        ask.href='https://claude.ai/new';
+        ask.title=`Ask Claude about ${nm} — brief is long, so use the copy button and paste it`;
+      }else{
+        ask.href=url;
+        ask.title=`Ask Claude about ${nm} — opens a new chat pre-filled with this company's full brief`;
+      }
+      cp.title=`Copy the ${nm} research brief (paste into Claude Code or anywhere)`;
+      cp.onclick=async()=>{
+        if(await copyText(prompt)) toast(`${chartTk} research brief copied — paste into Claude Code`);
+        else toast('Copy blocked by the browser — open the chat icon instead');
+      };
       box.style.display='';
     } else box.style.display='none';
   }
@@ -2394,6 +2481,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
         <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 1.8H4.4a1 1 0 0 0-1 1v10.4a1 1 0 0 0 1 1h7.2a1 1 0 0 0 1-1V5.2z"/><path d="M9.2 1.8v3.4h3.4"/><path d="M5.7 8.6h4.6M5.7 11h3.2"/></svg></a>
       <button class="dw-ico" id="dw-open" type="button">
         <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="2.6" width="11.6" height="3.1" rx=".8"/><rect x="2.2" y="7.2" width="11.6" height="3.1" rx=".8"/><path d="M3 12.8h7"/></svg></button>
+      <a class="dw-ico dw-ico-ai" id="dw-ask" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.6 8.6c0 2.5-2.4 4.5-5.4 4.5-.7 0-1.4-.1-2-.3l-3 1 1-2.4C3.1 10.6 2.6 9.7 2.6 8.6c0-2.5 2.4-4.5 5.4-4.5s5.6 2 5.6 4.5Z"/><path d="M8 6.2v4M6.2 8h3.6"/></svg></a>
+      <button class="dw-ico" id="dw-copy" type="button">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.6" y="5.6" width="8" height="8" rx="1.2"/><path d="M10.4 5.6V3.6a1.2 1.2 0 0 0-1.2-1.2H3.6a1.2 1.2 0 0 0-1.2 1.2v5.6a1.2 1.2 0 0 0 1.2 1.2h2"/></svg></button>
     </div>
     <button class="dw-close" onclick="closeDrawer()" title="Close (Esc)">✕</button>
   </div>
