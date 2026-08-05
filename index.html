@@ -2360,12 +2360,27 @@ function claudePrompt(tk){
             3:'high froth — narrative-priced, or sitting at highs'};
   const themes=(c.themes||[]).map(t=>{const m=(THEMES_REG||[]).find(x=>x.id===t);return m?m.label:t;}).join(', ');
   const srcs=(c.sources||[]).map(sid=>{const s=(SOURCES||[]).find(x=>x.id===sid);return s?`${s.title} (${s.author}, ${s.date})`:sid;}).slice(0,4).join('; ');
-  const peers=(COMPANIES||[]).filter(x=>x.vertical===c.vertical&&x.ticker!==tk)
-    .sort((a,b)=>b.conviction-a.conviction).slice(0,6).map(p=>`${p.name} (${p.ticker})`).join(', ');
-  const dma=q.p&&q.a200?` · vs 200DMA ${((q.p/q.a200-1)*100).toFixed(1)}%`:'';
-  const mkt=q.p?`Price ${q.p} · 1 day ${q.d1}% · 1 month ${q.m1}% · ${q.dd}% below its 52-week high${dma}${q.fpe?` · forward P/E ${q.fpe}`:''}`
+  /* Peers must be COMPARABLE, not merely co-located. Same chain layer first —
+     otherwise a GPU cloud gets compared against connector makers. */
+  const nm2=p=>`${p.name} (${p.ticker}, conviction ${p.conviction}${p.froth?`/froth ${p.froth}`:''})`;
+  const sameLayer=(COMPANIES||[]).filter(x=>x.ticker!==tk&&x.chain_layer&&c.chain_layer&&
+      x.chain_layer.toLowerCase()===c.chain_layer.toLowerCase()).map(nm2);
+  const sameVert=(COMPANIES||[]).filter(x=>x.vertical===c.vertical&&x.ticker!==tk&&
+      !(x.chain_layer&&c.chain_layer&&x.chain_layer.toLowerCase()===c.chain_layer.toLowerCase()))
+    .sort((a,b)=>b.conviction-a.conviction).slice(0,5).map(nm2);
+  const sgn=v=>v==null?null:(v>0?'+':'')+v+'%';
+  const dma=q.p&&q.a200?` · vs 200DMA ${sgn(+((q.p/q.a200-1)*100).toFixed(1))}`:'';
+  const mkt=q.p?`Price ${q.p} · 1 day ${sgn(q.d1)} · 1 month ${sgn(q.m1)} · ${q.dd}% below its 52-week high${dma}${q.fpe?` · forward P/E ${q.fpe}`:''}`
               :'No live quote available.';
   const cy=(CYD||[]).find(x=>x.id===c.vertical);
+  /* Signal status — is this name currently flagged by the nightly scan? */
+  const al=((ALERTS&&ALERTS.alerts)||[]).filter(a=>a.tk===tk).map(a=>a.msg);
+  /* The ask must match the claim the map actually makes about THIS record. */
+  const Q2={
+    3:`2. My conviction-3 rating claims this is genuinely hard to replace. Is that true — who could replace them, how quickly, and at what cost? If the position is contestable, say by what mechanism (customer qualification, policy, a new entrant, technology shift).`,
+    2:`2. I rate this conviction 2 — interesting, but not a chokepoint owner. Is that right? What would have to be true for it to deserve a 3, and conversely what would push it down to a monitor?`,
+    1:`2. I rate this conviction 1 — monitor only, meaning I do not think it owns a defensible bottleneck. Does it even belong in a chokepoint-focused universe? What would make me upgrade it, and is there a better-positioned way to own the same demand?`
+  }[c.conviction]||'2. Is my conviction rating right?';
   return `I maintain a research map of the AI hardware supply chain, and I want to dig into ${c.name} (${tk}). Everything below is what my map currently claims. Challenge it — I am looking for where I am wrong or out of date, not for agreement.
 
 WHERE IT SITS
@@ -2380,16 +2395,16 @@ Conviction ${c.conviction}/3 — ${CONV[c.conviction]||''}. This measures how ha
 ${c.froth?`Froth ${c.froth}/3 — ${FR[c.froth]}.${c.froth_note?`\nMy reasoning: ${c.froth_note}`:''}`:'Froth: not yet assessed.'}
 
 MARKET DATA (${((QUOTES_META&&QUOTES_META.as_of)||'').slice(0,10)}, local currency)
-${mkt}
-${themes?`\nTHEMES I HAVE TAGGED: ${themes}`:''}${srcs?`\nSOURCES I HAVE CITED: ${srcs}`:''}${peers?`\nPEERS I TRACK IN THIS VERTICAL: ${peers}`:''}
+${mkt}${al.length?`\nCurrently flagged by my nightly scan: ${al.join(' | ')}`:''}
+${themes?`\nTHEMES I HAVE TAGGED: ${themes}`:''}${srcs?`\nSOURCES I HAVE CITED: ${srcs}`:''}${sameLayer.length?`\nDIRECT COMPARABLES (same chain layer): ${sameLayer.join(', ')}`:''}${sameVert.length?`\nOTHERS IN THE SAME VERTICAL (different layer, so only loosely comparable): ${sameVert.join(', ')}`:''}
 
 WHAT I WANT FROM YOU
-1. Where is my thesis weakest, wrong, or stale? Search for material developments I have missed.
-2. Is the chokepoint claim actually true — who could replace them, how quickly, and at what cost? If it is contestable, say by what mechanism (customer qualification, policy, new entrant).
+1. Where is my thesis weakest, wrong, or stale? Search for material developments I have missed since ${c.last_touched||'it was written'}.
+${Q2}
 3. Is my froth read defensible at today's price? Make the bear case properly.
 4. What single development would most cleanly falsify this thesis, and what should I watch to catch it early?
 
-Be direct and specific, and cite sources where it matters. Tell me plainly if my rating is wrong.`;
+Be direct and specific, and cite sources where it matters. Tell me plainly if my ratings are wrong — I would rather be corrected than agreed with.`;
 }
 function drawerMarket(tk){
   const q=QUOTES&&QUOTES[tk]; if(!q)return '';
