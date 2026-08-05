@@ -495,6 +495,34 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .cal-nm{font-size:12px;font-weight:500;color:var(--color-text-primary)}
 .cal-b{font-size:8.5px;font-weight:600;letter-spacing:.03em;padding:1.5px 7px;border-radius:20px;white-space:nowrap}
 .cal-why{font-size:10.5px;color:var(--color-text-tertiary);line-height:1.5;margin-top:2px}
+.cal-timing{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:2px}
+.cal-when{font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:1.5px 7px;border-radius:20px}
+.cal-when-pre{background:#4F46E518;color:#4F46E5}
+.cal-when-post{background:#D9770618;color:#B45309}
+.cal-when-during{background:#16A34A18;color:#15803D}
+.cal-when-unk{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+.cal-time{font-size:10px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums}
+.cal-time b{color:var(--color-text-secondary);font-weight:600}
+.cal-flash{border:none;background:none;font-size:13px;cursor:pointer;padding:0 2px;line-height:1;margin-left:auto;
+  filter:grayscale(.15);transition:transform .12s}
+.cal-flash:hover{transform:scale(1.18)}
+.cal-has{border-color:var(--color-border-secondary)}
+.fc{display:none;margin-top:8px;padding:10px 12px;border:.5px solid var(--color-border-tertiary);
+  border-radius:8px;background:var(--color-background-secondary);cursor:default}
+.cal-row.ex .fc{display:block}
+.fc-h{font-family:var(--font-display);font-size:12.5px;font-weight:600;color:var(--color-text-primary);margin-bottom:6px}
+.fc-d{font-family:var(--font-sans);font-size:9.5px;font-weight:400;color:var(--color-text-tertiary);margin-left:6px}
+.fc-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:5px;margin-bottom:7px}
+.fc-tile{border:.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 8px;background:var(--color-background-primary)}
+.fc-l{font-size:8.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.fc-v{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:1px}
+.fc-lbl{font-size:8.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-tertiary);margin:6px 0 3px}
+.fc-news{display:block;font-size:11px;font-weight:500;color:var(--color-text-primary);text-decoration:none;
+  padding:4px 0;border-bottom:.5px dashed var(--color-border-tertiary);line-height:1.4}
+.fc-news:last-of-type{border-bottom:none}
+.fc-news:hover{color:var(--accent)}
+.fc-news span{display:block;font-size:9px;font-weight:400;color:var(--color-text-tertiary);margin-top:1px}
+.fc-note{font-size:10px;color:var(--color-text-tertiary);line-height:1.5}
 .cal-past-box{margin-top:18px}
 .cal-past-box summary{cursor:pointer;font-size:10.5px;font-weight:500;color:var(--color-text-tertiary);padding:6px 0}
 @media (max-width:640px){.cal-date{min-width:74px;padding:6px 8px}}
@@ -1039,6 +1067,30 @@ function ST(id,el){
    countdowns are computed at render, so the page cannot look frozen even if the
    underlying pull is a few days old. */
 let CAL_F='all';
+/* Flash card — what actually happened, the moment it is knowable.
+   EPS versus consensus and the price reaction are machine-readable; guidance is not,
+   so we surface the headlines rather than pretend to parse an outlook. */
+function flashCard(e){
+  const r=e.rep||{}, beat=r.est!=null?r.act-r.est:null;
+  const col=v=>v==null?'var(--color-text-tertiary)':v>=0?'#15803D':'#B32B2A';
+  const sg=v=>v==null?'—':(v>0?'+':'')+v+'%';
+  const tile=(l,v,c)=>`<div class="fc-tile"><div class="fc-l">${l}</div><div class="fc-v" style="color:${c||'var(--color-text-primary)'}">${v}</div></div>`;
+  const heads=((NEWS||[]).filter(n=>(n.tk||[]).includes(e.tk)).slice(0,3))
+    .map(n=>`<a class="fc-news" href="${esc(n.u)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(n.t)}<span>${esc(n.s)} · ${esc(n.d)}</span></a>`).join('');
+  return `<div class="fc" onclick="event.stopPropagation()">
+    <div class="fc-h">Results are in <span class="fc-d">reported ${esc(r.when||'')}</span></div>
+    <div class="fc-tiles">
+      ${tile('Reported EPS',r.act!=null?r.act:'—')}
+      ${tile('Consensus',r.est!=null?r.est:'—')}
+      ${tile('Surprise',r.surp!=null?sg(r.surp):(beat!=null?(beat>=0?'beat':'miss'):'—'),col(r.surp!=null?r.surp:beat))}
+      ${tile('Session move',sg(r.move),col(r.move))}
+      ${r.post!=null?tile('After hours',sg(r.post),col(r.post)):''}
+      ${r.pre!=null?tile('Pre-market',sg(r.pre),col(r.pre)):''}
+    </div>
+    ${heads?`<div class="fc-lbl">Headlines — read these for guidance and outlook</div>${heads}`:
+      `<div class="fc-note">No tagged headlines yet. Guidance and outlook are not machine-readable — open the company's release for those.</div>`}
+  </div>`;
+}
 function buildCalendar(){
   const el=document.getElementById('cal-cont');
   if(!CALENDAR||!CALENDAR.events){el.innerHTML='<div class="note">No calendar yet — it is written by the nightly refresh.</div>';return;}
@@ -1081,13 +1133,28 @@ function buildCalendar(){
     const title=e.type==='earnings'
       ? `<span class="cal-tk">${e.tk}</span><span class="cal-nm">${esc(e.n||'')}</span>`
       : `<span class="cal-nm">${esc(e.t||'')}</span>`;
+    /* Release timing: session slot in exchange time, with the viewer's own clock in
+       brackets — computed here so it is always right wherever you are reading. */
+    const WHEN={pre:'before the open',post:'after the close',during:'during the session'};
+    let timing='';
+    if(e.when){
+      const mine=e.ts?new Date(e.ts*1000).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'}):'';
+      timing=`<span class="cal-when cal-when-${e.when}">${WHEN[e.when]}</span>`+
+             `<span class="cal-time">${esc(e.xt||'')}${mine?` <b>(${mine} your time)</b>`:''}</span>`;
+    }else if(e.type==='earnings'){
+      timing=`<span class="cal-when cal-when-unk">time unconfirmed</span>`;
+    }
+    const flash=e.rep?`<button class="cal-flash" onclick="event.stopPropagation();this.closest('.cal-row').classList.toggle('ex')" title="Results are in — open the flash card">⚡</button>`:'';
     const click=e.type==='earnings'?` onclick="openCompanyDrawer('${e.tk}')" style="cursor:pointer"`:'';
-    return `<div class="cal-row${e.k<0?' cal-past':''}"${click}>
+    return `<div class="cal-row${e.k<0?' cal-past':''}${e.rep?' cal-has':''}"${click}>
       <div class="cal-date"><span class="cal-mon">${MON[dt.getMonth()]} ${dt.getDate()}</span>
         <span class="cal-dow">${DOW[dt.getDay()]}</span>
         <span class="cal-cd${e.k<=1&&e.k>=0?' now':''}">${countdown(e.k)}</span></div>
       <div class="cal-stripe" style="background:${t.c}"></div>
-      <div class="cal-main"><div class="cal-h">${title}${badges}</div>${why?`<div class="cal-why">${linkifyTickers(why)}</div>`:''}</div>
+      <div class="cal-main"><div class="cal-h">${title}${badges}${flash}</div>
+        ${timing?`<div class="cal-timing">${timing}</div>`:''}
+        ${why?`<div class="cal-why">${linkifyTickers(why)}</div>`:''}
+        ${e.rep?flashCard(e):''}</div>
     </div>`;
   };
   const groups=BUCKETS.map(([label,test])=>{

@@ -158,6 +158,15 @@ def main():
                 fpe = info.get('forwardPE')
                 if fpe and 0 < fpe < 1000:
                     quotes[t]['fpe'] = round(fpe, 1)
+                # Earnings release timestamp (UTC epoch) — carries the actual TIME,
+                # which .calendar does not. Reused by the calendar builder below.
+                ets = info.get('earningsTimestampStart') or info.get('earningsTimestamp')
+                if ets:
+                    quotes[t]['ets'] = int(ets)
+                for k_src, k_dst in (('postMarketChangePercent', 'post'), ('preMarketChangePercent', 'pre')):
+                    v = info.get(k_src)
+                    if v is not None:
+                        quotes[t][k_dst] = round(float(v) * (100 if abs(float(v)) < 1.5 else 1), 2)
                 time.sleep(0.3)
             except Exception:
                 pass
@@ -290,6 +299,44 @@ def main():
     # Earnings dates + consensus for the names that carry a judgment (conviction 2+ or
     # a froth tag). Fetching all 235 would double runtime for names we do not act on.
     import datetime as _dt
+    try:
+        from zoneinfo import ZoneInfo
+    except Exception:
+        ZoneInfo = None
+    # Exchange sessions in LOCAL market time — used to classify a release as before
+    # the open, after the close, or mid-session. Minutes from midnight.
+    EXCH = {
+        '':     ('America/New_York', 570, 960),  '.TO': ('America/Toronto', 570, 960),
+        '.TW':  ('Asia/Taipei', 540, 810),       '.TWO': ('Asia/Taipei', 540, 810),
+        '.KS':  ('Asia/Seoul', 540, 930),        '.KQ': ('Asia/Seoul', 540, 930),
+        '.T':   ('Asia/Tokyo', 540, 930),        '.HK': ('Asia/Hong_Kong', 570, 960),
+        '.SS':  ('Asia/Shanghai', 570, 900),     '.SZ': ('Asia/Shanghai', 570, 900),
+        '.DE':  ('Europe/Berlin', 540, 1050),    '.PA': ('Europe/Paris', 540, 1050),
+        '.AS':  ('Europe/Amsterdam', 540, 1050), '.BR': ('Europe/Brussels', 540, 1050),
+        '.SW':  ('Europe/Zurich', 540, 1050),    '.L':  ('Europe/London', 480, 990),
+        '.ST':  ('Europe/Stockholm', 540, 1050), '.OL': ('Europe/Oslo', 540, 980),
+        '.VI':  ('Europe/Vienna', 540, 1050),    '.AX': ('Australia/Sydney', 600, 960),
+    }
+
+    def session_slot(ticker, epoch):
+        """Return (when, exchange-local 'HH:MM TZ') for a release timestamp."""
+        if not epoch or ZoneInfo is None:
+            return None, None
+        sym = ymap.get(ticker, ticker)
+        suf = '.' + sym.rsplit('.', 1)[1] if '.' in sym else ''
+        tzname, o, c = EXCH.get(suf, EXCH[''])
+        try:
+            local = _dt.datetime.fromtimestamp(epoch, ZoneInfo(tzname))
+        except Exception:
+            return None, None
+        mins = local.hour * 60 + local.minute
+        if mins == 0:
+            return None, None                      # date-only, no real time
+        # A release AT the bell is before/after it, not mid-session — Tokyo 15:30,
+        # Frankfurt 17:30 and Taipei 13:30 all land exactly on the close.
+        when = 'pre' if mins <= o else ('post' if mins >= c else 'during')
+        return when, local.strftime('%H:%M ') + local.tzname()
+
     cal_targets = sorted({c['ticker'] for c in comp
                           if (c.get('conviction') or 0) >= 2 or c.get('froth')})
     today = _dt.date.today()
@@ -316,6 +363,40 @@ def main():
                 dd = quotes.get(t, {}).get('dd')
                 if dd is not None:
                     ev['dd'] = dd
+                # Release timing: epoch for client-side local rendering + session slot
+                ets = quotes.get(t, {}).get('ets')
+                if ets:
+                    when, loc = session_slot(t, ets)
+                    if when:
+                        ev['ts'], ev['when'], ev['xt'] = ets, when, loc
+                # Result flash: only for names that have just reported
+                if -4 <= (d - today).days <= 0:
+                    try:
+                        edf = yf.Ticker(ymap[t]).earnings_dates
+                        if edf is not None and len(edf):
+                            import pandas as _pd
+                            row = edf[edf['Reported EPS'].notna()].head(1)
+                            if len(row):
+                                r = row.iloc[0]
+                                rep_date = row.index[0].date()
+                                # Only attach a result to the event it belongs to —
+                                # otherwise last quarter's print shows beside a
+                                # forthcoming date and reads as fresh.
+                                if abs((rep_date - d).days) > 1:
+                                    raise ValueError('stale result')
+                                rep = {'act': round(float(r['Reported EPS']), 2),
+                                       'est': None if _pd.isna(r['EPS Estimate']) else round(float(r['EPS Estimate']), 2),
+                                       'when': rep_date.isoformat()}
+                                if not _pd.isna(r['Surprise(%)']):
+                                    rep['surp'] = round(float(r['Surprise(%)']), 1)
+                                q = quotes.get(t, {})
+                                rep['move'] = q.get('d1')
+                                for k in ('post', 'pre'):
+                                    if q.get(k) is not None:
+                                        rep[k] = q[k]
+                                ev['rep'] = rep
+                    except Exception:
+                        pass
                 events.append(ev)
             time.sleep(0.15)
         except Exception:
