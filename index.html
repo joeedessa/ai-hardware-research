@@ -522,7 +522,15 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .fc-news:last-of-type{border-bottom:none}
 .fc-news:hover{color:var(--accent)}
 .fc-news span{display:block;font-size:9px;font-weight:400;color:var(--color-text-tertiary);margin-top:1px}
-.fc-note{font-size:10px;color:var(--color-text-tertiary);line-height:1.5}
+.fc-note{font-size:10px;color:var(--color-text-tertiary);line-height:1.5;margin-top:5px}
+.fc-src{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin:8px 0 4px;
+  display:inline-block;padding:2px 8px;border-radius:20px}
+.fc-src-ok{background:#16A34A18;color:#15803D}
+.fc-src-wait{background:#EF9F2718;color:#B45309;text-transform:none;letter-spacing:.02em;font-weight:600}
+.fc-src-wire{background:var(--color-background-info);color:var(--color-text-info);text-transform:none;
+  letter-spacing:.01em;font-weight:600;display:block;padding:4px 9px}
+.fc-cues{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0 6px}
+.fc-cue{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:20px}
 .cal-past-box{margin:2px 0 6px;border:.5px dashed var(--color-border-secondary);border-radius:8px;padding:6px 10px}
 .cal-past-box summary{cursor:pointer;font-size:10.5px;font-weight:600;color:var(--color-text-tertiary);padding:2px 0}
 .cal-past-box[open] summary{margin-bottom:6px}
@@ -1085,24 +1093,38 @@ let CAL_F='all';
    EPS versus consensus and the price reaction are machine-readable; guidance is not,
    so we surface the headlines rather than pretend to parse an outlook. */
 function flashCard(e){
-  const r=e.rep||{}, beat=r.est!=null?r.act-r.est:null;
+  const r=e.rep||null, w=e.wire||null, q=(QUOTES&&QUOTES[e.tk])||{};
   const col=v=>v==null?'var(--color-text-tertiary)':v>=0?'#15803D':'#B32B2A';
   const sg=v=>v==null?'—':(v>0?'+':'')+v+'%';
   const tile=(l,v,c)=>`<div class="fc-tile"><div class="fc-l">${l}</div><div class="fc-v" style="color:${c||'var(--color-text-primary)'}">${v}</div></div>`;
-  const heads=((NEWS||[]).filter(n=>(n.tk||[]).includes(e.tk)).slice(0,3))
-    .map(n=>`<a class="fc-news" href="${esc(n.u)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(n.t)}<span>${esc(n.s)} · ${esc(n.d)}</span></a>`).join('');
-  return `<div class="fc" onclick="event.stopPropagation()">
-    <div class="fc-h">Results are in <span class="fc-d">reported ${esc(r.when||'')}</span></div>
+  const CUE={'beat':'#16A34A','record quarter':'#16A34A','guidance up':'#16A34A',
+             'miss':'#E24B4A','guidance cut':'#E24B4A','dividend/buyback':'#4F46E5'};
+  /* The wires arrive first; confirmed figures upgrade the card when Yahoo posts them. */
+  const cues=(w&&w.cues||[]).map(c=>`<span class="fc-cue" style="background:${CUE[c]||'#888780'}1C;color:${CUE[c]||'#888780'}">${esc(c)}</span>`).join('');
+  const heads=(w&&w.heads||[]).map(h=>
+    `<a class="fc-news" href="${esc(h.u)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(h.t)}<span>${esc(h.s)} · ${esc(h.d)}</span></a>`).join('');
+  const moveTiles=`${tile('Session move',sg(r?r.move:q.d1),col(r?r.move:q.d1))}`+
+    `${(r&&r.post!=null)||q.post!=null?tile('After hours',sg(r&&r.post!=null?r.post:q.post),col(r&&r.post!=null?r.post:q.post)):''}`+
+    `${(r&&r.pre!=null)||q.pre!=null?tile('Pre-market',sg(r&&r.pre!=null?r.pre:q.pre),col(r&&r.pre!=null?r.pre:q.pre)):''}`;
+  const confirmed=r?`
+    <div class="fc-src fc-src-ok">confirmed figures</div>
     <div class="fc-tiles">
       ${tile('Reported EPS',r.act!=null?r.act:'—')}
       ${tile('Consensus',r.est!=null?r.est:'—')}
-      ${tile('Surprise',r.surp!=null?sg(r.surp):(beat!=null?(beat>=0?'beat':'miss'):'—'),col(r.surp!=null?r.surp:beat))}
-      ${tile('Session move',sg(r.move),col(r.move))}
-      ${r.post!=null?tile('After hours',sg(r.post),col(r.post)):''}
-      ${r.pre!=null?tile('Pre-market',sg(r.pre),col(r.pre)):''}
-    </div>
-    ${heads?`<div class="fc-lbl">Headlines — read these for guidance and outlook</div>${heads}`:
-      `<div class="fc-note">No tagged headlines yet. Guidance and outlook are not machine-readable — open the company's release for those.</div>`}
+      ${tile('Surprise',r.surp!=null?sg(r.surp):'—',col(r.surp))}
+      ${moveTiles}
+    </div>`
+   :`<div class="fc-src fc-src-wait">figures not published yet — reaction only</div>
+     <div class="fc-tiles">${moveTiles}</div>`;
+  const wire=w?`
+    <div class="fc-src fc-src-wire">from the wires · only stories published on or after ${esc(w.gate)}, so this is the current release</div>
+    ${cues?`<div class="fc-cues">${cues}</div>`:''}
+    ${heads}
+    <div class="fc-note">Language classified from headlines, never numbers scraped from prose — open a story to confirm. Guidance lives here, not in the figures above.</div>`
+   :`<div class="fc-note">No headlines matched this release yet.</div>`;
+  return `<div class="fc" onclick="event.stopPropagation()">
+    <div class="fc-h">${r?'Results are in':'Just reported'}${r&&r.when?`<span class="fc-d">reported ${esc(r.when)}</span>`:''}</div>
+    ${confirmed}${wire}
   </div>`;
 }
 function buildCalendar(){
@@ -1161,13 +1183,13 @@ function buildCalendar(){
     }else if(e.type==='earnings'){
       timing=`<span class="cal-when cal-when-unk">time unconfirmed</span>`;
     }
-    const flash=e.rep?`<button class="cal-flash" onclick="event.stopPropagation();this.closest('.cal-row').classList.toggle('ex')" title="Results are in — open the flash card">⚡</button>`:'';
+    const flash=(e.rep||e.wire)?`<button class="cal-flash" onclick="event.stopPropagation();this.closest('.cal-row').classList.toggle('ex')" title="Open the flash card — headlines land first, confirmed figures follow">⚡</button>`:'';
     const click=e.type==='earnings'?` onclick="openCompanyDrawer('${e.tk}')" style="cursor:pointer"`:'';
     /* Fresh = reported yesterday or today. The gradient marks RECENCY, not whether the
        numbers have posted yet — results lag the release by hours, and the row still
        needs to pop the moment it is out. */
     const fresh=e.k>=-1&&e.k<=0&&e.type==='earnings';
-    const cls=(e.k<-1?' cal-past':'')+(e.rep?' cal-has':'')+(fresh?` cal-live${e.k===0?' cal-today':''}`:'');
+    const cls=(e.k<-1?' cal-past':'')+((e.rep||e.wire)?' cal-has':'')+(fresh?` cal-live${e.k===0?' cal-today':''}`:'');
     return `<div class="cal-row${cls}"${click}>
       <div class="cal-date"><span class="cal-mon">${MON[dt.getMonth()]} ${dt.getDate()}</span>
         <span class="cal-dow">${DOW[dt.getDay()]}</span>
@@ -1176,7 +1198,7 @@ function buildCalendar(){
       <div class="cal-main"><div class="cal-h">${title}${badges}${fresh?`<span class="cal-live-b">${e.k===0?'reporting today':'just released'}</span>`:''}${flash}</div>
         ${timing?`<div class="cal-timing">${timing}</div>`:''}
         ${why?`<div class="cal-why">${linkifyTickers(why)}</div>`:''}
-        ${e.rep?flashCard(e):''}</div>
+        ${(e.rep||e.wire)?flashCard(e):''}</div>
     </div>`;
   };
   const groups=BUCKETS.map(([label,test])=>{

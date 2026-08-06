@@ -12,7 +12,7 @@ dashboard already knows how to fetch.
 Failure policy: never clobber a good snapshot with a bad one — on wholesale
 fetch failure the previous JSON files are left untouched.
 """
-import json, os, re, sys, time
+import json, os, re, sys, time, urllib.parse
 from datetime import datetime, timezone, timedelta
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', 'data')
@@ -420,6 +420,75 @@ def main():
                     if isinstance(c2, dict) and c2.get('date') and c2.get('status') != 'landed':
                         events.append({'d': c2['date'], 'type': 'catalyst', 't': c2['t'],
                                        'why': c2.get('why', ''), 'hits': row.get('n', '')})
+
+    # ── Earnings wire: headlines land hours before Yahoo posts a reported EPS, so the
+    # flash card leads with the wires and upgrades to confirmed figures when they
+    # arrive. The hard problem is making sure a headline describes THIS release and
+    # not last quarter's; the release date is the gate — anything published before it
+    # is discarded outright, and we never scrape a number out of prose, only classify
+    # the language and show the headline verbatim.
+    CUES = [
+        ('beat',       'beat',        ['beats', 'tops ', 'above estimate', 'above expectation', 'exceeds',
+                                       'surpass', 'better than expected', 'stronger than expected',
+                                       'blows past', 'blows away', 'crushes', 'ahead of estimate']),
+        ('miss',       'miss',        ['misses', 'falls short', 'below estimate', 'below expectation',
+                                       'worse than expected', 'disappoint', 'shortfall', 'trails estimate']),
+        ('guide_up',   'guidance up', ['raises guidance', 'raises outlook', 'raises forecast', 'lifts forecast',
+                                       'lifts outlook', 'lifts guidance', 'lifts 2026', 'lifts full-year',
+                                       'boosts forecast', 'boosts outlook', 'hikes forecast', 'upbeat forecast',
+                                       'raises full-year', 'raises fy', 'upgrades outlook', 'guides above']),
+        ('guide_down', 'guidance cut',['cuts guidance', 'lowers outlook', 'cuts forecast', 'trims forecast',
+                                       'slashes forecast', 'profit warning', 'cuts full-year', 'lowers guidance',
+                                       'cuts outlook', 'guides below', 'warns on']),
+        ('record',     'record quarter', ['record revenue', 'record profit', 'record quarter', 'record sales',
+                                          'record eps', 'eps record', 'record high', 'new peak', 'record results']),
+        ('dividend',   'dividend/buyback', ['dividend', 'buyback', 'share repurchase', 'special dividend']),
+    ]
+    EARN_WORDS = ['earnings', 'results', 'profit', 'revenue', 'quarter', 'q1', 'q2', 'q3', 'q4',
+                  'guidance', 'outlook', 'forecast', 'beats', 'misses']
+    try:
+        import feedparser as _fp
+        wire_n = 0
+        for ev in events:
+            if ev.get('type') != 'earnings':
+                continue
+            k = (_dt.date.fromisoformat(ev['d']) - today).days
+            if not (-3 <= k <= 1):
+                continue                       # only around the release itself
+            try:
+                qname = ev.get('n') or ev['tk']
+                url = ('https://news.google.com/rss/search?q=' +
+                       urllib.parse.quote(f'"{qname}" earnings results') +
+                       '&hl=en-US&gl=US&ceid=US:en')
+                feed = _fp.parse(url)
+                heads, cues = [], []
+                for entry in feed.entries[:10]:
+                    pd_ = getattr(entry, 'published_parsed', None)
+                    if not pd_:
+                        continue
+                    hdate = time.strftime('%Y-%m-%d', pd_)
+                    if hdate < ev['d']:
+                        continue               # published before the release: wrong quarter
+                    title = re.sub(r'\s+-\s+[^-]+$', '', entry.title).strip()
+                    low = title.lower()
+                    if not any(w in low for w in EARN_WORDS):
+                        continue
+                    for key, label, pats in CUES:
+                        if any(p in low for p in pats) and label not in cues:
+                            cues.append(label)
+                    heads.append({'t': title, 'u': entry.link, 'd': hdate,
+                                  's': getattr(getattr(entry, 'source', None), 'title', '') or ''})
+                    if len(heads) >= 4:
+                        break
+                if heads:
+                    ev['wire'] = {'cues': cues, 'heads': heads, 'gate': ev['d']}
+                    wire_n += 1
+                time.sleep(0.2)
+            except Exception:
+                pass
+        print(f'earnings wire: {wire_n} events carry headlines')
+    except Exception as ex:
+        print('earnings wire skipped:', ex)
 
     events.sort(key=lambda e: e['d'])
     with open(os.path.join(ROOT, 'calendar.json'), 'w') as f:
