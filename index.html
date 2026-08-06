@@ -591,6 +591,19 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .sh-stat-v{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums}
 .sh-stat-k{font-size:10px;font-weight:600;color:var(--color-text-secondary);margin-top:1px}
 .sh-stat-d{font-size:9.5px;color:var(--color-text-tertiary);line-height:1.4;margin-top:2px}
+/* ── Refresh schedule ── */
+.rs{margin-top:12px;padding:12px 16px;border:.5px solid var(--color-border-tertiary);border-radius:9px;
+  background:var(--color-background-primary);box-shadow:var(--shadow-1);max-width:640px}
+.rs-now{font-size:11px;color:var(--color-text-secondary);margin:4px 0 8px;line-height:1.5}
+.rs-now b{color:var(--color-text-primary);font-weight:600;font-variant-numeric:tabular-nums}
+.rs-t{width:100%;border-collapse:collapse;font-size:10.5px}
+.rs-t td{padding:4px 8px 4px 0;border-bottom:.5px solid var(--color-border-tertiary);vertical-align:top;color:var(--color-text-secondary)}
+.rs-t tr:last-child td{border-bottom:none}
+.rs-t td span{display:block;font-size:9px;color:var(--color-text-tertiary);margin-top:1px}
+.rs-utc{font-family:var(--font-mono);font-size:9.5px;color:var(--color-text-tertiary);white-space:nowrap}
+.rs-loc{font-family:var(--font-mono);font-weight:600;color:var(--color-text-primary);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rs-note{font-size:9.5px;line-height:1.55;color:var(--color-text-tertiary);margin-top:8px;padding-top:7px;
+  border-top:.5px solid var(--color-border-tertiary)}
 /* ── TL;DR — the argument in full ── */
 .tl{margin-top:14px;padding:16px 20px;border:.5px solid var(--color-border-tertiary);
   border-left:4px solid var(--accent);border-radius:4px 12px 12px 4px;
@@ -1288,6 +1301,45 @@ function buildBreaking(){
     `<details class="bk-checks"><summary>What was checked${sigs.length?'':' and came back clean'}</summary><ul>${checks}</ul>
      <div class="bk-foot">Market-structure signals are computed from prices. Headline signals are keyword-classified text, marked unverified — confirm the story before acting. Stances are mechanical readings of this dashboard's own conviction and froth tags, not advice.</div></details>`;
 }
+/* ── Refresh schedule ── Slots are UTC crons; rendered in the viewer's own clock.
+   GitHub's scheduler is best-effort and routinely runs late, so we show what the
+   data actually says alongside what was intended. */
+const REFRESH_SLOTS=[[6,45,'Asia post-close','Tokyo & Seoul 15:30, Taipei 13:30 local'],
+                     [12,45,'US pre-open','Before-the-bell releases; Europe mid-session'],
+                     [16,0,'Europe post-close','Frankfurt & Paris 17:30 local; US mid-session'],
+                     [21,30,'US post-close','After-the-bell releases + full rebuild']];
+function nextRefresh(){
+  const now=new Date();
+  for(let d=0;d<8;d++){
+    for(const [h,m] of REFRESH_SLOTS){
+      const t=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+d,h,m));
+      const dow=t.getUTCDay();
+      if(dow===0||dow===6) continue;              /* weekday crons only */
+      if(t>now) return t;
+    }
+  }
+  return null;
+}
+function refreshScheduleHTML(){
+  const fmt=t=>t.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+  const rows=REFRESH_SLOTS.map(([h,m,label,note])=>{
+    const probe=new Date(Date.UTC(2026,0,5,h,m));   /* a Monday, for a stable local render */
+    return `<tr><td class="rs-utc">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} UTC</td>
+      <td class="rs-loc">${fmt(probe)}</td><td>${label}<span>${note}</span></td></tr>`;
+  }).join('');
+  const last=QUOTES_META&&QUOTES_META.as_of?new Date(QUOTES_META.as_of):null;
+  const nx=nextRefresh();
+  const ageH=last?Math.round((Date.now()-last)/36e5):null;
+  return `<div class="rs">
+    <div class="tl-eyebrow">Refresh schedule</div>
+    <div class="rs-now">Data last written <b>${last?fmtTS(QUOTES_META.as_of):'—'}</b>${ageH!=null?` · ${ageH}h ago`:''} ·
+      next pass due <b>${nx?fmt(nx):'—'}</b> your time</div>
+    <div style="overflow-x:auto"><table class="rs-t"><tbody>${rows}</tbody></table></div>
+    <div class="rs-note">Weekdays only. The three intraday passes run light — prices, signals and anything reporting
+      within a couple of days; the evening pass rebuilds everything. Times are the scheduled slots:
+      GitHub's cron is best-effort and often runs 20–60 minutes late, so trust the "last written" stamp above
+      over the timetable.</div></div>`;
+}
 /* ── Start Here — orientation + live today panel ── */
 function goTab(id){const t=[...document.querySelectorAll('.tab')].find(x=>(x.getAttribute('onclick')||'').includes("'"+id+"'"));if(t)ST(id,t);}
 function buildStartHere(){
@@ -1342,6 +1394,7 @@ function buildStartHere(){
       <div class="sh-hero-d">${(COMPANIES||[]).length} companies across 14 verticals, organized around one idea: <b>own the chokepoints</b> — the near-monopolies every AI product must pass through — and know the difference between a broken thesis and a repriced one. Everything cites its source, refreshes through the day, and grades itself.</div>
     </div>
     ${tldr}
+    ${refreshScheduleHTML()}
     <div class="sh-conv">
       <span class="sh-conv-t">How company mentions are marked</span>
       <span class="sh-conv-i"><b>Name (<span class="ticklink" data-tk="TSM">TSM</span>)</b> — in the investable universe; click the ticker for the full record</span>
@@ -2541,8 +2594,13 @@ async function loadData(){
 
   /* Last-updated stamp */
   const conv3 = COMPANIES.filter(c=>c.conviction===3).length;
-  document.getElementById('updated-stamp').innerHTML =
-    `<b>${COMPANIES.length}</b> names · <b>${conv3}</b> conviction-3 · as of <b>${companies._meta.as_of}</b>`;
+  const stamp=document.getElementById('updated-stamp');
+  stamp.innerHTML=`<b>${COMPANIES.length}</b> names · <b>${conv3}</b> conviction-3 · as of <b>${companies._meta.as_of}</b>`;
+  /* Hovering the stamp answers "how fresh is this, and when does it update again?" */
+  try{
+    const nx=nextRefresh(), last=QUOTES_META&&QUOTES_META.as_of;
+    if(nx) stamp.title=`Market data last written ${fmtTS(last)}\nNext refresh pass due ${nx.toLocaleString(undefined,{weekday:'short',hour:'2-digit',minute:'2-digit'})} your time\nFull schedule on the Orientation tab`;
+  }catch(e){}
   document.getElementById('co-count-total').textContent = COMPANIES.length;
 
   /* Populate dynamic content */
