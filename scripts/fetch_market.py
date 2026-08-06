@@ -351,7 +351,7 @@ def main():
             for d in ed[:1]:
                 if not hasattr(d, 'isoformat'):
                     continue
-                if d < today - _dt.timedelta(days=5):
+                if d < today - _dt.timedelta(days=8):
                     continue                      # nothing stale on a forward calendar
                 ev = {'d': d.isoformat(), 'type': 'earnings', 'tk': t,
                       'n': names.get(t, t), 'conv': conv.get(t), 'froth': froth.get(t)}
@@ -369,8 +369,9 @@ def main():
                     when, loc = session_slot(t, ets)
                     if when:
                         ev['ts'], ev['when'], ev['xt'] = ets, when, loc
-                # Result flash: only for names that have just reported
-                if -4 <= (d - today).days <= 0:
+                # Result flash for anything recently reported — the window has to cover
+                # every event still visible on the agenda, or past rows show no card.
+                if -8 <= (d - today).days <= 0:
                     try:
                         edf = yf.Ticker(ymap[t]).earnings_dates
                         if edf is not None and len(edf):

@@ -523,8 +523,22 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .fc-news:hover{color:var(--accent)}
 .fc-news span{display:block;font-size:9px;font-weight:400;color:var(--color-text-tertiary);margin-top:1px}
 .fc-note{font-size:10px;color:var(--color-text-tertiary);line-height:1.5}
-.cal-past-box{margin-top:18px}
-.cal-past-box summary{cursor:pointer;font-size:10.5px;font-weight:500;color:var(--color-text-tertiary);padding:6px 0}
+.cal-past-box{margin:2px 0 6px;border:.5px dashed var(--color-border-secondary);border-radius:8px;padding:6px 10px}
+.cal-past-box summary{cursor:pointer;font-size:10.5px;font-weight:600;color:var(--color-text-tertiary);padding:2px 0}
+.cal-past-box[open] summary{margin-bottom:6px}
+/* Freshly reported rows carry a gradient so they pop out of a long agenda. */
+.cal-today{--fresh:#4F46E5}
+.cal-live .cal-live-b{background:color-mix(in srgb,var(--fresh,#16A34A) 18%,transparent);
+  color:var(--fresh,#15803D)}
+.cal-today .cal-live-b{color:var(--accent)}
+.cal-live{background:linear-gradient(100deg,color-mix(in srgb,var(--fresh,#16A34A) 14%,transparent) 0%,color-mix(in srgb,var(--fresh,#16A34A) 4%,transparent) 44%,transparent 74%);
+  border-color:color-mix(in srgb,var(--fresh,#16A34A) 42%,transparent);box-shadow:var(--shadow-1)}
+.cal-live .cal-date{background:color-mix(in srgb,var(--fresh,#16A34A) 12%,transparent)}
+.cal-live-b{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1.5px 7px;
+  border-radius:20px;background:#16A34A1F;color:#15803D;white-space:nowrap}
+.cal-live .cal-flash{animation:calpulse 2.4s ease-in-out infinite}
+@keyframes calpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+@media (prefers-reduced-motion:reduce){.cal-live .cal-flash{animation:none}}
 @media (max-width:640px){.cal-date{min-width:74px;padding:6px 8px}}
 /* ── Act now ── */
 .bk-badge{display:inline-block;font-size:8.5px;font-weight:700;padding:0 5px;border-radius:20px;margin-left:4px;line-height:1.5;vertical-align:middle}
@@ -1102,7 +1116,10 @@ function buildCalendar(){
     if(CAL_F==='pol') return e.type!=='earnings';
     return true;
   }).map(e=>({...e,k:days(e.d)}));
+  /* Yesterday stays in the flow rather than being archived — a result one day old is
+     the most actionable thing on the page. Older items collapse into a box above. */
   const BUCKETS=[
+    ['Just released',   e=>e.k===-1],
     ['Today',           e=>e.k===0],
     ['This week',       e=>e.k>0&&e.k<=7],
     ['Next three weeks',e=>e.k>7&&e.k<=30],
@@ -1146,12 +1163,17 @@ function buildCalendar(){
     }
     const flash=e.rep?`<button class="cal-flash" onclick="event.stopPropagation();this.closest('.cal-row').classList.toggle('ex')" title="Results are in — open the flash card">⚡</button>`:'';
     const click=e.type==='earnings'?` onclick="openCompanyDrawer('${e.tk}')" style="cursor:pointer"`:'';
-    return `<div class="cal-row${e.k<0?' cal-past':''}${e.rep?' cal-has':''}"${click}>
+    /* Fresh = reported yesterday or today. The gradient marks RECENCY, not whether the
+       numbers have posted yet — results lag the release by hours, and the row still
+       needs to pop the moment it is out. */
+    const fresh=e.k>=-1&&e.k<=0&&e.type==='earnings';
+    const cls=(e.k<-1?' cal-past':'')+(e.rep?' cal-has':'')+(fresh?` cal-live${e.k===0?' cal-today':''}`:'');
+    return `<div class="cal-row${cls}"${click}>
       <div class="cal-date"><span class="cal-mon">${MON[dt.getMonth()]} ${dt.getDate()}</span>
         <span class="cal-dow">${DOW[dt.getDay()]}</span>
         <span class="cal-cd${e.k<=1&&e.k>=0?' now':''}">${countdown(e.k)}</span></div>
       <div class="cal-stripe" style="background:${t.c}"></div>
-      <div class="cal-main"><div class="cal-h">${title}${badges}${flash}</div>
+      <div class="cal-main"><div class="cal-h">${title}${badges}${fresh?`<span class="cal-live-b">${e.k===0?'reporting today':'just released'}</span>`:''}${flash}</div>
         ${timing?`<div class="cal-timing">${timing}</div>`:''}
         ${why?`<div class="cal-why">${linkifyTickers(why)}</div>`:''}
         ${e.rep?flashCard(e):''}</div>
@@ -1162,15 +1184,16 @@ function buildCalendar(){
     if(!rows.length) return '';          /* never render an empty bucket */
     return `<div class="cal-grp"><span>${label}</span><span class="cal-grp-n">${rows.length}</span></div>${rows.map(row).join('')}`;
   }).join('');
-  const past=ev.filter(e=>e.k<0);
+  const past=ev.filter(e=>e.k<-1);   /* yesterday now lives in the flow above */
   const pills=[['all','Everything'],['c3','Chokepoints'],['win','Open windows'],['pol','Policy & catalysts']]
     .map(([id,l])=>`<button class="pill${CAL_F===id?' on':''}" onclick="CAL_F='${id}';buildCalendar();">${l}</button>`).join('');
   el.innerHTML=`
     <div class="note">Dated events ahead — earnings with consensus, policy cliffs and catalysts — as an agenda rather than a month grid, because a calendar of sparse events is mostly empty squares. Countdowns recompute every time you open the page; anything that has passed drops to the bottom. ${esc((CALENDAR._meta&&CALENDAR._meta.note)||'')}</div>
     <div class="pills">${pills}</div>
-    ${groups||'<div class="bk-empty"><div class="bk-empty-t">Nothing dated in this filter.</div></div>'}
-    ${past.length?`<details class="cal-past-box"><summary>${past.length} just passed — did they land?</summary>${past.map(row).join('')}
-      <div class="bk-foot">Reconcile these against the catalyst calendar on Portfolio Summary: mark what landed, what slipped.</div></details>`:''}`;
+    ${past.length?`<details class="cal-past-box"><summary>${past.length} already passed — did they land?</summary>
+      <div class="bk-foot" style="margin:0 0 6px;border:none;padding:0">Reconcile these against the catalyst calendar on Portfolio Summary: mark what landed, what slipped.</div>
+      ${past.map(row).join('')}</details>`:''}
+    ${groups||'<div class="bk-empty"><div class="bk-empty-t">Nothing dated in this filter.</div></div>'}`;
 }
 /* ── Act now — only signals at a level that would change today's decision ── */
 const BK_SEV={critical:{c:'#E24B4A',l:'CRITICAL'},high:{c:'#EF9F27',l:'HIGH'},watch:{c:'#4F46E5',l:'WATCH'}};
