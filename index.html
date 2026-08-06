@@ -503,9 +503,12 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .cal-when-unk{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
 .cal-time{font-size:10px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums}
 .cal-time b{color:var(--color-text-secondary);font-weight:600}
-.cal-flash{border:none;background:none;font-size:13px;cursor:pointer;padding:0 2px;line-height:1;margin-left:auto;
-  filter:grayscale(.15);transition:transform .12s}
-.cal-flash:hover{transform:scale(1.18)}
+/* Sits immediately after the status badge, not flung to the far edge — the badge
+   says something happened, the bolt is how you read it, so they belong together. */
+.cal-flash{border:none;background:none;font-size:13px;cursor:pointer;line-height:1;
+  padding:1px 5px;margin-left:-3px;border-radius:20px;filter:grayscale(.15);
+  transition:transform .12s,background .12s}
+.cal-flash:hover{transform:scale(1.18);background:var(--color-background-secondary)}
 .cal-has{border-color:var(--color-border-secondary)}
 .fc{display:none;margin-top:8px;padding:10px 12px;border:.5px solid var(--color-border-tertiary);
   border-radius:8px;background:var(--color-background-secondary);cursor:default}
