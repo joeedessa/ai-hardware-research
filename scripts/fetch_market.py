@@ -77,11 +77,25 @@ def main():
     import yfinance as yf
     import pandas as pd
 
+    # full  = end-of-day rebuild, everything including the slow per-ticker loops
+    # light = intraday pass: prices, signals, and whatever is reporting right now
+    MODE = (os.environ.get('FETCH_MODE') or 'full').strip().lower()
+    LIGHT = MODE == 'light'
+    print(f'mode: {MODE}')
+
     with open(os.path.join(ROOT, 'companies.json')) as f:
         comp = json.load(f)['companies']
     tickers = [c['ticker'] for c in comp]
     ymap = {t: yahoo_symbol(t) for t in tickers}
     pe_targets = {c['ticker'] for c in comp if c.get('conviction') == 3 or c.get('froth')}
+
+    # Carry forward slow-moving fields (market cap, forward P/E, earnings timestamps)
+    # so a light pass never blanks data it deliberately skipped re-fetching.
+    prev = {}
+    try:
+        prev = json.load(open(os.path.join(ROOT, 'quotes.json'))).get('quotes', {})
+    except Exception:
+        pass
 
     now = datetime.now(timezone.utc).isoformat(timespec='seconds')
     errors = []
@@ -144,7 +158,29 @@ def main():
         sys.exit(1)
 
     # ── Market cap (fast_info) + best-effort forward P/E for the priority set ──
+    # On a light pass this whole loop is skipped except for names reporting around
+    # now — it is ~2 calls per ticker and dominates runtime.
+    reporting_now = set()
+    if LIGHT:
+        try:
+            _cal = json.load(open(os.path.join(ROOT, 'calendar.json'))).get('events', [])
+            _today = datetime.now(timezone.utc).date()
+            for _e in _cal:
+                if _e.get('type') == 'earnings' and _e.get('tk'):
+                    _k = (datetime.fromisoformat(_e['d']).date() - _today).days
+                    if -2 <= _k <= 1:
+                        reporting_now.add(_e['tk'])
+        except Exception:
+            pass
+        print(f'light pass: refreshing detail for {len(reporting_now)} reporting names')
+
     for t in list(quotes):
+        if LIGHT:
+            for k in ('mc', 'fpe', 'ets'):            # keep what we are not re-fetching
+                if k not in quotes[t] and k in prev.get(t, {}):
+                    quotes[t][k] = prev[t][k]
+            if t not in reporting_now:
+                continue
         try:
             fi = yf.Ticker(ymap[t]).fast_info
             mc = getattr(fi, 'market_cap', None)
@@ -152,7 +188,7 @@ def main():
                 quotes[t]['mc'] = int(mc)
         except Exception:
             pass
-        if t in pe_targets:
+        if t in pe_targets or t in reporting_now:
             try:
                 info = yf.Ticker(ymap[t]).info
                 fpe = info.get('forwardPE')
@@ -339,6 +375,15 @@ def main():
 
     cal_targets = sorted({c['ticker'] for c in comp
                           if (c.get('conviction') or 0) >= 2 or c.get('froth')})
+    prev_events = []
+    if LIGHT:
+        # Only re-scan what is reporting around now; carry the rest of the agenda
+        # forward untouched. Scheduled dates months out do not move intraday.
+        try:
+            prev_events = json.load(open(os.path.join(ROOT, 'calendar.json'))).get('events', [])
+        except Exception:
+            prev_events = []
+        cal_targets = [t for t in cal_targets if t in reporting_now]
     today = _dt.date.today()
     events = []
     cal_fail = 0
@@ -489,6 +534,14 @@ def main():
         print(f'earnings wire: {wire_n} events carry headlines')
     except Exception as ex:
         print('earnings wire skipped:', ex)
+
+    if LIGHT and prev_events:
+        refreshed = {(e.get('tk'), e.get('d')) for e in events if e.get('type') == 'earnings'}
+        for e in prev_events:
+            key = (e.get('tk'), e.get('d'))
+            if e.get('type') != 'earnings' or key in refreshed:
+                continue
+            events.append(e)                    # untouched entries survive the pass
 
     events.sort(key=lambda e: e['d'])
     with open(os.path.join(ROOT, 'calendar.json'), 'w') as f:
@@ -687,7 +740,15 @@ def main():
             except Exception as ex:
                 print('feed fail:', q, ex)
         voices = []
-        for name, url in VOICES:
+        if LIGHT:
+            # Long-form posts appear a few times a week; re-fetching them intraday is
+            # waste, but writing an empty list would blank the News tab until the
+            # evening pass. Carry the previous set forward instead.
+            try:
+                voices = json.load(open(os.path.join(ROOT, 'news.json'))).get('voices', [])
+            except Exception:
+                voices = []
+        for name, url in ([] if LIGHT else VOICES):
             try:
                 feed = feedparser.parse(url)
                 for e in feed.entries[:4]:
