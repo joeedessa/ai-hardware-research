@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "description": "The argument the whole dashboard rests on, stated plainly — including the parts that have not gone our way. Reviewed whenever the Scoreboard's forward record materially changes.",
+    "as_of": "2026-08-06"
+  },
+  "headline": "Own the gates, not the brands — knowing they are contested, and that owning them is leverage on the AI trade rather than shelter from it.",
+  "sections": [
+    {
+      "k": "The claim",
+      "b": "Across AI hardware, value concentrates at the stages nobody can easily replicate. The end-products are contested and crowded — merchant GPUs against custom ASICs, this humanoid against that one, one pair of glasses against another — and competition there grinds margin away. But every contender flows through the same narrow gates: ASML's lithography, TSMC's leading edge and CoWoS packaging, HBM from a handful of suppliers, Ajinomoto's insulating film, VAT's vacuum valves. Own the gate and you get paid regardless of which brand wins."
+    },
+    {
+      "k": "Why it should work",
+      "b": "A chokepoint is not the same as a large company. The test is mechanical: if this supplier stopped tomorrow, how long until someone else could do it, and at what cost? Where the honest answer runs to years and billions — a decade and $100B+ to replicate a leading-edge fab, decades of optical know-how inside a single German firm — pricing power follows without needing to forecast demand correctly. That is what conviction-3 means here, and why only 25 of 235 names carry it."
+    },
+    {
+      "k": "What has not gone our way",
+      "b": "Three things, stated plainly. <b>It is leverage, not safety.</b> Since the conviction ranking was set on 30 May, the chokepoint basket has underperformed semis — irreplaceable assets get bid hardest and de-rate hardest, so this is the theme's risk in its most concentrated form, not a hiding place. <b>Chokepoints are contested.</b> HBM4 became the first triple-qualified memory generation, diluting per-supplier power, and we cut Micron's rating for it; the FCC's draft transceiver ban would manufacture a chokepoint for Western optics and destroy one for InnoLight, purely by rule. Qualification and policy contest these positions as much as technology does. <b>The froth lens is unproven.</b> It was written on 1 August and has no meaningful record — the Scoreboard publishes it as it accumulates rather than claiming it later."
+    },
+    {
+      "k": "What would prove us wrong",
+      "b": "If the conviction-3 basket keeps losing to semis over a rolling six months while hyperscaler capex guidance holds, the premise is wrong: value would be accruing to the deployers and model owners rather than the suppliers, and this map is looking in the wrong place. The second falsifier is sustained inference-price deflation with flat token volume, which breaks the demand spine under every vertical at once."
+    },
+    {
+      "k": "How the ratings are actually used",
+      "b": "<b>Conviction measures replaceability, never cheapness.</b> A conviction-3 name can be a terrible purchase at the wrong price. <b>The froth lens carries valuation</b> — the two are read together and never merged into one score. <b>A drawdown means opposite things depending on where it starts:</b> more than 15% off the high in an insulated chokepoint is an entry window; the same fall in a high-froth name is just air leaving a price that was never anchored. <b>Everything carries a date</b>, because a judgment without one is a guess."
+    }
+  ]
+}

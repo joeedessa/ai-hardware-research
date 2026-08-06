@@ -591,6 +591,25 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .sh-stat-v{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums}
 .sh-stat-k{font-size:10px;font-weight:600;color:var(--color-text-secondary);margin-top:1px}
 .sh-stat-d{font-size:9.5px;color:var(--color-text-tertiary);line-height:1.4;margin-top:2px}
+/* ── TL;DR — the argument in full ── */
+.tl{margin-top:14px;padding:16px 20px;border:.5px solid var(--color-border-tertiary);
+  border-left:4px solid var(--accent);border-radius:4px 12px 12px 4px;
+  background:var(--color-background-primary);box-shadow:var(--shadow-1);max-width:900px}
+.tl-eyebrow{font-size:8.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.tl-head{font-family:var(--font-display);font-size:18px;font-weight:600;line-height:1.32;letter-spacing:-.005em;
+  color:var(--color-text-primary);margin:5px 0 0;max-width:62ch;text-wrap:balance}
+.tl-live{font-size:10.5px;line-height:1.55;margin-top:9px;padding:6px 10px;border-radius:7px;font-variant-numeric:tabular-nums}
+.tl-live.ok{background:#16A34A12;color:#15803D}
+.tl-live.bad{background:#E24B4A12;color:#B32B2A}
+.tl-live b{font-weight:700}
+.tl-body{display:grid;gap:11px;margin-top:13px}
+.tl-sec{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.tl-k{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding-top:2px}
+.tl-b{font-size:12px;line-height:1.68;color:var(--color-text-secondary);max-width:70ch}
+.tl-b b{color:var(--color-text-primary);font-weight:600}
+.tl-foot{font-size:9.5px;color:var(--color-text-tertiary);margin-top:12px;padding-top:9px;
+  border-top:.5px solid var(--color-border-tertiary)}
+@media (max-width:640px){.tl{padding:13px 15px}.tl-sec{grid-template-columns:1fr;gap:3px}.tl-head{font-size:16px}}
 .sh-conv{display:flex;flex-direction:column;gap:2px;margin-top:12px;padding:8px 11px;border:.5px solid var(--color-border-tertiary);border-left:3px solid var(--accent);border-radius:6px 9px 9px 6px;background:var(--color-background-primary);max-width:820px}
 .sh-conv-t{font-size:8.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:2px}
 .sh-conv-i{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary)}
@@ -940,7 +959,7 @@ let PS,EL_CHAIN,EL_INTX,EL_AI,EL_CYCLE,THEMES,CY_CATS,PORTFOLIO;
 let B_BAND,C_BAND;
 let SOURCES,COMPANIES,EXCLUDED,THEMES_REG,GLOSSARY,GL_CATS,WALKTHROUGHS;
 let TICKER_RE,TICKER_MAP,NAME_MAP,PRIVATE_MAP;
-let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF,BREAKING,CALENDAR;
+let QUOTES,QUOTES_META,IDX,NEWS,NEWS_V,POLICY,GEO_B,ALERTS,PERF,BREAKING,CALENDAR,THESIS;
 let CO_STATE={q:'',v:null,conv:null,theme:null,froth:null,sort:'conv'};
 const FROTH_META={1:{l:'insulated',c:'#16A34A'},2:{l:'exposed',c:'#EF9F27'},3:{l:'high froth',c:'#E24B4A'}};
 let GL_STATE={q:'',cat:null};
@@ -1293,11 +1312,36 @@ function buildStartHere(){
     ['Understand the machine','vx','Chain explorer','Every vertical’s supply chain in plain English, stage by stage. Or trace one product end-to-end in Walk-throughs.'],
     ['Track what’s changing','nw','News','Nightly headlines + the leading independent voices. Catalyst calendar and Policy & Fiscal forces carry the dated triggers.'],
   ].map(p=>`<div class="sh-path" onclick="goTab('${p[1]}')"><div class="sh-path-t">${p[0]}</div><div class="sh-path-tab">${p[2]} →</div><div class="sh-path-d">${p[3]}</div></div>`).join('');
+  /* The thesis in full — what the whole map is arguing, including what has not
+     worked. The live forward record is spliced in so it cannot drift from reality. */
+  let tldr='';
+  if(THESIS){
+    const tr=(PERF&&PERF.tracks||[]).find(x=>/Conviction/i.test(x.name));
+    let live='';
+    if(tr){
+      const lead=tr.rows.find(r=>!r.bench), bench=tr.rows.find(r=>r.bench&&/SMH/.test(r.label));
+      if(lead&&bench&&lead.si!=null&&bench.si!=null){
+        const d=+(lead.si-bench.si).toFixed(1);
+        live=`<div class="tl-live ${d>=0?'ok':'bad'}">Live scorecard · since ${tr.inception} the chokepoint basket has returned
+          <b>${lead.si>0?'+':''}${lead.si}%</b> against <b>${bench.si>0?'+':''}${bench.si}%</b> for semis —
+          <b>${d>=0?'+':''}${d} points</b> ${d>=0?'ahead':'behind'}.</div>`;
+      }
+    }
+    tldr=`<div class="tl">
+      <div class="tl-eyebrow">What we are saying, really</div>
+      <div class="tl-head">${esc(THESIS.headline)}</div>
+      ${live}
+      <div class="tl-body">${THESIS.sections.map(s=>
+        `<div class="tl-sec"><div class="tl-k">${esc(s.k)}</div><div class="tl-b">${linkifyTickers(s.b)}</div></div>`).join('')}</div>
+      <div class="tl-foot">Reviewed ${esc((THESIS._meta&&THESIS._meta.as_of)||'')} · restated whenever the forward record materially changes.</div>
+    </div>`;
+  }
   cont.innerHTML=`
     <div class="sh-hero">
       <div class="sh-hero-t">A supply-chain map for the AI hardware trade</div>
-      <div class="sh-hero-d">${(COMPANIES||[]).length} companies across 14 verticals, organized around one idea: <b>own the chokepoints</b> — the near-monopolies every AI product must pass through — and know the difference between a broken thesis and a repriced one. Everything cites its source, refreshes nightly, and grades itself.</div>
+      <div class="sh-hero-d">${(COMPANIES||[]).length} companies across 14 verticals, organized around one idea: <b>own the chokepoints</b> — the near-monopolies every AI product must pass through — and know the difference between a broken thesis and a repriced one. Everything cites its source, refreshes through the day, and grades itself.</div>
     </div>
+    ${tldr}
     <div class="sh-conv">
       <span class="sh-conv-t">How company mentions are marked</span>
       <span class="sh-conv-i"><b>Name (<span class="ticklink" data-tk="TSM">TSM</span>)</b> — in the investable universe; click the ticker for the full record</span>
@@ -2384,6 +2428,7 @@ async function loadData(){
   PERF=await fetchJ('performance.json').catch(()=>null);
   BREAKING=await fetchJ('breaking.json').catch(()=>null);
   CALENDAR=await fetchJ('calendar.json').catch(()=>null);
+  THESIS=await fetchJ('thesis.json').catch(()=>null);
 
   /* Core data */
   VC_COLS  = matrix.verticals;
