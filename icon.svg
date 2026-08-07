@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="AI Hardware Research">
+  <!-- Chip package: reads as silicon at 16px, where a literal "AI" monogram turns to mush.
+       Indigo ground works against both light and dark browser chrome. -->
+  <rect width="32" height="32" rx="7.5" fill="#4F46E5"/>
+  <g fill="#FFFFFF">
+    <!-- pins, four sides -->
+    <rect x="9.1"  y="2.6"  width="2.6" height="4.2" rx="1.3"/>
+    <rect x="14.7" y="2.6"  width="2.6" height="4.2" rx="1.3"/>
+    <rect x="20.3" y="2.6"  width="2.6" height="4.2" rx="1.3"/>
+    <rect x="9.1"  y="25.2" width="2.6" height="4.2" rx="1.3"/>
+    <rect x="14.7" y="25.2" width="2.6" height="4.2" rx="1.3"/>
+    <rect x="20.3" y="25.2" width="2.6" height="4.2" rx="1.3"/>
+    <rect x="2.6"  y="9.1"  width="4.2" height="2.6" rx="1.3"/>
+    <rect x="2.6"  y="14.7" width="4.2" height="2.6" rx="1.3"/>
+    <rect x="2.6"  y="20.3" width="4.2" height="2.6" rx="1.3"/>
+    <rect x="25.2" y="9.1"  width="4.2" height="2.6" rx="1.3"/>
+    <rect x="25.2" y="14.7" width="4.2" height="2.6" rx="1.3"/>
+    <rect x="25.2" y="20.3" width="4.2" height="2.6" rx="1.3"/>
+    <!-- die -->
+    <rect x="7.4" y="7.4" width="17.2" height="17.2" rx="3.4"/>
+  </g>
+  <!-- core: the chokepoint at the centre of the die -->
+  <rect x="12.5" y="12.5" width="7" height="7" rx="1.8" fill="#4F46E5"/>
+</svg>
