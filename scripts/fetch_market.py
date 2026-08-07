@@ -199,10 +199,22 @@ def main():
                 ets = info.get('earningsTimestampStart') or info.get('earningsTimestamp')
                 if ets:
                     quotes[t]['ets'] = int(ets)
-                for k_src, k_dst in (('postMarketChangePercent', 'post'), ('preMarketChangePercent', 'pre')):
-                    v = info.get(k_src)
-                    if v is not None:
-                        quotes[t][k_dst] = round(float(v) * (100 if abs(float(v)) < 1.5 else 1), 2)
+                # Extended-hours moves: derive from PRICES, never from Yahoo's percent
+                # field. That field is already a percentage, and an earlier attempt to
+                # normalise it multiplied small moves by 100 — a real +0.86% printed as
+                # +85.88%. Prices are unambiguous.
+                reg = info.get('regularMarketPrice')
+                prevc = info.get('regularMarketPreviousClose')
+                postp, prep = info.get('postMarketPrice'), info.get('preMarketPrice')
+                if postp and reg:
+                    quotes[t]['post'] = round((float(postp) / float(reg) - 1) * 100, 2)
+                if prep and prevc:
+                    quotes[t]['pre'] = round((float(prep) / float(prevc) - 1) * 100, 2)
+                # Live session move — the daily history bar lags the in-progress session,
+                # so an intraday pass would otherwise report YESTERDAY's move as today's.
+                if reg and prevc:
+                    quotes[t]['lp'] = round(float(reg), 2)
+                    quotes[t]['ld1'] = round((float(reg) / float(prevc) - 1) * 100, 2)
                 time.sleep(0.3)
             except Exception:
                 pass
@@ -436,7 +448,10 @@ def main():
                                 if not _pd.isna(r['Surprise(%)']):
                                     rep['surp'] = round(float(r['Surprise(%)']), 1)
                                 q = quotes.get(t, {})
-                                rep['move'] = q.get('d1')
+                                # Prefer the live session move; the daily bar lags.
+                                rep['move'] = q.get('ld1', q.get('d1'))
+                                if q.get('ld1') is not None:
+                                    rep['live'] = True
                                 for k in ('post', 'pre'):
                                     if q.get(k) is not None:
                                         rep[k] = q[k]
