@@ -1044,6 +1044,24 @@ function yahooSymbol(t){
 }
 const yahooChart=t=>'https://finance.yahoo.com/chart/'+encodeURIComponent(yahooSymbol(t));
 const yahooQuote=t=>'https://finance.yahoo.com/quote/'+encodeURIComponent(yahooSymbol(t));
+/* TradingView for charts — its coverage of the Asian and European lines this map
+   leans on is materially better than Yahoo's, and it needs an EXCHANGE prefix
+   rather than a suffix. Bare US symbols resolve on their own, so no NASDAQ/NYSE
+   disambiguation is required. Verified per exchange before switching. */
+const TV_EXCH={'.SH':'SSE','.SZ':'SZSE','.TW':'TWSE','.TWO':'TPEX','.KS':'KRX','.KQ':'KOSDAQ',
+  '.T':'TSE','.HK':'HKEX','.DE':'XETR','.PA':'EURONEXT','.AS':'EURONEXT','.BR':'EURONEXT',
+  '.SW':'SIX','.L':'LSE','.ST':'OMXSTO','.OL':'OMXOSE','.VI':'WBAG','.TO':'TSX','.V':'TSXV',
+  '.AX':'ASX','.JO':'JSE','.MC':'BME','.MI':'MIL','.HE':'OMXHEX','.CO':'OMXCOP'};
+function tvSymbol(t){
+  if(!t) return '';
+  const m=/^(.+?)(\.[A-Z]+)$/.exec(t);
+  if(!m) return t;                                  /* bare US ticker */
+  let [,code,suf]=m;
+  if(suf==='.HK') code=String(parseInt(code,10));   /* HKEX drops the leading zeros */
+  const ex=TV_EXCH[suf];
+  return ex?`${ex}-${code}`:t;
+}
+const tvChart=t=>'https://www.tradingview.com/symbols/'+encodeURIComponent(tvSymbol(t))+'/';
 /* Render a machine timestamp (ISO, UTC) in the viewer's local time. Date-only strings pass through. */
 function fmtTS(iso){
   if(!iso)return '';
@@ -2674,7 +2692,7 @@ function openCompanyDrawer(tk,push=true){
      ${themes?`<div class="dw-sect">Themes</div><div>${themes}</div>`:''}
      ${srcs?`<div class="dw-sect">Sources</div>${srcs}`:''}
      ${peers?`<div class="dw-sect">Same vertical — ${v.n}</div>${peers}`:''}
-     ${ysym!==c.ticker?`<div class="dw-symnote">Yahoo lists this as <span class="mono-sym">${ysym}</span> — our records use the local convention <span class="mono-sym">${c.ticker}</span>.</div>`:''}`,
+     ${ysym!==c.ticker?`<div class="dw-symnote">Charted as <span class="mono-sym">${tvSymbol(c.ticker).replace('-',':')}</span> on TradingView, quoted as <span class="mono-sym">${ysym}</span> on Yahoo — our records use the local convention <span class="mono-sym">${c.ticker}</span>.</div>`:''}`,
     c.ticker);
 }
 function openThemeDrawer(id,push=true){
@@ -2781,9 +2799,9 @@ function renderDrawer(accent,head,body,chartTk){
   const box=document.getElementById('dw-icons');
   if(box){
     if(chartTk){
-      const sym=yahooSymbol(chartTk), nm=(TICKER_MAP&&TICKER_MAP[chartTk])||chartTk;
+      const sym=yahooSymbol(chartTk), tvs=tvSymbol(chartTk), nm=(TICKER_MAP&&TICKER_MAP[chartTk])||chartTk;
       const ch=document.getElementById('dw-chart'), qt=document.getElementById('dw-quote'), op=document.getElementById('dw-open');
-      ch.href=yahooChart(chartTk); ch.title=`Chart — ${nm} (${sym}) on Yahoo Finance`;
+      ch.href=tvChart(chartTk); ch.title=`Chart — ${nm} (${tvs.replace('-',':')}) on TradingView`;
       qt.href=yahooQuote(chartTk); qt.title=`Quote & financials — ${nm} (${sym}) on Yahoo Finance`;
       op.title=`Open ${chartTk} in the Companies tab`;
       op.onclick=()=>{closeDrawer();jumpToCompanies(chartTk);};
