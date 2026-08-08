@@ -676,7 +676,9 @@ def main():
         # "Breaking" means recent — but a solvency or macro event does not stop
         # mattering after 72 hours, so the severe categories get a longer window.
         cut_std = (datetime.now(timezone.utc) - timedelta(days=3)).strftime('%Y-%m-%d')
-        cut_crit = (datetime.now(timezone.utc) - timedelta(days=8)).strftime('%Y-%m-%d')
+        # 5 days, not 8: long enough to bridge a weekend, short enough that a
+        # "breaking" page does not show the same story for a week and a half.
+        cut_crit = (datetime.now(timezone.utc) - timedelta(days=5)).strftime('%Y-%m-%d')
         stale_skipped = 0
         for it in (news_items or []):
             title = (it.get('t') or '')
@@ -718,8 +720,26 @@ def main():
         checks.append(f'Headline scan, 6 severity categories, last 3 days only: {len(news_items or [])} read, '
                       f'{stale_skipped} too old, {hits} cleared the bar')
 
+        # Persistence: a signal showing for a week is not "act now" any more, even if
+        # it is still true. Carry a first-seen date across runs so the page can say
+        # which signals are NEW and how long the others have been sitting there.
+        today_s = datetime.now(timezone.utc).date().isoformat()
+        prev_seen = {}
+        try:
+            for s in json.load(open(os.path.join(ROOT, 'breaking.json'))).get('signals', []):
+                if s.get('key'):
+                    prev_seen[s['key']] = s.get('first', today_s)
+        except Exception:
+            pass
+        for s in sigs:
+            s['key'] = f"{s['cat']}|{(s.get('tk') or [''])[0]}|{s['t'][:60]}"
+            s['first'] = prev_seen.get(s['key'], today_s)
+            s['new'] = s['key'] not in prev_seen
+            s['age'] = (datetime.now(timezone.utc).date() - _dt.date.fromisoformat(s['first'])).days
+
         order = {'critical': 0, 'high': 1, 'watch': 2}
-        sigs.sort(key=lambda s: order.get(s['sev'], 3))
+        # New signals first within a severity band — the whole point of the page.
+        sigs.sort(key=lambda s: (order.get(s['sev'], 3), 0 if s['new'] else 1, s['age']))
         return {'_meta': {'as_of': now,
                           'bar': 'Only events likely to change an allocation decision today. Market-structure signals are '
                                  'computed from prices and are facts; headline-derived signals are parsed text and are '

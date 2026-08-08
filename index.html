@@ -570,6 +570,13 @@ body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-p
 .bk-ver{font-size:8.5px;font-weight:600;color:#15803D;background:#16A34A14;padding:2px 7px;border-radius:20px;cursor:help}
 .bk-unver{font-size:8.5px;font-weight:600;color:#B45309;background:#EF9F2714;padding:2px 7px;border-radius:20px;cursor:help}
 .bk-src{font-size:9px;color:var(--color-text-info);text-decoration:none;margin-left:auto}
+.bk-new{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;
+  border-radius:20px;background:#16A34A1F;color:#15803D}
+.bk-age{font-size:8.5px;font-weight:600;padding:2px 8px;border-radius:20px;cursor:help;
+  background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+.bk-quiet{font-size:10.5px;line-height:1.55;color:var(--color-text-secondary);padding:7px 11px;margin-bottom:8px;
+  border:.5px dashed var(--color-border-secondary);border-radius:8px;background:var(--color-background-secondary)}
+.bk-quiet b{color:var(--color-text-primary);font-weight:600}
 .bk-t{font-family:var(--font-display);font-size:15px;font-weight:600;line-height:1.25;color:var(--color-text-primary);margin-bottom:4px}
 .bk-ev{font-size:11px;line-height:1.55;color:var(--color-text-secondary);margin-bottom:8px}
 .bk-stance{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;padding:6px 10px;border:.5px solid;border-radius:7px;margin-bottom:7px}
@@ -1289,7 +1296,9 @@ function buildBreaking(){
       <div><div class="bk-title">${sigs.length?'Signals live':'Nothing at this level'}</div>
       <div class="bk-sub">${esc((BREAKING._meta&&BREAKING._meta.bar)||'')}</div></div>
       <div class="bk-stamp">checked ${fmtTS(BREAKING._meta&&BREAKING._meta.as_of)}</div></div>`;
-  const tape=`<div class="bk-tape">
+  const nNew=sigs.filter(s=>s.new).length;
+  const tape=`${sigs.length&&!nNew?`<div class="bk-quiet">Nothing new since yesterday — the ${sigs.length} signal${sigs.length===1?'':'s'} below are carried over. A card marked <b>showing Nd</b> is still true but has stopped being news.</div>`:''}
+    <div class="bk-tape">
       <span><b>${ctx.sox1d>=0?'+':''}${ctx.sox1d}%</b> SOX</span>
       <span><b>${ctx.median1d>=0?'+':''}${ctx.median1d}%</b> universe median</span>
       <span><b>${ctx.down5}</b> down 5%+</span>
@@ -1305,6 +1314,8 @@ function buildBreaking(){
         <span class="bk-cat">${esc(s.cat)}</span>
         ${s.verified?'<span class="bk-ver" title="Computed from prices — a measured fact">measured</span>'
                     :'<span class="bk-unver" title="Parsed from a headline — confirm before acting">unverified headline</span>'}
+        ${s.new?'<span class="bk-new">new today</span>'
+               :(s.age>0?`<span class="bk-age" title="First flagged ${esc(s.first||'')} — still standing, but not news any more">showing ${s.age}d</span>`:'')}
         ${src}</div>
       <div class="bk-t">${esc(s.t)}</div>
       <div class="bk-ev">${esc(s.ev)}</div>
