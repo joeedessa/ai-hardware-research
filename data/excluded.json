@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Names that came up in source memos but were deliberately NOT added to the dashboard, with the reason. Scope discipline is value: this list documents the curation rules so the 'why isn't X here?' question is answered. Categories: software-saas, payments-fintech, cybersecurity, auto-oem, av-services, defense-pure, service-robots, raw-materials (→ Hard Assets sibling), bitcoin-infra, speculative, lagging-edge-memory, ticker-conflict, end-customer.",
-    "as_of": "2026-08-05",
+    "as_of": "2026-08-08",
     "categories": {
       "software-saas": "Software / SaaS layer — out of scope for a hardware dashboard",
       "payments-fintech": "Payments rails / stablecoin / fintech — out of scope",
@@ -114,6 +114,13 @@
     {"ticker": "2379.TW", "name": "Realtek", "reason": "Consumer and PC connectivity silicon; no AI datacenter chokepoint", "category": "end-customer", "source_ref": ["review-gap-2026-08"]},
     {"ticker": "5347.TWO", "name": "Vanguard International Semiconductor", "reason": "Mature-node foundry — the layer is covered by UMC and GlobalFoundries", "category": "lagging-edge", "source_ref": ["review-gap-2026-08"]},
     {"ticker": "1590.TW", "name": "Airtac International", "reason": "Pneumatic automation components — industrial automation rather than AI or humanoid actuation", "category": "out-of-scope", "source_ref": ["review-gap-2026-08"]},
-    {"ticker": "6146.TW", "name": "Flytech Technology", "reason": "Industrial and retail computing systems; not an AI-server supplier", "category": "out-of-scope", "source_ref": ["review-gap-2026-08"]}
+    {"ticker": "6146.TW", "name": "Flytech Technology", "reason": "Industrial and retail computing systems; not an AI-server supplier", "category": "out-of-scope", "source_ref": ["review-gap-2026-08"]},
+    {"ticker": "TENB", "name": "Tenable Holdings", "reason": "Exposure/vulnerability management — cybersecurity SaaS, no AI hardware position; consistent with the CrowdStrike ruling", "category": "software-saas", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "UPWK", "name": "Upwork", "reason": "Freelance marketplace — an AI-disruption story, not an AI-infrastructure one", "category": "software-saas", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "SPT", "name": "Sprout Social", "reason": "Social media management SaaS — outside the supply chain entirely", "category": "software-saas", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "RELY", "name": "Remitly Global", "reason": "Cross-border remittances — fintech", "category": "payments-fintech", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "WISE.L", "name": "Wise", "reason": "Cross-border payments infrastructure — fintech", "category": "payments-fintech", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "PSFE", "name": "Paysafe", "reason": "Payment processing and digital wallets — fintech", "category": "payments-fintech", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "CAPS", "name": "Capstone Holding Corp", "reason": "NOT Capstone Energy — a building-products distributor that shares the shorthand. Recorded to stop the wrong ticker being bought; the microturbine name is CGEH", "category": "ticker-conflict", "source_ref": ["pernas-inventory-2026-08"]}
   ]
 }

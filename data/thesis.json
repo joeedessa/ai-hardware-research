@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "The argument the whole dashboard rests on, stated plainly — including the parts that have not gone our way. Reviewed whenever the Scoreboard's forward record materially changes.",
-    "as_of": "2026-08-06"
+    "as_of": "2026-08-08"
   },
   "headline": "Own the gates, not the brands — knowing they are contested, and that owning them is leverage on the AI trade rather than shelter from it.",
   "sections": [
@@ -24,6 +24,10 @@
     {
       "k": "How the ratings are actually used",
       "b": "<b>Conviction measures replaceability, never cheapness.</b> A conviction-3 name can be a terrible purchase at the wrong price. <b>The froth lens carries valuation</b> — the two are read together and never merged into one score. <b>A drawdown means opposite things depending on where it starts:</b> more than 15% off the high in an insulated chokepoint is an entry window; the same fall in a high-froth name is just air leaving a price that was never anchored. <b>Everything carries a date</b>, because a judgment without one is a guess."
+    },
+    {
+      "k": "The bear case, from outside",
+      "b": "An external view worth holding against this map, from an investor inventory supplied 2026-08-08. <b>Avoid semiconductors outright</b> on the argument that Chinese competitiveness and lower production cost erode the pricing power the whole thesis rests on — a direct attack on the premise, not a quibble with a name. <b>GPU rental prices are going up, not down</b>, which contradicts the inference-price-deflation signal the Froth Monitor treats as a froth marker; if rental economics are improving, the GPU-renter layer we flag as high-froth is mispriced in our direction, not theirs. <b>Hyperscalers at roughly 10x EV/sales are vulnerable to step-function capex</b> — which is the demand spine of every vertical here. We do not adopt these views, but the first would break the thesis and the second contradicts a live signal, so they are recorded rather than filed away."
     }
   ]
 }
