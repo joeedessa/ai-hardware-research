@@ -1055,9 +1055,9 @@ const yahooQuote=t=>'https://finance.yahoo.com/quote/'+encodeURIComponent(yahooS
    leans on is materially better than Yahoo's, and it needs an EXCHANGE prefix
    rather than a suffix. Bare US symbols resolve on their own, so no NASDAQ/NYSE
    disambiguation is required. Verified per exchange before switching. */
-const TV_EXCH={'.SH':'SSE','.SZ':'SZSE','.TW':'TWSE','.TWO':'TPEX','.KS':'KRX','.KQ':'KOSDAQ',
+const TV_EXCH={'.SH':'SSE','.SZ':'SZSE','.TW':'TWSE','.TWO':'TPEX','.KS':'KRX','.KQ':'KRX',
   '.T':'TSE','.HK':'HKEX','.DE':'XETR','.PA':'EURONEXT','.AS':'EURONEXT','.BR':'EURONEXT',
-  '.SW':'SIX','.L':'LSE','.ST':'OMXSTO','.OL':'OMXOSE','.VI':'WBAG','.TO':'TSX','.V':'TSXV',
+  '.SW':'SIX','.L':'LSE','.ST':'OMXSTO','.OL':'OSL','.VI':'VIE','.TO':'TSX','.V':'TSXV',
   '.AX':'ASX','.JO':'JSE','.MC':'BME','.MI':'MIL','.HE':'OMXHEX','.CO':'OMXCOP'};
 function tvSymbol(t){
   if(!t) return '';
