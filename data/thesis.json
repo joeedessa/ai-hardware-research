@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "The argument the whole dashboard rests on, stated plainly — including the parts that have not gone our way. Reviewed whenever the Scoreboard's forward record materially changes.",
-    "as_of": "2026-08-08"
+    "as_of": "2026-08-09"
   },
   "headline": "Own the gates, not the brands — knowing they are contested, and that owning them is leverage on the AI trade rather than shelter from it.",
   "sections": [
@@ -15,7 +15,7 @@
     },
     {
       "k": "What has not gone our way",
-      "b": "Three things, stated plainly. <b>It is leverage, not safety.</b> Since the conviction ranking was set on 30 May, the chokepoint basket has underperformed semis — irreplaceable assets get bid hardest and de-rate hardest, so this is the theme's risk in its most concentrated form, not a hiding place. <b>Chokepoints are contested.</b> HBM4 became the first triple-qualified memory generation, diluting per-supplier power, and we cut Micron's rating for it; the FCC's draft transceiver ban would manufacture a chokepoint for Western optics and destroy one for InnoLight, purely by rule. Qualification and policy contest these positions as much as technology does. <b>The froth lens is unproven.</b> It was written on 1 August and has no meaningful record — the Scoreboard publishes it as it accumulates rather than claiming it later."
+      "b": "Three things, stated plainly. <b>It is leverage, not safety.</b> Since the conviction ranking was set on 30 May, the chokepoint basket has underperformed semis — irreplaceable assets get bid hardest and de-rate hardest, so this is the theme's risk in its most concentrated form, not a hiding place. <b>Chokepoints are contested.</b> HBM4 became the first triple-qualified memory generation, diluting per-supplier power, and we cut Micron's rating for it; and on 28 July the FCC began adding whole product classes to its Covered List by PLACE OF PRODUCTION — robots and power inverters first, optical modules drafting. That instrument can manufacture a chokepoint for Western optics and destroy one for InnoLight without a single technical fact changing, and it catches allied producers on the same terms as Chinese ones, releasing them only through a discretionary exemption. Qualification and policy contest these positions as much as technology does. <b>The froth lens is unproven.</b> It was written on 1 August and has no meaningful record — the Scoreboard publishes it as it accumulates rather than claiming it later."
     },
     {
       "k": "What would prove us wrong",
@@ -27,7 +27,7 @@
     },
     {
       "k": "The bear case, from outside",
-      "b": "An external view worth holding against this map, from an investor inventory supplied 2026-08-08. <b>Avoid semiconductors outright</b> on the argument that Chinese competitiveness and lower production cost erode the pricing power the whole thesis rests on — a direct attack on the premise, not a quibble with a name. <b>GPU rental prices are going up, not down</b>, which contradicts the inference-price-deflation signal the Froth Monitor treats as a froth marker; if rental economics are improving, the GPU-renter layer we flag as high-froth is mispriced in our direction, not theirs. <b>Hyperscalers at roughly 10x EV/sales are vulnerable to step-function capex</b> — which is the demand spine of every vertical here. We do not adopt these views, but the first would break the thesis and the second contradicts a live signal, so they are recorded rather than filed away."
+      "b": "An external view worth holding against this map, from an investor inventory supplied 2026-08-08. <b>Avoid semiconductors outright</b> on the argument that Chinese competitiveness and lower production cost erode the pricing power the whole thesis rests on — a direct attack on the premise, not a quibble with a name. That one stopped being purely an opinion on 4 August, when Reuters reported Samsung and SK Hynix have been qualifying AMEC etch tools for their China fabs — with Deutsche Bank sizing NAURA, AMEC, Piotech and ACM Research at 25-30% of China's ~$28B equipment market this year. Confined to China fabs it is a walled garden; if it travels, it is the slow erosion of the deepest moat on this board. <b>GPU rental prices are going up, not down</b>, which contradicts the inference-price-deflation signal the Froth Monitor treats as a froth marker; if rental economics are improving, the GPU-renter layer we flag as high-froth is mispriced in our direction, not theirs. <b>Hyperscalers at roughly 10x EV/sales are vulnerable to step-function capex</b> — which is the demand spine of every vertical here. We do not adopt these views, but the first would break the thesis and the second contradicts a live signal, so they are recorded rather than filed away."
     }
   ]
 }

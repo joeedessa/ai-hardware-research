@@ -1,23 +1,23 @@
 {
   "_meta": {
     "description": "Policy & fiscal forces acting on the universe — regime state (what the rules ARE right now), fiscal programs (who is paying whom), and levers to watch. Reconcile alongside the catalyst calendar; >60 days without reconciling = stale.",
-    "as_of": "2026-08-05"
+    "as_of": "2026-08-09"
   },
   "regimes": [
     {
       "side": "US → China",
       "c": "#2563EB",
       "title": "Export controls: tiered and whiplash-prone",
-      "state": "Within twelve months Washington banned the H200, unbanned it (BIS rule effective Jan 16, 2026), then put a 25% tariff on it. Current shape: 'green-zone' chips (H20-class) flow freely, H200 sells under license + tariff, frontier GPUs stay banned. Jun 2026: BIS affirmed controls reach Chinese firms' overseas subsidiaries (closing the offshore loophole). Feb 2026: eight lawmakers pushed for a blanket WFE ban to China — entity-specific controls judged leaky. Aug 4 2026: the FCC is drafting an import ban on NEW MODELS of Chinese optical transceivers — the first time the control regime reaches past chips into datacenter networking hardware (rationale: data theft / malware / service-disruption risk). Officials hope to publish this year; it could still be modified or shelved.",
-      "watch": "The regime changes with the political weather — that volatility, not any single rule, is the risk to price. NVDA/AMD China revenue swings on every revision; a blanket WFE ban would hit AMAT/LRCX/KLAC/8035.T's China backlogs.",
+      "state": "Within twelve months Washington banned the H200, unbanned it (BIS rule effective Jan 16, 2026), then put a 25% tariff on it. Current shape: 'green-zone' chips (H20-class) flow freely, H200 sells under license + tariff, frontier GPUs stay banned. Jun 2026: BIS affirmed controls reach Chinese firms' overseas subsidiaries (closing the offshore loophole). Feb 2026: eight lawmakers pushed for a blanket WFE ban to China — entity-specific controls judged leaky. Jul 28 2026: the FCC opened a THIRD front — adding foreign-produced connected power inverters and advanced robotic devices to its Covered List (DA 26-786), which bars them from equipment authorisation and therefore from being imported or sold. Aug 4 2026 (Reuters): a parallel measure on Chinese optical modules is drafting. Officials hope to publish this year; it could still be modified or shelved.",
+      "watch": "The regime changes with the political weather — that volatility, not any single rule, is the risk to price. NVDA/AMD China revenue swings on every revision; a blanket WFE ban would hit AMAT/LRCX/KLAC/8035.T's China backlogs. The newer worry is the instrument, not the target: see the production-origin regime below.",
       "hits": "acc, wfe, eda, opt, net"
     },
     {
       "side": "China → US/allies",
       "c": "#DC2626",
       "title": "Materials leverage: suspended, not dismantled",
-      "state": "China built a 12-category rare-earth/critical-materials control regime through 2025 (gallium/germanium ~98% refined share, tungsten hexafluoride, electronic-grade HF, 'look-through' end-user tracing — domestic-vs-export price gaps up to 100x). The Oct 2025 escalation was SUSPENDED for one year at the Xi-Trump truce — expiring Nov 10, 2026. Separate controls now aimed at Japan.",
-      "watch": "The Nov 10 expiry is a dated, binary event sitting under the robotics (magnets), optics (Ge/Ga) and fab-chemicals chains. Raw-materials names live in the Hard Assets sibling map — but the POLICY shock lands on this universe's act/opt/wfe verticals.",
+      "state": "China built a 12-category rare-earth/critical-materials control regime through 2025 (gallium/germanium ~98% refined share, tungsten hexafluoride, electronic-grade HF, 'look-through' end-user tracing — domestic-vs-export price gaps up to 100x). The Oct 2025 escalation was SUSPENDED for one year at the Xi-Trump truce — expiring Nov 10, 2026. Separate controls now aimed at Japan. Aug 5 2026 — MOFCOM answered the FCC robotics listing within a week: licence facilitation withdrawn for US-bound exports of controlled DRONES and their components (case-by-case review restored), CCC certification bodies barred from commissioning US labs for factory inspection, seven US entities blacklisted (one of them an FCC test lab), and a first-ever Article 41 Foreign Trade Law probe into imported printing and copying equipment. Note the choice of target: drones are the one mobile-robot category the FCC rule explicitly exempts.",
+      "watch": "The Nov 10 expiry is a dated, binary event sitting under the robotics (magnets), optics (Ge/Ga) and fab-chemicals chains. Raw-materials names live in the Hard Assets sibling map — but the POLICY shock lands on this universe's act/opt/wfe verticals. The Aug 5 package also opened a quieter front — certification friction. Blocking CCC factory audits taxes every US hardware maker selling into China with delay rather than tariff, which is harder to price and harder to unwind.",
       "hits": "act, opt, wfe, sen"
     },
     {
@@ -27,6 +27,14 @@
       "state": "State-directed decoupling: domestic-substitution quotas push SMIC/NAURA/Cambricon/Empyrean into captive demand regardless of economics, funded by Big Fund III (~$50B) plus provincial money. Antitrust probes of US chipmakers held as a retaliation card.",
       "watch": "Makes the china-localization cohort (30 tagged names) partly policy-driven rather than market-driven — treat their revenue 'demand' accordingly in conviction terms.",
       "hits": "fdy, wfe, eda, acc, mem"
+    },
+    {
+      "side": "New instrument",
+      "c": "#D97706",
+      "title": "Production-origin bans, enforced through equipment authorisation",
+      "state": "On Jul 28 2026 the FCC added two whole product classes to its Covered List by PLACE OF PRODUCTION rather than by company: foreign-produced connected power inverters, and foreign-produced advanced robotic devices (DA 26-786). 'Foreign-produced' means failing the Buy American domestic-end-product test (48 CFR 25.101(a)) — so a German, Japanese or Korean maker is caught on identical terms to a Chinese one, and a US brand manufacturing in Mexico is caught too. Covered gear cannot receive FCC equipment authorisation, which for anything carrying a radio is the gate to being imported, marketed or sold. Existing authorisations are grandfathered; the ban bites new models. The only exit is a Conditional Approval granted case-by-case by the Department of War (robots) or DoW/DHS (inverters), with no published decision timetable.",
+      "watch": "This is the mechanism to track, not the two product classes. Export controls restrict what you may SELL abroad and entity lists name WHO is barred; this restricts what may be BUILT abroad and sold here, with a discretionary licence as the release valve. It is the same instrument now drafting for optical modules — which is why the transceiver measure should be read as a template rather than a one-off. For the map, the practical effect is that allied suppliers hold their position at the pleasure of a case-by-case exemption, and 'where is it manufactured' becomes a first-order question alongside 'who owns the technology'.",
+      "hits": "act, sen, opt, net, dci"
     }
   ],
   "fiscal_programs": [
@@ -74,42 +82,14 @@
     }
   ],
   "levers": [
-    {
-      "l": "FCC import ban on Chinese optical transceivers (drafting)",
-      "hits": "opt, net",
-      "d": "Chinese vendors hold >50% of the global datacenter-transceiver market, InnoLight alone ~27% (Counterpoint). A US import ban on new models would forcibly re-route that demand to COHR, LITE, AAOI, FN, CIEN, NOK, MTSI, SMTC — but the Foundation for American Innovation notes the Western vendors lack the SCALE to replace Chinese supply quickly, so the near-term effect is pricing power and shortage, not clean substitution. Mirror-image risk for 300308.SZ and 300502.SZ. Still drafting — could be modified or shelved.",
-      "date": "2026-12-31"
-    },
-    {
-      "l": "Nov 10, 2026 — China rare-earth truce expires",
-      "hits": "act, opt, wfe",
-      "d": "Renewal = status quo; lapse = magnets/Ga/Ge/chemicals shock into robotics, optics and fab chemicals. The single most dated policy risk on the board.",
-      "date": "2026-11-10"
-    },
-    {
-      "l": "Blanket US WFE-ban push",
-      "hits": "wfe",
-      "d": "If entity-lists give way to a China-wide equipment ban, AMAT/LRCX/KLAC/8035.T lose the remaining China backlog; ASML already effectively there on EUV."
-    },
-    {
-      "l": "GPU rules: next revision",
-      "hits": "acc",
-      "d": "Every H-series reclassification swings NVDA/AMD China revenue by $Bs and re-prices Cambricon/Huawei's captive market share in mirror image."
-    },
-    {
-      "l": "Section 232 semiconductor tariffs",
-      "hits": "fdy, pkg, dci",
-      "d": "Chip/electronics tariffs would tax the Taiwan-assembled AI supply chain broadly — ODMs and packaged-silicon importers first."
-    },
-    {
-      "l": "EDA license regime",
-      "hits": "eda",
-      "d": "The on/off lever on SNPS/CDNS China revenue (~10-15%) — historically toggled with little warning; Empyrean is the mirror trade."
-    },
-    {
-      "l": "China antitrust / procurement bans",
-      "hits": "acc, mem",
-      "d": "Retaliation card against US chipmakers with China exposure (MU precedent 2023; NVDA probe on file)."
-    }
+    {"l": "LIVE — FCC Covered List now bars foreign-produced robots (Jul 28, 2026)", "hits": "act, sen", "d": "Adopted, not proposed. Any ground-moving device over 4.4lb (with dock) that senses, connects and navigates cannot get FCC equipment authorisation unless the Department of War grants a Conditional Approval. Read the carve-outs before pricing it: industrial robotic ARMS, medical robots, vehicles and drones are explicitly excluded, so Fanuc, Yaskawa, ABB, KUKA/Midea, Estun and Doosan's cobots are untouched. What is caught is humanoids, quadrupeds and autonomous mobile robots — 9880.HK UBTech head-on, 277810.KQ Rainbow Robotics and TER's MiR unit on the same terms despite being allied, plus 1810.HK Xiaomi's consumer line. HSAI is hit second-hand through its customers' US market access. The asymmetry is the point: US-produced humanoids get a market cleared by rule, everyone else queues for a discretionary exemption.", "date": "2026-07-28"},
+    {"l": "FCC import ban on Chinese optical modules (drafting)", "hits": "opt, net", "d": "Chinese vendors hold >50% of the global datacenter-transceiver market, InnoLight alone ~27% (Counterpoint). A US import ban on new models would forcibly re-route that demand to COHR, LITE, AAOI, FN, CIEN, NOK, MTSI, SMTC — but the Foundation for American Innovation notes the Western vendors lack the SCALE to replace Chinese supply quickly, so the near-term effect is pricing power and shortage, not clean substitution. Mirror-image risk for 300308.SZ and 300502.SZ. Reuters confirmed the drafting on Aug 4 2026. The Jul 28 robotics and inverter listings show the instrument working end-to-end, which raises the odds this one lands — read it as a template that has now been tested, not a trial balloon.", "date": "2026-12-31"},
+    {"l": "Nov 10, 2026 — China rare-earth truce expires", "hits": "act, opt, wfe", "d": "Renewal = status quo; lapse = magnets/Ga/Ge/chemicals shock into robotics, optics and fab chemicals. The single most dated policy risk on the board.", "date": "2026-11-10"},
+    {"l": "Chinese WFE tools qualifying at Samsung and SK Hynix", "hits": "wfe", "d": "Reuters, Aug 4 2026: both Korean memory makers have been testing AMEC etch tools for their China fabs — begun ~2 years ago, aimed at SERVICING and upgrading existing lines rather than adding capacity, after Washington revoked their validated-end-user status in 2025 and replaced it with an annual licence. Small in units, large in meaning: qualification is the slow half of the WFE moat, and it is being done by the two customers whose sign-off other buyers copy. Deutsche Bank has NAURA, AMEC, Piotech and ACM Research each clearing $1B of revenue in 2026 and together taking 25-30% of China's ~$28B WFE market. This is the external bear case (see Thesis) arriving as an event rather than an opinion — watch whether qualification stays confined to China fabs.", "date": "2026-08-04"},
+    {"l": "Blanket US WFE-ban push", "hits": "wfe", "d": "If entity-lists give way to a China-wide equipment ban, AMAT/LRCX/KLAC/8035.T lose the remaining China backlog; ASML already effectively there on EUV."},
+    {"l": "GPU rules: next revision", "hits": "acc", "d": "Every H-series reclassification swings NVDA/AMD China revenue by $Bs and re-prices Cambricon/Huawei's captive market share in mirror image."},
+    {"l": "Section 232 semiconductor tariffs", "hits": "fdy, pkg, dci", "d": "Chip/electronics tariffs would tax the Taiwan-assembled AI supply chain broadly — ODMs and packaged-silicon importers first."},
+    {"l": "EDA license regime", "hits": "eda", "d": "The on/off lever on SNPS/CDNS China revenue (~10-15%) — historically toggled with little warning; Empyrean is the mirror trade."},
+    {"l": "China antitrust / procurement bans", "hits": "acc, mem", "d": "Retaliation card against US chipmakers with China exposure (MU precedent 2023; NVDA probe on file)."}
   ]
 }
