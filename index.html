@@ -36,6 +36,7 @@
   --shadow-1:0 1px 2px rgba(22,24,29,.05);
   --shadow-2:0 4px 16px rgba(22,24,29,.08),0 1px 3px rgba(22,24,29,.05);
   --shadow-3:0 12px 40px rgba(22,24,29,.16),0 2px 8px rgba(22,24,29,.08);
+  color-scheme:light;
 }
 /* Dark theme — explicit via data-theme, or system preference when unset */
 :root[data-theme="dark"]{
@@ -59,6 +60,7 @@
   --shadow-1:0 1px 2px rgba(0,0,0,.4);
   --shadow-2:0 4px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4);
   --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
+  color-scheme:dark;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -82,9 +84,19 @@
     --shadow-1:0 1px 2px rgba(0,0,0,.4);
     --shadow-2:0 4px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4);
     --shadow-3:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5);
+    color-scheme:dark;
   }
 }
 body{margin:0;padding:12px 14px;background:var(--paper);color:var(--color-text-primary);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* Form controls inherited the UA's white field background in dark mode — text token was
+   themed, the background behind it never was. Themed explicitly so it cannot regress. */
+input[type="text"],input[type="search"],textarea,select{
+  background:var(--color-background-primary);color:var(--color-text-primary);
+  border-color:var(--color-border-secondary)}
+input[type="text"]::placeholder,input[type="search"]::placeholder,textarea::placeholder{
+  color:var(--color-text-tertiary);opacity:1}
+input[type="text"]:focus,input[type="search"]:focus,textarea:focus,select:focus{
+  outline:none;border-color:var(--accent);box-shadow:0 0 0 2.5px color-mix(in srgb,var(--accent) 22%,transparent)}
 .theme-btn{border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:20px;font-size:12px;padding:2px 9px;cursor:pointer;color:var(--color-text-secondary);line-height:1.4}
 .theme-btn:hover{border-color:var(--accent)}
 /* Active demand-theme card: solid theme-color background needs white text (was color-on-color) */
