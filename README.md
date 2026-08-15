@@ -9,6 +9,9 @@ Investment-research dashboard: the AI / semiconductor / robotics / optical & AR 
 - `scripts/fetch_market.py` + `.github/workflows/refresh-data.yml` — the zero-cost nightly data robot
 - `.github/workflows/ci.yml` — push-time validation (data JSON + app JS)
 - `archive/` — frozen historical snapshots
+- `docs/qa-log.md` — running record of bugs, root causes and the guards that now
+  prevent them, plus a pre-flight checklist. Read §1 before committing; append to
+  §4 when something breaks.
 
 ## License & disclaimer
 

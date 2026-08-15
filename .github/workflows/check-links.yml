@@ -1,0 +1,26 @@
+name: Check external chart links
+
+# Weekly rather than per-push: symbol mappings break because a VENUE changed its
+# convention, not because we edited code, so the clock matters more than the diff.
+# Also runs on any change to the mapping tables or the universe itself.
+on:
+  schedule:
+    - cron: '20 5 * * 1'      # Mondays, before the week's research starts
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'data/companies.json'
+      - 'scripts/check_links.py'
+  workflow_dispatch:
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify every generated chart link resolves
+        run: python scripts/check_links.py

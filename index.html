@@ -1052,10 +1052,14 @@ const scolor=s=>['#E24B4A','#D85A30','#EF9F27','#639922','#1D9E75'][s-1];
 const slabel=s=>['Very low','Low','Moderate','High','Very high'][s-1];
 /* Map our ticker convention to Yahoo's — mirrors yahoo_symbol() in scripts/fetch_market.py.
    Without this, external links break for every Shanghai, Hong Kong and TPEx name. */
-const YH_SPECIAL={'8299.TW':'8299.TWO','3324.TW':'3324.TWO','SHA.DE':'SHA0.DE'};
+/* Corrections to OUR OWN ticker convention, not to any one venue's naming. Phison and
+   Auras trade on TPEx rather than TWSE, and Schaeffler's Xetra line is SHA0 — so every
+   consumer needs these, not just the Yahoo path. Wiring it into yahooSymbol() alone is
+   what left three TradingView chart links 404ing. See docs/qa-log.md class B. */
+const SYM_FIX={'8299.TW':'8299.TWO','3324.TW':'3324.TWO','SHA.DE':'SHA0.DE'};
 function yahooSymbol(t){
   if(!t) return '';
-  if(YH_SPECIAL[t]) return YH_SPECIAL[t];
+  if(SYM_FIX[t]) t=SYM_FIX[t];
   const hk=/^(\d+)\.HK$/.exec(t);
   if(hk) return hk[1].padStart(4,'0')+'.HK';
   if(/\.SH$/.test(t)) return t.slice(0,-3)+'.SS';   /* Shanghai incl. STAR is .SS on Yahoo */
@@ -1073,6 +1077,7 @@ const TV_EXCH={'.SH':'SSE','.SZ':'SZSE','.TW':'TWSE','.TWO':'TPEX','.KS':'KRX','
   '.AX':'ASX','.JO':'JSE','.MC':'BME','.MI':'MIL','.HE':'OMXHEX','.CO':'OMXCOP'};
 function tvSymbol(t){
   if(!t) return '';
+  if(SYM_FIX[t]) t=SYM_FIX[t];                      /* same corrections as the Yahoo path */
   const m=/^(.+?)(\.[A-Z]+)$/.exec(t);
   if(!m) return t;                                  /* bare US ticker */
   let [,code,suf]=m;
