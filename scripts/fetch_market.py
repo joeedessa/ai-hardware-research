@@ -304,8 +304,23 @@ def main():
         out['n'] = len(tks)
         return out
 
-    def si(tks, date_str):
-        return avg([ret_since(ymap.get(t, t), date_str) for t in tks])
+    # A name joins a forward track only from the day it earned the tag. Scoring today's
+    # members from the original inception date would let a later addition rewrite the
+    # record with hindsight -- e.g. tagging a stock high-froth AFTER it has already
+    # fallen would make the froth lens look prescient. Records carry conv_since /
+    # froth_since when their tag post-dates inception; absent means "since inception".
+    tag_since = {c['ticker']: {'conviction': c.get('conv_since'), 'froth': c.get('froth_since')}
+                 for c in comp}
+
+    def si(tks, date_str, kind=None):
+        vals = []
+        for t in tks:
+            start = date_str
+            own = tag_since.get(t, {}).get(kind) if kind else None
+            if own and own > start:
+                start = own
+            vals.append(ret_since(ymap.get(t, t), start))
+        return avg(vals)
 
     c3 = [t for t, v in conv.items() if v == 3]
     ins = [t for t, v in froth.items() if v == 1]
@@ -313,17 +328,17 @@ def main():
 
     tracks = [
         {'name': 'Conviction ranking', 'inception': INCEPTION['conviction'],
-         'note': 'Conviction scores were systematically re-ranked on 2026-05-30 (3 records revised 2026-08-04). Everything below is forward performance from that date.',
+         'note': 'Conviction scores were systematically re-ranked on 2026-05-30. Each name is scored from the day it earned its 3 (Delta joined 2026-08-03), not from the ranking date. Names that LOST a 3 are not yet carried for the time they were members (Micron, cut 2026-08-03) — this row omits that and is flattered by it until exits are tracked.',
          'rows': [
-             {'label': 'Conviction-3 chokepoints', 'n': len(c3), 'si': si(c3, INCEPTION['conviction'])},
+             {'label': 'Conviction-3 chokepoints', 'n': len(c3), 'si': si(c3, INCEPTION['conviction'], 'conviction')},
              {'label': 'SMH — semis benchmark', 'n': 1, 'si': si(['SMH'], INCEPTION['conviction']), 'bench': True},
              {'label': 'SPY — market benchmark', 'n': 1, 'si': si(['SPY'], INCEPTION['conviction']), 'bench': True},
          ]},
         {'name': 'Froth lens', 'inception': INCEPTION['froth'],
-         'note': 'Froth tags were written on 2026-08-01. This window is far too short to judge them — it is published so the record accumulates in the open rather than being claimed later.',
+         'note': 'Froth tags were written in waves — 18 names on 2026-08-01, 52 on 2026-08-05, a few since — and each name is scored from the day it was tagged, so no name is credited with a move made before we held the view. Far too short a window to judge the lens; it is published so the record accumulates in the open.',
          'rows': [
-             {'label': 'Insulated (froth 1)', 'n': len(ins), 'si': si(ins, INCEPTION['froth'])},
-             {'label': 'High froth (froth 3)', 'n': len(hot), 'si': si(hot, INCEPTION['froth'])},
+             {'label': 'Insulated (froth 1)', 'n': len(ins), 'si': si(ins, INCEPTION['froth'], 'froth')},
+             {'label': 'High froth (froth 3)', 'n': len(hot), 'si': si(hot, INCEPTION['froth'], 'froth')},
              {'label': 'SMH — semis benchmark', 'n': 1, 'si': si(['SMH'], INCEPTION['froth']), 'bench': True},
              {'label': 'SPY — market benchmark', 'n': 1, 'si': si(['SPY'], INCEPTION['froth']), 'bench': True},
          ]},

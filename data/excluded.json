@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Names that came up in source memos but were deliberately NOT added to the dashboard, with the reason. Scope discipline is value: this list documents the curation rules so the 'why isn't X here?' question is answered. Categories: software-saas, payments-fintech, cybersecurity, auto-oem, av-services, defense-pure, service-robots, raw-materials (→ Hard Assets sibling), bitcoin-infra, speculative, lagging-edge-memory, ticker-conflict, end-customer.",
-    "as_of": "2026-08-08",
+    "as_of": "2026-09-19",
     "categories": {
       "software-saas": "Software / SaaS layer — out of scope for a hardware dashboard",
       "payments-fintech": "Payments rails / stablecoin / fintech — out of scope",
@@ -15,7 +15,8 @@
       "speculative": "Too speculative or too binary-outcome for the curated map",
       "lagging-edge-memory": "Legacy DDR3/DDR4/NOR squeeze — deferred (could be added later)",
       "ticker-conflict": "Source had a likely-wrong ticker; deferred until verified",
-      "end-customer": "Pure end-customer (hyperscaler / brand) — not a supply chain layer"
+      "end-customer": "Pure end-customer (hyperscaler / brand) — not a supply chain layer",
+      "prototyping-machine-tools": "Rapid prototyping, machine tools and CAD — the ecosystem that builds robots and other hardware, not a position in the AI hardware chain"
     },
     "review_note": "as_of reflects the last real content change to this file, not the last time the dashboard was opened."
   },
@@ -121,6 +122,15 @@
     {"ticker": "RELY", "name": "Remitly Global", "reason": "Cross-border remittances — fintech", "category": "payments-fintech", "source_ref": ["pernas-inventory-2026-08"]},
     {"ticker": "WISE.L", "name": "Wise", "reason": "Cross-border payments infrastructure — fintech", "category": "payments-fintech", "source_ref": ["pernas-inventory-2026-08"]},
     {"ticker": "PSFE", "name": "Paysafe", "reason": "Payment processing and digital wallets — fintech", "category": "payments-fintech", "source_ref": ["pernas-inventory-2026-08"]},
-    {"ticker": "CAPS", "name": "Capstone Holding Corp", "reason": "NOT Capstone Energy — a building-products distributor that shares the shorthand. Recorded to stop the wrong ticker being bought; the microturbine name is CGEH", "category": "ticker-conflict", "source_ref": ["pernas-inventory-2026-08"]}
+    {"ticker": "CAPS", "name": "Capstone Holding Corp", "reason": "NOT Capstone Energy — a building-products distributor that shares the shorthand. Recorded to stop the wrong ticker being bought; the microturbine name is CEPL (Nasdaq since 2026-07-08; formerly OTC CGEH)", "category": "ticker-conflict", "source_ref": ["pernas-inventory-2026-08"]},
+    {"ticker": "PRLB", "name": "Protolabs", "reason": "Citrini Tipping Point basket's top weight (11%). Owns its CNC, 3D-printing and molding capacity and fits the 'hardware iteration' thesis well — but it earns from every hardware category (drones, space, defense, medical), so robotics is a slice of its demand, not its driver. Revisit if robotics appears as a disclosed segment.", "category": "prototyping-machine-tools", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "XMTR", "name": "Xometry", "reason": "Citrini basket 10%. Marketplace monetising design iterations across all hardware; accelerating growth is real, the AI-hardware link is indirect.", "category": "prototyping-machine-tools", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "6141.T", "name": "DMG Mori", "reason": "Citrini basket 5%. Order book +40% y/y — but this is a machine-tool capex recovery from the 2022-25 trough, driven mainly by aerospace, defense, datacenter and energy customers.", "category": "prototyping-machine-tools", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "6103.T", "name": "Okuma", "reason": "Citrini basket 5%. Record orders, but its own commentary credits aviation, space, defense, datacenter and energy — robotics is not named. A cycle trade with a robotics label.", "category": "prototyping-machine-tools", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "HURC", "name": "Hurco Companies", "reason": "Mentioned by Citrini as a small-cap machine-tool option; same cycle-recovery logic as DMG Mori and Okuma, with less scale.", "category": "prototyping-machine-tools", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "PTC", "name": "PTC Inc", "reason": "Citrini basket 5%, pitched as a negative-beta hedge to the AI infrastructure trade. Design software is out of scope for a hardware map — worth remembering as a hedge idea, not as a chain position.", "category": "software-saas", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "RPI.L", "name": "Raspberry Pi", "reason": "Citrini basket 4%. Low-cost edge boards used in vision AI and robot kits; small AI exposure, meme-prone trading, and memory prices threaten volumes. Revisit only if robotics becomes a disclosed driver.", "category": "speculative", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "NTWO", "name": "FORT Robotics (via Newbury Street II SPAC)", "reason": "Citrini basket 3%. Safety controllers that let robots work outside cages — a genuine regulatory gate and the most chokepoint-like idea in the basket. Pre-listing SPAC with established players able to certify their own systems; revisit after the listing.", "category": "speculative", "source_ref": ["citrini-tipping-2026-09"]},
+    {"ticker": "CCXI", "name": "Agility Robotics (via Churchill Capital Corp XI SPAC)", "reason": "Citrini basket 2%, which it calls the purest US humanoid expression while being unimpressed by the tech. $1.8M of sales on ~$142M of opex; the '$300M committed orders' carry milestones and equity warrants to the buyers, and Schaeffler is both investor and showcase customer. Useful froth calibration, not a holding.", "category": "speculative", "source_ref": ["citrini-tipping-2026-09"]}
   ]
 }

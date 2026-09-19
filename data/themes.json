@@ -1,8 +1,8 @@
 {
   "_meta": {
     "description": "Demand themes — the structural narratives driving the AI hardware supply chain. Each maps a supply-chain position list, an investment thesis, structure-vs-cycle scores (0-100), portfolio positioning tiers, and watch/risk.",
-    "as_of": "2026-08-05",
-    "review_note": "Content unchanged since May 2026 and NOT yet re-reviewed against the July shakeout, the CPO volume ramp, HBM4 triple-qualification or the August policy developments. Treat as historical framing rather than current judgment.",
+    "as_of": "2026-09-19",
+    "review_note": "Humanoid Robotics and the compute theme's buyer list were re-reviewed 2026-09-19 against Citrini's robotics field trip. The other themes are unchanged since May 2026 and NOT yet re-reviewed against the July shakeout, the CPO volume ramp, HBM4 triple-qualification or the August policy developments — treat those as historical framing rather than current judgment.",
     "taxonomy_note": "These eight demand themes are narrative views; the per-record tags in companies.json _meta.themes_registry are the machine-readable taxonomy. Each theme now declares which registry tags compose it (registry_themes), so the two systems reconcile instead of running in parallel. Content of the narratives themselves has not been re-reviewed since May 2026."
   },
   "themes": [
@@ -36,6 +36,11 @@
           "lbl": "Systems",
           "ticks": "2317.TW, 6669.TW, SMCI, DELL",
           "why": "Rack-scale integration of NVL72-class systems"
+        },
+        {
+          "lbl": "Physical-AI training (new buyer)",
+          "ticks": "NVDA",
+          "why": "Robot labs now train at frontier scale — Figure ≥$3.5B committed incl. 100k Vera Rubin GPUs via Nscale (Sep 2026)"
         }
       ],
       "positions": [
@@ -43,7 +48,7 @@
         "Picks-shovels: ASE, Advantest, ALAB",
         "Asia proxies: 6669.TW, 2382.TW, 3661.TW"
       ],
-      "thesis": "The single largest capex cycle in tech history. Hyperscalers + neoclouds + sovereign AI are spending ~$300-400B/yr, and demand still outruns supply at CoWoS and HBM. The durable winners own the bottlenecks (TSMC, SK Hynix) or the platform (Nvidia CUDA, Broadcom ASIC).",
+      "thesis": "The single largest capex cycle in tech history. Hyperscalers + neoclouds + sovereign AI are spending ~$300-400B/yr, and demand still outruns supply at CoWoS and HBM. The durable winners own the bottlenecks (TSMC, SK Hynix) or the platform (Nvidia CUDA, Broadcom ASIC). A third buyer class is forming beside hyperscalers and sovereigns: physical-AI labs training robot foundation models (Figure alone ≥$3.5B committed, Sep 2026). Small against hyperscaler capex, but it is the one buyer whose demand grows with robotics rather than with chatbots — and whose funding is the most reflexive.",
       "struct": 95,
       "near": 85,
       "bc": 55,
@@ -231,51 +236,52 @@
       "id": "humanoid",
       "n": "Humanoid Robotics",
       "c": "#DC2626",
-      "sub": "~28-40 actuators per robot",
+      "sub": "~28-40 actuators per robot — but the leading OEMs design their own",
       "items": [
         {
-          "lbl": "Reducers",
+          "lbl": "Reducers — the part OEMs can't make",
           "ticks": "6324.T, 6268.T, 688017.SH",
-          "why": "Harmonic + RV gearing — costliest joint part"
+          "why": "Strain-wave and RV gearing: OEMs design the actuator around it but buy it — the one component layer that survives insourcing"
         },
         {
-          "lbl": "Screws & motors",
-          "ticks": "6481.T, NSK, GSA, 300124.SZ",
-          "why": "Roller screws + torque motors; a humanoid bottleneck"
+          "lbl": "R&D enablers — paid now",
+          "ticks": "108490.KQ, TER, HSAI, OUST",
+          "why": "Labs buy arms, hands, actuators and sensors to train on; in the R&D phase this is where the money actually lands (Robotis +72% y/y)"
         },
         {
-          "lbl": "Actuator assembly",
-          "ticks": "002050.SZ",
-          "why": "Sanhua exclusive Tier-1 Optimus assembler"
+          "lbl": "Brain + training compute",
+          "ticks": "NVDA",
+          "why": "Jetson on the robot, and labs are now frontier-scale GPU buyers — Figure has committed ≥$3.5B, incl. a 100k Vera Rubin cluster"
         },
         {
-          "lbl": "Robot brain",
-          "ticks": "NVDA (Jetson Thor)",
-          "why": "Embodied-AI compute links to accelerators"
+          "lbl": "Humanoid OEMs — the moonshot",
+          "ticks": "688836.SH, TSLA, 005380.KS, XPEV, 9880.HK",
+          "why": "Contested end products; the US leaders are private (Figure) or buried inside carmakers"
         },
         {
-          "lbl": "Sensing",
-          "ticks": "6758.T, HSAI, NOVT (ATI)",
-          "why": "Vision, lidar, force/torque for manipulation"
+          "lbl": "Actuator assembly — downgraded",
+          "ticks": "002050.SZ, 601689.SH",
+          "why": "Build to Tesla's design: volume optionality without IP, and Optimus volume is not yet verified"
         }
       ],
       "positions": [
-        "Core (incumbent): 6324.T, 6268.T",
-        "China localization: 300124.SZ, 002050.SZ, 688017.SH",
+        "Core (chokepoint): 6324.T, 6268.T",
+        "R&D enablers (paid now): TER, HSAI, 108490.KQ",
+        "OEM moonshot, sized small: 688836.SH, 005380.KS, TSLA",
         "Brain: NVDA"
       ],
-      "thesis": "Humanoids create an entirely new precision-motion BOM. The supply chain — not the AI — is the hard part: reducers, roller screws and torque motors are Japanese/European chokepoints that China is racing to localize and cost-down. The clearest pure-plays sit in the actuator components, not the robot brands.",
+      "thesis": "Humanoids create a new precision-motion BOM — but the money arrives in the wrong order for a component trade. Through the R&D phase, spend goes to the enablers labs build and train on, and to compute. The leading OEMs design their own actuators and spread sub-component buying on purpose, so component shortages need volumes that are years away. And unlike AI datacenters, where margin-rich buyers pay whatever the bottleneck asks, robotics only works if costs fall — which squeezes suppliers rather than paying them. The durable exception is the part OEMs cannot insource: precision reducers. Revised 2026-09-19 on Citrini's field trip; the May version held that the clearest pure-plays sat in actuator components.",
       "struct": 80,
-      "near": 55,
+      "near": 45,
       "bc": 60,
-      "risk": "Timeline + unit-volume risk is high — humanoid deployment forecasts are speculative and could slip years. China cost-down could crush component margins. Watch Optimus/Figure production numbers and actual reducer/screw order flow vs hype.",
+      "risk": "Timeline: factory 'deployments' are still pilots — Figure at BMW Spartanburg is the one well-verified case. Funding reflexivity: the OEM layer is equity-funded and pre-revenue, so a funding squeeze or an AI-infrastructure downturn breaks it regardless of progress. Optimus: Tesla's Q2 update had lines still being installed with first builds going to internal training — watch the Q3 update in late October. Geography: FCC origin rules and China's hardware lead are walling the US and Chinese markets off from each other.",
       "registry_themes": [
         "humanoid",
         "humanoid-actuator",
         "industrial-robotics",
         "sensing"
       ],
-      "tagged_names": 67
+      "tagged_names": 63
     },
     {
       "id": "glasses",

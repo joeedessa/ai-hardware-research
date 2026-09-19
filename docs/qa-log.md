@@ -13,7 +13,7 @@ Two rules for using this file:
 - **When adding a guard, say where it lives** (CI, a code comment, a checklist
   item here). A guard nobody can find is a note, not a guard.
 
-Last updated 2026-08-09.
+Last updated 2026-09-19.
 
 ---
 
@@ -47,11 +47,18 @@ caught by one line of it.
 - [ ] Check any date/session logic at the boundary — the exact open minute, the
       exact close minute, and the day rollover. See class D.
 
+**Ingesting a new source memo**
+- [ ] Grep the universe for the same author's earlier source ids and re-read every
+      record citing them — the new piece may reverse an attribution. See class N.
+- [ ] Pull embedded images from the PDF; tables and baskets are often images. See K.
+
 **Adding or editing a company record**
 - [ ] Confirm the ticker resolves to the **intended entity** — check market cap
       and business description, not just that the symbol returns data. See class J.
 - [ ] Confirm price history exists for the symbol we store.
 - [ ] Confirm the chart link returns 200.
+- [ ] If the record's conviction or froth tag is set after the relevant forward
+      track's inception, set `conv_since` / `froth_since` to today. See class M.
 - [ ] Confirm any generated text respects the record's own conviction tier — do
       not let a template assert a claim the data does not make. See class I.
 
@@ -194,6 +201,18 @@ recently US-listed, is Smartoptics Group ASA — **Norwegian**, Oslo-listed, and
 US line (`SMOPF`, OTC Pink) is an unsponsored cross-quote trading ~4k shares a day
 against 170k in Oslo.
 
+A listing can also go stale after verification. Capstone Energy+ was checked for
+*entity* on 2026-08-08 and stored as OTC `CGEH` — but it had uplisted to Nasdaq as
+`CEPL` on 2026-07-08. Yahoo kept resolving the dead symbol for a while and then
+stopped, after which the pipeline carried forward $9.85 while CEPL traded near $6.69.
+Doosan Tesna had the same failure from the Korean side (`131970.KS` for a KOSDAQ name).
+The pipeline's "N misses" line had been reporting both.
+
+A third instance, 2026-09-19: Citrini writes Robotis as `108490 KS`. Bloomberg's
+`KS` covers **both** Korean boards; Robotis is on KOSDAQ. Yahoo's `.KS` alias for it
+returned a quote of 22,400 while the real KOSDAQ line (`.KQ`) was at 306,500 — the chart
+endpoint and the quote endpoint even disagreed with each other. Stored as `.KQ`.
+
 *Lesson:* verify entity and listing **separately**. Confirm the business
 description and market cap match the intended company, then confirm which line
 actually has depth. A name match is not an identity match, and a quote existing
@@ -213,9 +232,60 @@ spent diagnosing a bug that did not exist.
 `index.html` and fails loudly if it cannot find them, so a rename breaks the
 checker instead of silently degrading it.
 
+A second instance, 2026-09-19: while quantifying class M, I compared the corrected
+track against a "naive" baseline I had rebuilt myself. It included two names the live
+dashboard had never scored, and it made the froth lens appear to flip from right to
+wrong. It had not — against the real published figures the lens was already behind.
+The comparison baseline must be **what users actually saw** (the committed
+`performance.json`), not a reconstruction of it.
+
 *Lesson:* a verification tool must **read** the real mapping, not restate it. If
 that is impossible, the tool's disagreement with production is a finding about the
 tool until proven otherwise.
+
+### M. Forward records scored with hindsight
+A "since inception" track computed from **today's** members lets every later addition
+rewrite history. A name tagged after it moved gets scored across a window in which we
+held no view of it — in either direction.
+
+*Instances:* the froth tracks start 2026-08-01, but only 18 names carried a froth 1
+or 3 tag that day; 52 more were tagged on 2026-08-05 and 2 on 2026-08-08, and all were
+scored from 08-01. The conviction-3 track starts 2026-05-30, but Delta (2308.TW)
+earned its 3 on 2026-08-03 and was credited with its −34.7% fall from May. Found on
+2026-09-19 while adding Unitree, which listed after the froth inception and would
+have booked its post-IPO slide.
+
+*Effect, production vs production:* insulated +2.3% → −1.6%; high froth +3.1% →
+−0.1%; the **spread** that actually tests the lens went from −0.8 to −1.5 points
+against it. Conviction-3 went from −12.2% to −10.6%. Hindsight had been inflating the
+froth tracks by 2–4 points and hiding about half the lens's shortfall.
+
+*Guard:* records carry `conv_since` / `froth_since` (backfilled from git history for
+all 55 affected records); `si()` in `scripts/fetch_market.py` scores each name from
+`max(inception, own tag date)`. The track notes now say so.
+
+*Still open — exits:* a name that LOSES its tag drops out of the track entirely,
+taking its membership-period return with it. Micron was conviction-3 from 05-30 to
+08-03 and fell −19.9% in that time; the corrected −10.6% omits it and is flattered by
+it. Fixing that needs a membership ledger with entry and exit dates — see §5.
+
+*Lesson:* any record that claims to test a judgment must know when each judgment was
+made, per item, and must keep the ones it later abandoned.
+
+### N. Stale attribution to a source that has moved
+A record that says "Source X's clearest play" keeps saying it after Source X changes
+its mind. The claim is still quoted accurately; it is just no longer true.
+
+*Instance:* Schaeffler's record described it as "Citrini's clearest non-China humanoid
+design-win play" (May 2025). Citrini's September 2026 field trip used Schaeffler as the
+**counter-example** to that thesis. Our July Optimus notes had the same problem from the
+other side: "ramping at Fremont" when Tesla's own Q2 update said the lines were still
+being installed.
+
+*Guard:* when a source is ingested, grep the universe for its earlier source ids
+(`citrini-*`) and re-read every record that cites them. Attributions carry dates in
+the prose ("May 2025, Citrini called it…") so a reversal reads as history rather than a
+contradiction.
 
 ### K. Tooling and process friction
 Not product bugs, but they cost real time and produce false signals.
@@ -225,6 +295,16 @@ Not product bugs, but they cost real time and produce false signals.
   cache-busting query before concluding a change did not work.
 - **Scratchpad virtualenv does not persist** between sessions. Rebuild it; do not
   assume the interpreter path from earlier in a conversation still exists.
+- **The preview server lost read access to `~/Desktop`** (a macOS privacy permission,
+  not the launch config): Python's `http.server` calls `getcwd()` before it reads
+  `--directory`, so it dies at import. Workaround: mirror `index.html`, `icon.svg`
+  and `data/` to the scratchpad and serve that on a temporary port. Do not commit the
+  temporary launch entry.
+- **`timeout` is not on macOS.** A backgrounded `timeout 900 …` exits 0 having run
+  nothing — read the output, not the exit code.
+- **Paid-newsletter PDFs carry the payload as images.** The Citrini robotics piece
+  extracts 94k characters of prose, but the basket — tickers and weights, the most
+  actionable page — is a PNG. `pypdf`'s `page.images` pulls it out for reading.
 - **Scanned PDF appendices have no text layer.** `pypdf` returns empty strings for
   them and gives no error. FCC DA 26-786's Appendices B and C — which carry the
   actual definitions — are images; the definitional language had to come from the
@@ -253,6 +333,7 @@ Not product bugs, but they cost real time and produce false signals.
 | Conviction-tier branching in the research-brief template | `index.html` | I |
 | Weekly external chart-link check over the whole universe | `scripts/check_links.py`, `.github/workflows/check-links.yml` | B |
 | Checker parses mappings from `index.html` rather than restating them | `scripts/check_links.py` | L |
+| Per-record tag dates honoured by the forward tracks | `scripts/fetch_market.py` `si()`, `conv_since`/`froth_since` | M |
 | `archive/` dated snapshots as revert points | repo | all |
 
 ---
@@ -260,6 +341,32 @@ Not product bugs, but they cost real time and produce false signals.
 ## 4. Chronological log
 
 Newest first. Format: date — symptom — root cause — fix.
+
+**2026-09-19** — Froth tracks and the conviction-3 track credited names with moves made
+before they were tagged. — Tracks scored today's members from inception. — Tag dates
+backfilled from git for 55 records and honoured by `si()`; exits still open. Class M.
+
+**2026-09-19** — Capstone Energy+ priced at a stale $9.85 (actual ~$6.69); Doosan
+Tesna's price frozen. — `CGEH` died on the 2026-07-08 Nasdaq uplisting to `CEPL`;
+Doosan Tesna stored as `.KS` on KOSDAQ. Both were in the pipeline's miss list and
+nobody read it. — Renamed to `CEPL` and `131970.KQ`; quotes now 241/241. Class J.
+
+**2026-09-19** — `fcc-da-26-786` shown as a raw id in eight company drawers. — Source
+cited in August, never registered. — Registered in `sources.json`. Class N-adjacent.
+
+**2026-09-19** — Adding Unitree would have flattered the froth track. — Forward tracks
+scored today's members from inception; a post-inception listing fell back to its first
+bar. — Per-record `conv_since`/`froth_since`, honoured by `si()`. Caught before shipping.
+Class M.
+
+**2026-09-19** — Schaeffler still credited as Citrini's top design-win pick after
+Citrini reversed; Optimus described as "ramping" when Tesla said "installing". — Dated
+claims read as current. — Both rewritten as dated history; Schaeffler, Sanhua and Tuopu
+re-rated 2→1. Class N.
+
+**2026-09-19** — Robotis given as `108490 KS` by the source. — Bloomberg's code spans
+both Korean boards; Yahoo's `.KS` alias returned a wrong quote. — Stored as `108490.KQ`.
+Class J.
 
 **2026-08-09** — Three TradingView chart links 404 (Phison `8299.TW`, Auras
 `3324.TW`, Schaeffler `SHA.DE`). — The `YH_SPECIAL` table encodes real exchange
@@ -366,7 +473,12 @@ more than once.
 3. **Contrast check across both themes** (class H). Two separate dark-mode
    contrast failures have shipped. A scripted pass over the token pairs, or a
    render-and-sample check on key surfaces, would close it.
-4. **Entity verification on record creation** (class J). Currently a checklist
+4. **Membership ledger for forward tracks** (class M). Tag dates now handle entries;
+   exits still vanish with their history (Micron, −19.9% while conviction-3).
+5. **Read the pipeline's miss list** (class J). The "N misses" line named `CGEH` and
+   `131970.KS` for weeks. It should fail loudly — or open an alert — when a universe
+   ticker stops resolving, instead of silently carrying the last price forward.
+6. **Entity verification on record creation** (class J). Currently a checklist
    item here rather than anything enforced. At minimum, storing the market cap
    and a one-line business description at creation time would make a mismatch
    visible later.

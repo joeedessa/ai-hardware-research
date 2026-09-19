@@ -6,3 +6,4 @@ node_modules/
 
 # Source research inputs (memos, tweets, notes) — PROPRIETARY, keep OUT of the public repo
 memos/
+__pycache__/
